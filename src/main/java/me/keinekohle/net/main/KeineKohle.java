@@ -1,6 +1,9 @@
 package me.keinekohle.net.main;
 
 import me.keinekohle.net.license.ServerIdentifier;
+import me.keinekohle.net.listeners.Listener_PlayerJoinEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.UnsupportedEncodingException;
@@ -13,12 +16,14 @@ public class KeineKohle extends JavaPlugin {
     public static String prefix = "§8[§bDungeon§8]§e ";
 
     //server identifier
-    public static String serverIdentifier = ServerIdentifier.getServerIdentifier();
+    //public static String serverIdentifier = ServerIdentifier.getServerIdentifier();
 
     //loaded on startup
     @Override
     public void onEnable() {
 
+        //load common listeners
+        loadCommonListeners();
        /* try {
 
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
@@ -53,5 +58,10 @@ public class KeineKohle extends JavaPlugin {
         }
 
         */
+    }
+
+    private void loadCommonListeners() {
+        PluginManager pm = Bukkit.getPluginManager();
+        pm.registerEvents(new Listener_PlayerJoinEvent(), this);
     }
 }
