@@ -1,5 +1,7 @@
 package me.keinekohle.net.scoreboard;
 
+import me.keinekohle.net.stuff.LobbyScoreboardStuff;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -24,22 +26,38 @@ public class LobbyScoreboard {
 
         //-- Set scores --
         //Space
-        setScore(objective, "§a", 0);
+        int score = 9;
+        setScore(objective, ChatColor.DARK_PURPLE + "", score);
+        score -= 1;
 
         //Class
-        setScore(objective, "§aSelected Class", 1);
-        setScore(objective, "§8None", 2);
+        setScore(objective, "§aSelected Class", score);
+        score -= 1;
+
+        setScore(objective, LobbyScoreboardStuff.getLastUsedClass(player), score);
+        score -= 1;
 
         //Space
-        setScore(objective, "§b", 3);
+        setScore(objective, ChatColor.DARK_AQUA + "", score);
+        score -= 1;
 
         //Difficulty
-        setScore(objective, "§cDifficulty", 4);
-        setScore(objective, "§2Normal", 5);
+        setScore(objective, "§cDifficulty", score);
+        score -= 1;
+
+        setScore(objective, "§2Normal", score);
+        score -= 1;
+
+        //Space
+        setScore(objective, ChatColor.DARK_BLUE + "", score);
+        score -= 1;
 
         //Coins
-        setScore(objective, "§6Coins", 4);
-        setScore(objective, "§80", 5);
+        setScore(objective, "§6Coins", score);
+        score -= 1;
+
+        setScore(objective,  "§80", score);
+        score -= 1;
 
         //-- send the scoreboard to the player --
         player.setScoreboard(scoreboard);

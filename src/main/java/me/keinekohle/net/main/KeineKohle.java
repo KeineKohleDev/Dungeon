@@ -2,6 +2,7 @@ package me.keinekohle.net.main;
 
 import me.keinekohle.net.license.ServerIdentifier;
 import me.keinekohle.net.listeners.Listener_PlayerJoinEvent;
+import me.keinekohle.net.stuff.ClassStuff;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -9,11 +10,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.UnsupportedEncodingException;
 import java.security.*;
 import java.util.Base64;
+import java.util.HashMap;
 
 public class KeineKohle extends JavaPlugin {
 
     //message prefix
     public static String prefix = "§8[§bDungeon§8]§e ";
+
+    //classes
+    public static HashMap<String, String> class_prefix = new HashMap<>();
 
     //server identifier
     //public static String serverIdentifier = ServerIdentifier.getServerIdentifier();
@@ -21,6 +26,11 @@ public class KeineKohle extends JavaPlugin {
     //loaded on startup
     @Override
     public void onEnable() {
+
+        //-- Classes --
+        ClassStuff.registerAllStandardClasses();
+        // NEED TO BE ADDED: LICENSE CHECK!
+        ClassStuff.registerAllAddonClasses();
 
         //load common listeners
         loadCommonListeners();

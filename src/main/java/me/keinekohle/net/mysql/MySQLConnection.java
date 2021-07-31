@@ -6,10 +6,10 @@ import java.sql.SQLException;
 
 public class MySQLConnection {
 
-    private final String name = "db_251891";
-    private final String password = "5d15434c5f";
-    private final String database = "db_251891";
-    private final String host = "45.93.248.120";
+    private final String username = "root";
+    private final String password = "";
+    private final String database = "dungeons";
+    private final String host = "localhost";
 
     private Connection conn = null;
 
@@ -19,9 +19,10 @@ public class MySQLConnection {
 
     public void connect() throws SQLException {
         if(!isConnected()) {
-            conn = DriverManager.getConnection("jdbc:mysql://" + host + ":3306/" + database + "?useSSL=false", name, password);
+            conn = DriverManager.getConnection("jdbc:mysql://" + host + ":3306/" + database + "?useSSL=false", username, password);
         }
     }
+
 
     public Connection getConnection() {
         try {
