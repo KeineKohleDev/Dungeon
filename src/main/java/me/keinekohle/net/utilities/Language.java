@@ -12,6 +12,8 @@ public class Language {
 
     public static String noPermissions = Replacements.replaceHexColors("#FC1C3FYou don't have the permission to perform this command!");
 
+    public static String classGotAutoSelected = Replacements.replaceHexColors("The Class you used the last time got auto selected!");
+
     //PlayerJoinEvent
     public static String playerJoinMessage = Replacements.replaceHexColors("#51AAFC%player% §8[#44FC44+§8]");
 }

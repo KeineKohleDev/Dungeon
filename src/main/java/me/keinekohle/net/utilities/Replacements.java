@@ -27,6 +27,10 @@ public class Replacements {
         return toReplace.replace("%player%", player.getName());
     }
 
+    public static String replaceClassName(String toReplace, String className) {
+        return toReplace.replace("%class%", className);
+    }
+
     public static String replaceMessage(String toReplace, String msg) {
         return toReplace.replace("%msg%", msg);
     }
