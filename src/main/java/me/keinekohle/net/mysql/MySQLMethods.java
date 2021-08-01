@@ -16,10 +16,10 @@ public class MySQLMethods {
     public void createDungeonPlayerTable() {
         Statement statement = null;
         String sql = "CREATE TABLE IF NOT EXISTS dungeon_player (" +
-                "name VARCHAR(50) null," +
+                "username VARCHAR(50) null," +
                 "uuid VARCHAR(50) null," +
                 "coins INTEGER(11) null," +
-                "last_class VARCHAR(50) null" +
+                "lastClass VARCHAR(50) null" +
                 ")";
         try {
             statement = connection.createStatement();

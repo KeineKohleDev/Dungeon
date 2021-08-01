@@ -1,4 +1,4 @@
-package me.keinekohle.net.stuff;
+package me.keinekohle.net.utilities;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
@@ -7,6 +7,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Replacements {
+
+    private Replacements() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static String replaceHexColors(String toReplace) {
         Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
@@ -20,10 +24,10 @@ public class Replacements {
     }
 
     public static String replacePlayerName(String toReplace, Player player) {
-        return toReplace.replaceAll("%player%", player.getName());
+        return toReplace.replace("%player%", player.getName());
     }
 
     public static String replaceMessage(String toReplace, String msg) {
-        return toReplace.replaceAll("%msg%", msg);
+        return toReplace.replace("%msg%", msg);
     }
 }

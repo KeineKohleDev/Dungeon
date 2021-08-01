@@ -1,9 +1,6 @@
-package me.keinekohle.net.commands.TabCompleter;
+package me.keinekohle.net.commands.tabcompleter;
 
 import me.keinekohle.net.main.KeineKohle;
-import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -12,17 +9,14 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TabComplet_cmd_dungeon implements TabCompleter {
+public class TabCompletCmdDungeon implements TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        List<String> tabComplete = new ArrayList<String>();
+        List<String> tabComplete = new ArrayList<>();
         if(command.getName().equalsIgnoreCase("dungeon")) {
-            if(sender instanceof Player) {
-                Player player = (Player) sender;
+            if(sender instanceof Player player && player.hasPermission(KeineKohle.PERMISSIONPREFIX + "*")) {
                 if (args.length == 1) {
-                    if (player.hasPermission(KeineKohle.permission_prefix + "*")) {
-                        tabComplete.add("buildmode");
-                    }
+                    tabComplete.add("buildmode");
                 }
             }
         }

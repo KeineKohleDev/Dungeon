@@ -6,6 +6,10 @@ import java.sql.SQLException;
 
 public class MySQLConnection {
 
+    MySQLConnection() {
+        throw new IllegalStateException("Utility class");
+    }
+
     static final String USERNAME = "root";
     static final String PASSWORD = "";
     static final String DATABASE = "dungeons";

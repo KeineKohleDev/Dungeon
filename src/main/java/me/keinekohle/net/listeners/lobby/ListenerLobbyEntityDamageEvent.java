@@ -7,14 +7,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-public class Listener_Lobby_EntityDamageEvent implements Listener {
+public class ListenerLobbyEntityDamageEvent implements Listener {
 
     @EventHandler
     public void onEntityDamageEvent(EntityDamageEvent event) {
-        if(event.getEntity() instanceof Player || event.getEntity() instanceof ArmorStand) {
-            if(!KeineKohle.inGame) {
-                event.setCancelled(true);
-            }
+        if (event.getEntity() instanceof Player || event.getEntity() instanceof ArmorStand && !KeineKohle.inGame) {
+            event.setCancelled(true);
         }
     }
 }

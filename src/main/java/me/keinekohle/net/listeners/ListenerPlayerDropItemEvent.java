@@ -4,14 +4,16 @@ import me.keinekohle.net.main.KeineKohle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 
-public class Listener_BlockPlaceEvent implements Listener {
+public class ListenerPlayerDropItemEvent implements Listener {
 
     @EventHandler
-    public void onBlockPlaceEvent(BlockPlaceEvent event) {
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
+        player.sendMessage("Drop");
         if(!KeineKohle.buildmode.contains(player)) {
+            player.sendMessage("Drop 1");
             event.setCancelled(true);
         }
     }

@@ -1,12 +1,11 @@
 package me.keinekohle.net.main;
 
-import me.keinekohle.net.commands.TabCompleter.TabComplet_cmd_dungeon;
-import me.keinekohle.net.commands.cmd_dungeon;
+import me.keinekohle.net.commands.CmdDungeon;
+import me.keinekohle.net.commands.tabcompleter.TabCompletCmdDungeon;
 import me.keinekohle.net.listeners.*;
-import me.keinekohle.net.listeners.lobby.Listener_Lobby_EntityDamageByEntityEvent;
-import me.keinekohle.net.listeners.lobby.Listener_Lobby_EntityDamageEvent;
-import me.keinekohle.net.stuff.ClassStuff;
-import me.keinekohle.net.stuff.Stuff;
+import me.keinekohle.net.listeners.lobby.ListenerLobbyEntityDamageByEntityEvent;
+import me.keinekohle.net.listeners.lobby.ListenerLobbyEntityDamageEvent;
+import me.keinekohle.net.utilities.GlobalUtilities;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -17,26 +16,24 @@ import java.util.HashMap;
 
 public class KeineKohle extends JavaPlugin {
 
-    //message prefix
-    public static final String prefix = Stuff.surroundWithBracketsAndColorCodes(Stuff.getColorByName(KeineKohle.DISPLAYNAME) + KeineKohle.DISPLAYNAME);
-    public static final String permission_prefix = "Dungeon.";
-
-    //-- Hashmaps --
-    //classes
-    public static final HashMap<String, String> class_prefix = new HashMap<>();
-
+    //message PREFIX
+    public static final String PREFIX = GlobalUtilities.surroundWithBracketsAndColorCodes(GlobalUtilities.getColorByName(KeineKohle.DISPLAYNAME) + KeineKohle.DISPLAYNAME);
+    public static final String PERMISSIONPREFIX = "Dungeon.";
 
     //-- ArrayLists --
     //buildmode
-    public static ArrayList<Player> buildmode = new ArrayList<Player>();
+    public static final ArrayList<Player> buildmode = new ArrayList<>();
 
     //-- Player lobby hotbar --
     //Chest
-    public static final String CHEST_DISPLAYNAME = "Shop";
+    public static final String CHESTDISPLAYNAME = "Shop";
     //Comperator
-    public static final String COMPARATOR_DISPLAYNAME  = "Difficulty";
+    public static final String COMPARATORDISPLAYNAME  = "Difficulty";
     //Anvil
-    public static final String ANVIL_DISPLAYNAME  = "Upgrade";
+    public static final String ANVILDISPLAYNAME  = "Upgrade";
+    //BRACKETS
+    public static final String BRACKETSCOLOR = "BRACKETSCOLOR";
+    public static final String CHATCOLOR = "CHATCOLOR";
 
     public static final String DISPLAYNAME = "Dungeon";
 
@@ -52,34 +49,32 @@ public class KeineKohle extends JavaPlugin {
     //loaded on startup
     @Override
     public void onEnable() {
-        //-- Classes --
-        ClassStuff.registerAllStandardClasses();
         // NEED TO BE ADDED: LICENSE CHECK!
-        ClassStuff.registerAllAddonClasses();
 
         loadCommonListeners();
         loadCommonCommands();
         loadCommonTabCompleter();
-        System.out.println("Version: 1.0.2");
+        System.getLogger(Bukkit.getVersion());
 
     }
 
     private void loadCommonCommands() {
-        getCommand("dungeon").setExecutor(new cmd_dungeon());
+        getCommand("dungeon").setExecutor(new CmdDungeon());
     }
 
     private void loadCommonTabCompleter() {
-        getCommand("dungeon").setTabCompleter(new TabComplet_cmd_dungeon());
+        getCommand("dungeon").setTabCompleter(new TabCompletCmdDungeon());
     }
 
     private void loadCommonListeners() {
         PluginManager pm = Bukkit.getPluginManager();
-        pm.registerEvents(new Listener_PlayerJoinEvent(), this);
-        pm.registerEvents(new Listener_EntityPickupItemEvent(), this);
-        pm.registerEvents(new Listener_PlayerDropItemEvent(), this);
-        pm.registerEvents(new Listener_BlockBreakEvent(), this);
-        pm.registerEvents(new Listener_BlockPlaceEvent(), this);
-        pm.registerEvents(new Listener_Lobby_EntityDamageByEntityEvent(), this);
-        pm.registerEvents(new Listener_Lobby_EntityDamageEvent(), this);
+        pm.registerEvents(new ListenerPlayerJoinEvent(), this);
+        pm.registerEvents(new ListenerEntityPickupItemEvent(), this);
+        pm.registerEvents(new ListenerPlayerDropItemEvent(), this);
+        pm.registerEvents(new ListenerBlockBreakEvent(), this);
+        pm.registerEvents(new ListenerBlockPlaceEvent(), this);
+        pm.registerEvents(new ListenerLobbyEntityDamageByEntityEvent(), this);
+        pm.registerEvents(new ListenerLobbyEntityDamageEvent(), this);
     }
+
 }

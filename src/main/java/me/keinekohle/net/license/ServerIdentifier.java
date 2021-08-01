@@ -12,6 +12,10 @@ import java.security.NoSuchAlgorithmException;
 
 public class ServerIdentifier {
 
+    private ServerIdentifier() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static String getServerIdentifier()  {
         try {
             return encode(generateServerIdentifier());
