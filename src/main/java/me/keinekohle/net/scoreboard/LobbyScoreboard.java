@@ -1,6 +1,8 @@
 package me.keinekohle.net.scoreboard;
 
+import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.stuff.LobbyScoreboardStuff;
+import me.keinekohle.net.stuff.Stuff;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -11,8 +13,6 @@ import org.bukkit.scoreboard.ScoreboardManager;
 
 public class LobbyScoreboard {
 
-    private static String displayName = "§6§lDungeon§";
-
     public static void sendLobbyScoreboard(Player player) {
         //-- Get the scoreboard manager --
         ScoreboardManager manager = Bukkit.getScoreboardManager();
@@ -21,7 +21,7 @@ public class LobbyScoreboard {
         Scoreboard scoreboard = manager.getNewScoreboard();
 
         //-- register new objectiv --
-        Objective objective = scoreboard.registerNewObjective("display", "dummy", displayName);
+        Objective objective = scoreboard.registerNewObjective("display", "dummy", Stuff.getColorByName(KeineKohle.DISPLAYNAME) + ChatColor.BOLD + KeineKohle.DISPLAYNAME);
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         //-- Set scores --
@@ -42,7 +42,7 @@ public class LobbyScoreboard {
         score -= 1;
 
         //Difficulty
-        setScore(objective, "§cDifficulty", score);
+        setScore(objective, Stuff.getColorByName(KeineKohle.COMPARATOR_DISPLAYNAME) + KeineKohle.COMPARATOR_DISPLAYNAME, score);
         score -= 1;
 
         setScore(objective, "§2Normal", score);
@@ -53,11 +53,10 @@ public class LobbyScoreboard {
         score -= 1;
 
         //Coins
-        setScore(objective, "§6Coins", score);
+        setScore(objective, Stuff.getColorByName(KeineKohle.COINS) + KeineKohle.COINS, score);
         score -= 1;
 
-        setScore(objective,  "§80", score);
-        score -= 1;
+        setScore(objective,  Stuff.getColorByName(KeineKohle.COINS) + LobbyScoreboardStuff.getCoins(player), score);
 
         //-- send the scoreboard to the player --
         player.setScoreboard(scoreboard);

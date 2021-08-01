@@ -10,10 +10,11 @@ import java.util.UUID;
 
 public class MySQLMethods {
 
-    MySQLConnection mySQLConnection = new MySQLConnection();
-    private final Connection connection = mySQLConnection.getConnection();
+    private MySQLConnection mySQLConnection = new MySQLConnection();
+    private Connection connection = mySQLConnection.getConnection();
 
     public void createDungeonPlayerTable() {
+        Statement statement = null;
         String sql = "CREATE TABLE IF NOT EXISTS dungeon_player (" +
                 "name VARCHAR(50) null," +
                 "uuid VARCHAR(50) null," +
@@ -21,49 +22,107 @@ public class MySQLMethods {
                 "last_class VARCHAR(50) null" +
                 ")";
         try {
-            Statement statement = connection.createStatement();
+            statement = connection.createStatement();
             statement.executeQuery(sql);
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if(statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     public String selectString(String select, String table, String where, String is) {
+        Statement statement = null;
         try {
             String sql = "SELECT " + select + " FROM " + table + " WHERE " + where + "='" + is + "'";
-            Statement statement = connection.createStatement();
+            statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
                 return resultSet.getString(select);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if(statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
+    public Integer selectInteger(String select, String table, String where, String is) {
+        Statement statement = null;
+        try {
+            String sql = "SELECT " + select + " FROM " + table + " WHERE " + where + "='" + is + "'";
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return resultSet.getInt(select);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if(statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return null;
     }
 
     public void updateString(String table, String set, String setIs, String where, String is) {
+        Statement statement = null;
         try {
             String sql = "UPDATE " + table + " set " + set + "='" + setIs + "' WHERE " + where + "='" + is + "'";
-            Statement statem = connection.createStatement();
-            statem.executeUpdate(sql);
+            statement = connection.createStatement();
+            statement.executeUpdate(sql);
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
+        } finally {
+            if(statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
 
     public boolean checkIsPlayerInDataBase(UUID uuid) {
+        Statement statement = null;
         try {
             String sql = "SELECT uuid from dungeon_player WHERE uuid='" + uuid + "'";
-            Statement statement = connection.createStatement();
+            statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            if (rs.next() == true) {
+            if (rs.next()) {
                 return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if(statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return false;
@@ -71,12 +130,22 @@ public class MySQLMethods {
     }
 
     public void addPlayerToDataBase(Player player) {
+        Statement statement = null;
         try {
             String sql = "INSERT into dungeon_player (name, uuid) values ('" + player.getName() + "', '" + player.getUniqueId() + "')";
-            Statement statement = connection.createStatement();
+            statement = connection.createStatement();
             statement.execute(sql);
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if(statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

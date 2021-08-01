@@ -6,20 +6,22 @@ import java.sql.SQLException;
 
 public class MySQLConnection {
 
-    private final String username = "root";
-    private final String password = "";
-    private final String database = "dungeons";
-    private final String host = "localhost";
+    static final String USERNAME = "root";
+    static final String PASSWORD = "";
+    static final String DATABASE = "dungeons";
+    static final String HOST = "localhost";
 
-    private Connection conn = null;
+    public static final String TABLE_PREFIX = "dungeon_";
+
+    private Connection connection = null;
 
     public boolean isConnected() {
-        return (conn != null);
+        return (connection != null);
     }
 
     public void connect() throws SQLException {
         if(!isConnected()) {
-            conn = DriverManager.getConnection("jdbc:mysql://" + host + ":3306/" + database + "?useSSL=false", username, password);
+            connection = DriverManager.getConnection("jdbc:mysql://" + HOST + ":3306/" + DATABASE + "?useSSL=false", USERNAME, PASSWORD);
         }
     }
 
@@ -30,6 +32,6 @@ public class MySQLConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return conn;
+        return connection;
     }
 }

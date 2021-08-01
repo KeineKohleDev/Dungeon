@@ -1,7 +1,12 @@
 package me.keinekohle.net.listeners;
 
+import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.mysql.MySQLMethods;
 import me.keinekohle.net.scoreboard.LobbyScoreboard;
+import me.keinekohle.net.stuff.Language;
+import me.keinekohle.net.stuff.PlayerStuff;
+import me.keinekohle.net.stuff.Replacements;
+import me.keinekohle.net.stuff.Stuff;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,7 +18,11 @@ public class Listener_PlayerJoinEvent implements Listener {
     public void onPlayerJoinEvent(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         doDataBaseChecks(player);
-        LobbyScoreboard.sendLobbyScoreboard(event.getPlayer());
+        LobbyScoreboard.sendLobbyScoreboard(player);
+        PlayerStuff playerStuff = new PlayerStuff(player);
+        playerStuff.clearPlayerInventory();
+        playerStuff.giveLobbyItemsToPlayer();
+        event.setJoinMessage(KeineKohle.prefix + Stuff.getColorByName("CHAT") + " " + Replacements.replacePlayerName(Language.player_join_message, player));
     }
 
     private void doDataBaseChecks(Player player) {
