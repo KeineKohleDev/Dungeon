@@ -4,12 +4,12 @@ import me.keinekohle.net.main.KeineKohle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 
-public class Listener_DropItemEvent implements Listener {
+public class Listener_BlockPlaceEvent implements Listener {
 
     @EventHandler
-    public void onPlayerDropItem(PlayerDropItemEvent event) {
+    public void onBlockPlaceEvent(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         if(!KeineKohle.buildmode.contains(player)) {
             event.setCancelled(true);

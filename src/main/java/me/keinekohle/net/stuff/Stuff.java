@@ -2,6 +2,7 @@ package me.keinekohle.net.stuff;
 
 import me.keinekohle.net.main.KeineKohle;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 
@@ -31,5 +32,9 @@ public class Stuff {
 
     public static String surroundWithBracketsAndColorCodes(String tosurround) {
         return getColorByName("BRACKETS") + "[" + tosurround + getColorByName("BRACKETS") + "]";
+    }
+
+    public static void debbugMode(String code) {
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + code);
     }
 }

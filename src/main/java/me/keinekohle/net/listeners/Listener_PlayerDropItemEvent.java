@@ -1,0 +1,20 @@
+package me.keinekohle.net.listeners;
+
+import me.keinekohle.net.main.KeineKohle;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerDropItemEvent;
+
+public class Listener_PlayerDropItemEvent implements Listener {
+
+    @EventHandler
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        Player player = event.getPlayer();
+        player.sendMessage("Drop");
+        if(!KeineKohle.buildmode.contains(player)) {
+            player.sendMessage("Drop 1");
+            event.setCancelled(true);
+        }
+    }
+}

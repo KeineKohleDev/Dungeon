@@ -2,22 +2,17 @@ package me.keinekohle.net.main;
 
 import me.keinekohle.net.commands.TabCompleter.TabComplet_cmd_dungeon;
 import me.keinekohle.net.commands.cmd_dungeon;
-import me.keinekohle.net.license.ServerIdentifier;
-import me.keinekohle.net.listeners.Listener_DropItemEvent;
-import me.keinekohle.net.listeners.Listener_PlayerJoinEvent;
+import me.keinekohle.net.listeners.*;
+import me.keinekohle.net.listeners.lobby.Listener_Lobby_EntityDamageByEntityEvent;
+import me.keinekohle.net.listeners.lobby.Listener_Lobby_EntityDamageEvent;
 import me.keinekohle.net.stuff.ClassStuff;
 import me.keinekohle.net.stuff.Stuff;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.UnsupportedEncodingException;
-import java.security.*;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
 
 public class KeineKohle extends JavaPlugin {
@@ -65,6 +60,7 @@ public class KeineKohle extends JavaPlugin {
         loadCommonListeners();
         loadCommonCommands();
         loadCommonTabCompleter();
+        System.out.println("Version: 1.0.2");
 
     }
 
@@ -79,6 +75,11 @@ public class KeineKohle extends JavaPlugin {
     private void loadCommonListeners() {
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new Listener_PlayerJoinEvent(), this);
-        pm.registerEvents(new Listener_DropItemEvent(), this);
+        pm.registerEvents(new Listener_EntityPickupItemEvent(), this);
+        pm.registerEvents(new Listener_PlayerDropItemEvent(), this);
+        pm.registerEvents(new Listener_BlockBreakEvent(), this);
+        pm.registerEvents(new Listener_BlockPlaceEvent(), this);
+        pm.registerEvents(new Listener_Lobby_EntityDamageByEntityEvent(), this);
+        pm.registerEvents(new Listener_Lobby_EntityDamageEvent(), this);
     }
 }
