@@ -1,5 +1,9 @@
 package me.keinekohle.net.utilities;
 
+import me.keinekohle.net.mysql.MySQLConnection;
+import me.keinekohle.net.mysql.MySQLMethods;
+import org.bukkit.entity.Player;
+
 public class Classes {
 
     private Classes() {
@@ -12,5 +16,19 @@ public class Classes {
     public static final String SURVIVORCLASS = "SURVIVOR";
     public static final String ARCHERCLASS = "ARCHER";
     public static final String BOMBERCLASS = "BOMBER";
+
+
+    public static String getLastUsedClass(Player player) {
+        String lastClass = getLastUsedClassFromDataBase(player);
+        if(lastClass != null) {
+            return lastClass.toUpperCase();
+        }
+        return Classes.NONECLASS;
+    }
+
+    public static String getLastUsedClassFromDataBase(Player player) {
+        MySQLMethods mySQLMethods = new MySQLMethods();
+        return mySQLMethods.selectString(MySQLConnection.TABLE_PREFIX + "player","lastClass", "uuid", player.getUniqueId().toString());
+    }
 
 }

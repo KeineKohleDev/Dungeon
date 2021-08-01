@@ -3,6 +3,7 @@ package me.keinekohle.net.utilities;
 import me.keinekohle.net.main.KeineKohle;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 public class GlobalUtilities {
 
@@ -19,6 +20,8 @@ public class GlobalUtilities {
                 return ChatColor.of("#F70C24").toString();
             case KeineKohle.CHESTDISPLAYNAME:
                 return ChatColor.of("#F75CCB").toString();
+            case KeineKohle.BOOKDISPLAYNAME:
+                return ChatColor.of("#76B7F0").toString();
             case KeineKohle.DISPLAYNAME:
                 return ChatColor.GOLD.toString();
             case KeineKohle.COINS:

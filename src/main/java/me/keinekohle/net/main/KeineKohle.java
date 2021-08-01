@@ -25,12 +25,12 @@ public class KeineKohle extends JavaPlugin {
     public static final ArrayList<Player> buildmode = new ArrayList<>();
 
     //-- Player lobby hotbar --
-    //Chest
     public static final String CHESTDISPLAYNAME = "Shop";
-    //Comperator
     public static final String COMPARATORDISPLAYNAME  = "Difficulty";
-    //Anvil
     public static final String ANVILDISPLAYNAME  = "Upgrade";
+    public static final String BOOKDISPLAYNAME  = "Settings";
+
+
     //BRACKETS
     public static final String BRACKETSCOLOR = "BRACKETSCOLOR";
     public static final String CHATCOLOR = "CHATCOLOR";

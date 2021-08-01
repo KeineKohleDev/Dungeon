@@ -19,9 +19,7 @@ public class ListenerPlayerJoinEvent implements Listener {
     public void onPlayerJoinEvent(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         doDataBaseChecks(player);
-        LobbyScoreboard.sendLobbyScoreboard(player);
-        PlayerUtilities.clearPlayerInventory(player);
-        PlayerUtilities.giveLobbyItemsToPlayer(player);
+        PlayerUtilities.onJoin(player);
         event.setJoinMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Replacements.replacePlayerName(Language.playerJoinMessage, player));
     }
 
