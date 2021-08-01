@@ -11,8 +11,6 @@ public class ListenerBlockPlaceEvent implements Listener {
     @EventHandler
     public void onBlockPlaceEvent(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        if(!KeineKohle.buildmode.contains(player)) {
-            event.setCancelled(true);
-        }
+        if(!KeineKohle.buildmode.contains(player)) event.setCancelled(true);
     }
 }

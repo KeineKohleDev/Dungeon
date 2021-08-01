@@ -75,6 +75,7 @@ public class KeineKohle extends JavaPlugin {
         pm.registerEvents(new ListenerBlockPlaceEvent(), this);
         pm.registerEvents(new ListenerLobbyEntityDamageByEntityEvent(), this);
         pm.registerEvents(new ListenerLobbyEntityDamageEvent(), this);
+        pm.registerEvents(new ListenerFoodLevelChangeEvent(), this);
     }
 
 }

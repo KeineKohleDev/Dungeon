@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class MySQLMethods {
 
-    private MySQLConnection mySQLConnection = new MySQLConnection();
+    private final MySQLConnection mySQLConnection = new MySQLConnection();
     private Connection connection = mySQLConnection.getConnection();
 
     public void createDungeonPlayerTable() {
@@ -38,7 +38,7 @@ public class MySQLMethods {
         }
     }
 
-    public String selectString(String select, String table, String where, String is) {
+    public String selectString(String table, String select, String where, String is) {
         Statement statement = null;
         try {
             String sql = "SELECT " + select + " FROM " + table + " WHERE " + where + "='" + is + "'";
@@ -61,7 +61,7 @@ public class MySQLMethods {
         return null;
     }
 
-    public Integer selectInteger(String select, String table, String where, String is) {
+    public Integer selectInteger(String table, String select, String where, String is) {
         Statement statement = null;
         try {
             String sql = "SELECT " + select + " FROM " + table + " WHERE " + where + "='" + is + "'";
@@ -132,7 +132,7 @@ public class MySQLMethods {
     public void addPlayerToDataBase(Player player) {
         Statement statement = null;
         try {
-            String sql = "INSERT into dungeon_player (name, uuid) values ('" + player.getName() + "', '" + player.getUniqueId() + "')";
+            String sql = "INSERT into dungeon_player (username, uuid) values ('" + player.getName() + "', '" + player.getUniqueId() + "')";
             statement = connection.createStatement();
             statement.execute(sql);
             statement.close();

@@ -1,6 +1,5 @@
 package me.keinekohle.net.utilities;
 
-import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.mysql.MySQLConnection;
 import me.keinekohle.net.mysql.MySQLMethods;
 import org.bukkit.entity.Player;
@@ -13,7 +12,7 @@ public class LobbyScoreboardUtilities {
 
     public static String getLastUsedClass(Player player) {
         MySQLMethods mySQLMethods = new MySQLMethods();
-        String lastClass = mySQLMethods.selectString("lastClass", MySQLConnection.TABLE_PREFIX + "player", "uuid", player.getUniqueId().toString());
+        String lastClass = mySQLMethods.selectString(MySQLConnection.TABLE_PREFIX + "player","lastClass", "uuid", player.getUniqueId().toString());
         if(lastClass != null) {
             return lastClass.toUpperCase();
         }
@@ -22,6 +21,6 @@ public class LobbyScoreboardUtilities {
 
     public static Integer getCoins(Player player) {
         MySQLMethods mySQLMethods = new MySQLMethods();
-        return mySQLMethods.selectInteger("coins", MySQLConnection.TABLE_PREFIX + "player", "uuid", player.getUniqueId().toString());
+        return mySQLMethods.selectInteger(MySQLConnection.TABLE_PREFIX + "player","coins", "uuid", player.getUniqueId().toString());
     }
 }

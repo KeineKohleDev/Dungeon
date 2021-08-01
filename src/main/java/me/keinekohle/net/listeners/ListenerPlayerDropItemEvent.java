@@ -11,10 +11,6 @@ public class ListenerPlayerDropItemEvent implements Listener {
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
-        player.sendMessage("Drop");
-        if(!KeineKohle.buildmode.contains(player)) {
-            player.sendMessage("Drop 1");
-            event.setCancelled(true);
-        }
+        if(!KeineKohle.buildmode.contains(player)) event.setCancelled(true);
     }
 }

@@ -38,7 +38,7 @@ public class LobbyScoreboard {
         setScore(objective, "§aSelected Class", score);
         score -= 1;
 
-        setScore(objective, GlobalUtilities.getColorByName(LobbyScoreboardUtilities.getLastUsedClass(player)) + LobbyScoreboardUtilities.getLastUsedClass(player), score);
+        setScore(objective, GlobalUtilities.getColorByName(LobbyScoreboardUtilities.getLastUsedClass(player)) + GlobalUtilities.capitalizeFirstLetter(LobbyScoreboardUtilities.getLastUsedClass(player)), score);
         score -= 1;
 
         //Space

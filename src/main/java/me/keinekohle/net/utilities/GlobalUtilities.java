@@ -49,4 +49,8 @@ public class GlobalUtilities {
     public static void debbugMode(String code) {
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + code);
     }
+
+    public static String capitalizeFirstLetter(String tocapitalize) {
+        return tocapitalize.substring(0, 1).toUpperCase() + tocapitalize.substring(1).toLowerCase();
+    }
 }
