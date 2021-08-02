@@ -19,23 +19,16 @@ public class CmdDungeon implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player player) {
             if (player.hasPermission(KeineKohle.PERMISSIONPREFIX + "*")) {
-                if (args.length == 1) {
-                    buildmode(args, player);
-
-                } else if (args.length == 4) {
-                    if(args[0].equalsIgnoreCase("create") && args[1].equalsIgnoreCase("class") && args[2] != null && GlobalUtilities.isNumeric(args[3])) {
-                        Inventory inv = player.getInventory();
-                        for(ItemStack itemStack : inv.getContents()) {
-                            if(itemStack != null) {
-                                player.sendMessage("Befor: " + itemStack.getType());
-                                Map<String, Object> serializedMap = itemStack.serialize();
-                                player.sendMessage("" + serializedMap);
-                                Map<String, Object> deserialization = serializedMap;
-                                ItemStack itemStack1 = ItemStack.deserialize(deserialization);
-                                player.sendMessage("After: " + itemStack1.getType());
-                            }
-                        }
-                    }
+                switch (args.length) {
+                    case 1:
+                        buildmode(args, player);
+                        break;
+                    case 4:
+                        createNewClass(args, player);
+                        break;
+                    default:
+                        sendHelp(player);
+                        break;
                 }
             }  else {
                 noPermissions(player);
@@ -44,6 +37,26 @@ public class CmdDungeon implements CommandExecutor {
             sender.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " +  "This command is only for players!");
         }
         return false;
+    }
+
+    private void sendHelp(Player player) {
+        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "---- Help ----");
+    }
+
+    private void createNewClass(String[] args, Player player) {
+        if(args[0].equalsIgnoreCase("create") && args[1].equalsIgnoreCase("class") && args[2] != null && GlobalUtilities.isNumeric(args[3])) {
+            Inventory inv = player.getInventory();
+            for(ItemStack itemStack : inv.getContents()) {
+                if(itemStack != null) {
+                    player.sendMessage("Befor: " + itemStack.getType());
+                    Map<String, Object> serializedMap = itemStack.serialize();
+                    player.sendMessage("" + serializedMap);
+                    Map<String, Object> deserialization = serializedMap;
+                    ItemStack itemStack1 = ItemStack.deserialize(deserialization);
+                    player.sendMessage("After: " + itemStack1.getType());
+                }
+            }
+        }
     }
 
     private void noPermissions(Player player) {
