@@ -7,18 +7,35 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.Map;
 
 public class CmdDungeon implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player player) {
-            if(args.length == 1) {
-                if (player.hasPermission(KeineKohle.PERMISSIONPREFIX + "*")) {
+            if (player.hasPermission(KeineKohle.PERMISSIONPREFIX + "*")) {
+                if (args.length == 1) {
                     buildmode(args, player);
-                } else {
-                    noPermissions(player);
+
+                } else if (args.length == 4) {
+                    if(args[0].equalsIgnoreCase("create") && args[1].equalsIgnoreCase("class") && args[2] != null && GlobalUtilities.isNumeric(args[3])) {
+                        Inventory inv = player.getInventory();
+                        for(ItemStack itemStack : inv.getContents()) {
+                            player.sendMessage("Befor: "+itemStack.getType());
+                            Map<String, Object> serializedMap = itemStack.serialize();
+                            player.sendMessage(""+serializedMap);
+                            Map<String, Object> deserialization = serializedMap;
+                            ItemStack itemStack1 = ItemStack.deserialize(deserialization);
+                            player.sendMessage("After: "+itemStack1.getType());
+                        }
+                    }
                 }
+            }  else {
+                noPermissions(player);
             }
         } else {
             sender.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " +  "This command is only for players!");

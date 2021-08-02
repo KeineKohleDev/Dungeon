@@ -17,6 +17,15 @@ public class TabCompletCmdDungeon implements TabCompleter {
             if(sender instanceof Player player && player.hasPermission(KeineKohle.PERMISSIONPREFIX + "*")) {
                 if (args.length == 1) {
                     tabComplete.add("buildmode");
+                    tabComplete.add("create");
+                } else if(args.length == 2) {
+                    tabComplete.add("class");
+                } else if(args.length == 3) {
+
+                } else if(args.length == 4) {
+                    for(int i = 0; i < 6; i++) {
+                        tabComplete.add(String.valueOf(i));
+                    }
                 }
             }
         }

@@ -58,4 +58,14 @@ public class GlobalUtilities {
     public static String capitalizeFirstLetter(String tocapitalize) {
         return tocapitalize.substring(0, 1).toUpperCase() + tocapitalize.substring(1).toLowerCase();
     }
+
+    public static boolean isNumeric(String toBeChecked) {
+        try {
+            int temp = Integer.parseInt(toBeChecked);
+        } catch (NumberFormatException exception) {
+            return false;
+        }
+
+        return true;
+    }
 }
