@@ -1,11 +1,13 @@
 package me.keinekohle.net.mysql;
 
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
 import java.util.UUID;
 
 public class MySQLMethods {
@@ -135,7 +137,6 @@ public class MySQLMethods {
             String sql = "INSERT into dungeon_player (username, uuid) values ('" + player.getName() + "', '" + player.getUniqueId() + "')";
             statement = connection.createStatement();
             statement.execute(sql);
-            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -149,5 +150,22 @@ public class MySQLMethods {
         }
     }
 
-
+    public void insertClassItemstack(String className, int classLevel, int slot, Map<String, Object> serializedMap) {
+        Statement statement = null;
+        try {
+            String sql = "INSERT into dungeon_classes (classname, classlevel, slot, serializedmap) values ('" + className + "', '" + classLevel + "', '" + slot +"', '" + serializedMap +"')";
+            statement = connection.createStatement();
+            statement.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if(statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

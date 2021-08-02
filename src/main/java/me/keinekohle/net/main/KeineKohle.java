@@ -13,6 +13,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class KeineKohle extends JavaPlugin {
 
@@ -22,7 +23,7 @@ public class KeineKohle extends JavaPlugin {
 
     //-- ArrayLists --
     //buildmode
-    public static final ArrayList<Player> buildmode = new ArrayList<>();
+    public static final List<Player> buildmode = new ArrayList<>();
 
     //-- Player lobby hotbar --
     public static final String CHESTDISPLAYNAME = "Shop";

@@ -1,8 +1,9 @@
 package me.keinekohle.net.commands;
 
 import me.keinekohle.net.main.KeineKohle;
-import me.keinekohle.net.utilities.Language;
+import me.keinekohle.net.mysql.MySQLMethods;
 import me.keinekohle.net.utilities.GlobalUtilities;
+import me.keinekohle.net.utilities.Language;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,14 +11,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Base64;
 import java.util.Map;
 
 public class CmdDungeon implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(sender instanceof Player player) {
+        if (sender instanceof Player player) {
             if (player.hasPermission(KeineKohle.PERMISSIONPREFIX + "*")) {
                 switch (args.length) {
                     case 1:
@@ -25,16 +25,17 @@ public class CmdDungeon implements CommandExecutor {
                         break;
                     case 4:
                         createNewClass(args, player);
+                        getClass(args, player);
                         break;
                     default:
                         sendHelp(player);
                         break;
                 }
-            }  else {
+            } else {
                 noPermissions(player);
             }
         } else {
-            sender.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " +  "This command is only for players!");
+            sender.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "This command is only for players!");
         }
         return false;
     }
@@ -43,19 +44,32 @@ public class CmdDungeon implements CommandExecutor {
         player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "---- Help ----");
     }
 
+    private void getClass(String[] args, Player player) {
+        if (args[0].equalsIgnoreCase("select") && args[1].equalsIgnoreCase("class") && args[2] != null && GlobalUtilities.isNumeric(args[3])) {
+        }
+    }
+
     private void createNewClass(String[] args, Player player) {
-        if(args[0].equalsIgnoreCase("create") && args[1].equalsIgnoreCase("class") && args[2] != null && GlobalUtilities.isNumeric(args[3])) {
+        if (args[0].equalsIgnoreCase("create") && args[1].equalsIgnoreCase("class") && args[2] != null && GlobalUtilities.isNumeric(args[3])) {
             Inventory inv = player.getInventory();
-            for(ItemStack itemStack : inv.getContents()) {
-                if(itemStack != null) {
+            long time_all = System.currentTimeMillis();
+            int slot = 0;
+            MySQLMethods mySQLMethods = new MySQLMethods();
+            for (ItemStack itemStack : inv.getContents()) {
+                if (itemStack != null) {
+                    long time = System.currentTimeMillis();
                     player.sendMessage("Befor: " + itemStack.getType());
                     Map<String, Object> serializedMap = itemStack.serialize();
-                    player.sendMessage("" + serializedMap);
+                    player.sendMessage("" + serializedMap.toString());
                     Map<String, Object> deserialization = serializedMap;
                     ItemStack itemStack1 = ItemStack.deserialize(deserialization);
                     player.sendMessage("After: " + itemStack1.getType());
+                    player.sendMessage("ms: " + (System.currentTimeMillis() - time));
+                    mySQLMethods.insertClassItemstack(args[2], Integer.parseInt(args[3]), slot, serializedMap);
                 }
+                slot++;
             }
+            player.sendMessage("ms all: " + (System.currentTimeMillis() - time_all));
         }
     }
 
