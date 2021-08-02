@@ -40,6 +40,8 @@ public class GlobalUtilities {
                 return ChatColor.of("#E3914B").toString();
             case Classes.BOMBERCLASS:
                 return ChatColor.of("#C73B1C").toString();
+            case Classes.SHOPCLASSES:
+                return ChatColor.of("#39F6D3").toString();
             default:
                 return "getColorByName: default! for input " + name;
         }

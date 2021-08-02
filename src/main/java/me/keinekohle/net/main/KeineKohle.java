@@ -5,6 +5,7 @@ import me.keinekohle.net.commands.tabcompleter.TabCompletCmdDungeon;
 import me.keinekohle.net.listeners.*;
 import me.keinekohle.net.listeners.lobby.ListenerLobbyEntityDamageByEntityEvent;
 import me.keinekohle.net.listeners.lobby.ListenerLobbyEntityDamageEvent;
+import me.keinekohle.net.listeners.lobby.ListenerLobbyPlayerInteractEvent;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -68,14 +69,18 @@ public class KeineKohle extends JavaPlugin {
 
     private void loadCommonListeners() {
         PluginManager pm = Bukkit.getPluginManager();
+        //Global
         pm.registerEvents(new ListenerPlayerJoinEvent(), this);
         pm.registerEvents(new ListenerEntityPickupItemEvent(), this);
         pm.registerEvents(new ListenerPlayerDropItemEvent(), this);
         pm.registerEvents(new ListenerBlockBreakEvent(), this);
         pm.registerEvents(new ListenerBlockPlaceEvent(), this);
+        pm.registerEvents(new ListenerFoodLevelChangeEvent(), this);
+
+        //Lobby only
+        pm.registerEvents(new ListenerLobbyPlayerInteractEvent(), this);
         pm.registerEvents(new ListenerLobbyEntityDamageByEntityEvent(), this);
         pm.registerEvents(new ListenerLobbyEntityDamageEvent(), this);
-        pm.registerEvents(new ListenerFoodLevelChangeEvent(), this);
     }
 
 }

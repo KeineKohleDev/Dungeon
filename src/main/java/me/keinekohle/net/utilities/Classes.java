@@ -17,6 +17,8 @@ public class Classes {
     public static final String ARCHERCLASS = "ARCHER";
     public static final String BOMBERCLASS = "BOMBER";
 
+    public static final String SHOPCLASSES = "Classes";
+
 
     public static String getLastUsedClass(Player player) {
         String lastClass = getLastUsedClassFromDataBase(player);
