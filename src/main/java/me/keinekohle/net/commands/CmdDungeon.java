@@ -7,13 +7,13 @@ import me.keinekohle.net.utilities.Language;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Map;
-
 public class CmdDungeon implements CommandExecutor {
+
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -46,32 +46,36 @@ public class CmdDungeon implements CommandExecutor {
 
     private void getClass(String[] args, Player player) {
         if (args[0].equalsIgnoreCase("select") && args[1].equalsIgnoreCase("class") && args[2] != null && GlobalUtilities.isNumeric(args[3])) {
+            MySQLMethods mySQLMethods = new MySQLMethods();
+            mySQLMethods.giveClassItems(player, args[2], Integer.parseInt(args[3]));
         }
     }
 
     private void createNewClass(String[] args, Player player) {
         if (args[0].equalsIgnoreCase("create") && args[1].equalsIgnoreCase("class") && args[2] != null && GlobalUtilities.isNumeric(args[3])) {
             Inventory inv = player.getInventory();
-            long time_all = System.currentTimeMillis();
             int slot = 0;
+            int classlevel = Integer.parseInt(args[3]);
             MySQLMethods mySQLMethods = new MySQLMethods();
             for (ItemStack itemStack : inv.getContents()) {
                 if (itemStack != null) {
-                    long time = System.currentTimeMillis();
-                    player.sendMessage("Befor: " + itemStack.getType());
-                    Map<String, Object> serializedMap = itemStack.serialize();
-                    player.sendMessage("" + serializedMap.toString());
-                    Map<String, Object> deserialization = serializedMap;
-                    ItemStack itemStack1 = ItemStack.deserialize(deserialization);
-                    player.sendMessage("After: " + itemStack1.getType());
-                    player.sendMessage("ms: " + (System.currentTimeMillis() - time));
-                    mySQLMethods.insertClassItemstack(args[2], Integer.parseInt(args[3]), slot, serializedMap);
+                    YamlConfiguration configuration = new YamlConfiguration();
+                    configuration.set("i", itemStack);
+                    String itemstackYAML = configuration.saveToString().replace("'", "*");
+                    if(mySQLMethods.checkIfClassExists(args[2], classlevel, slot)) {
+                        player.sendMessage("ture");
+                        mySQLMethods.updateClassItemstack(args[2], classlevel, slot, itemstackYAML);
+                    } else {
+                        player.sendMessage("false");
+                        mySQLMethods.insertClassItemstack(args[2], classlevel, slot, itemstackYAML);
+                    }
                 }
                 slot++;
             }
-            player.sendMessage("ms all: " + (System.currentTimeMillis() - time_all));
         }
     }
+
+
 
     private void noPermissions(Player player) {
         player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.noPermissions);

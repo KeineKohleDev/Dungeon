@@ -1,5 +1,7 @@
 package me.keinekohle.net.mysql;
 
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -7,7 +9,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Map;
 import java.util.UUID;
 
 public class MySQLMethods {
@@ -150,10 +151,10 @@ public class MySQLMethods {
         }
     }
 
-    public void insertClassItemstack(String className, int classLevel, int slot, Map<String, Object> serializedMap) {
+    public void insertClassItemstack(String className, int classLevel, int slot, String itemstackyaml) {
         Statement statement = null;
         try {
-            String sql = "INSERT into dungeon_classes (classname, classlevel, slot, serializedmap) values ('" + className + "', '" + classLevel + "', '" + slot +"', '" + serializedMap +"')";
+            String sql = "INSERT into dungeon_classes (classname, classlevel, slot, itemstackyaml) values ('" + className + "', '" + classLevel + "', '" + slot +"', '" + itemstackyaml +"')";
             statement = connection.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {
@@ -167,5 +168,100 @@ public class MySQLMethods {
                 }
             }
         }
+    }
+
+    public void updateClassItemstack(String className, int classLevel, int slot, String itemstackyaml) {
+        Statement statement = null;
+        try {
+            String sql = "UPDATE dungeon_classes SET itemstackyaml='" + itemstackyaml + "' WHERE className='" + className + "' AND slot='" + slot + "' AND classLevel='" + classLevel +"'";
+            statement = connection.createStatement();
+            statement.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if(statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public ItemStack selectItemFromClass(String classname, int classlevel, int slot) {
+        Statement statement = null;
+        try {
+            String sql = "SELECT itemstackyaml FROM dungeon_classes WHERE classname='" + classname + "' AND slot='" + slot +"' AND classlevel='" + classlevel +"'";
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                YamlConfiguration configuration = new YamlConfiguration();
+                String cfg = resultSet.getString("itemstackyaml").replace("*", "'");
+                configuration.loadFromString(cfg);
+                ItemStack itemStack = configuration.getItemStack("i", null);
+                return itemStack;
+            }
+        } catch (SQLException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        } finally {
+            if(statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
+    public void giveClassItems(Player player, String classname, int classlevel) {
+        Statement statement = null;
+        try {
+            String sql = "SELECT slot FROM dungeon_classes WHERE classname='" + classname + "' AND classlevel='" + classlevel +"'";
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                int slot = resultSet.getInt("slot");
+                ItemStack itemStack = selectItemFromClass(classname, classlevel, slot);
+                player.getInventory().setItem(slot, itemStack);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if(statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public boolean checkIfClassExists(String classname, int classlevel, int slot) {
+        Statement statement = null;
+        try {
+            String sql = "SELECT itemstackyaml FROM dungeon_classes WHERE classname='" + classname + "' AND slot='" + slot + "' AND classlevel='" + classlevel +"'";
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                System.out.println("true");
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if(statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        System.out.println("false");
+        return false;
     }
 }
