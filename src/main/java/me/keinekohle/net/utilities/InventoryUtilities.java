@@ -15,7 +15,8 @@ public class InventoryUtilities {
     public static String fillDisplayname = "§a";
 
     public static Inventory createShopInventroy(Player player) {
-        Inventory inventory = Bukkit.createInventory(player, 9 * 3, GlobalUtilities.getColorByName(KeineKohle.CHESTDISPLAYNAME) + KeineKohle.DISPLAYNAME);
+        Inventory inventory = Bukkit.createInventory(player, 9 * 3, GlobalUtilities.getColorByName(KeineKohle.CHESTDISPLAYNAME) + KeineKohle.CHESTDISPLAYNAME);
+        fillInventory(inventory, Material.BLACK_STAINED_GLASS_PANE);
         inventory.setItem(10, ItemBuilder.createItemStack(Material.IRON_CHESTPLATE, 1, GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Classes.SHOPCLASSES));
         return inventory;
     }

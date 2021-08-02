@@ -3,6 +3,7 @@ package me.keinekohle.net.listeners.lobby;
 import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import me.keinekohle.net.utilities.InventoryUtilities;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,13 +17,19 @@ public class ListenerLobbyPlayerInteractEvent implements Listener {
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
         if(!KeineKohle.inGame) {
             Player player = event.getPlayer();
-            if(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR && event.getItem() != null && event.getItem().hasItemMeta() && event.getItem().getItemMeta().hasDisplayName()) {
+            player.sendMessage("1");
+            if(event.getItem() != null && checkAction(event) && event.getItem().hasItemMeta() && event.getItem().getItemMeta().hasDisplayName()) {
                 ItemStack itemInHand = event.getItem();
-
-                if(itemInHand.getItemMeta().getDisplayName() == GlobalUtilities.getColorByName(KeineKohle.CHESTDISPLAYNAME) + KeineKohle.CHESTDISPLAYNAME) {
+                player.sendMessage("2");
+                if(itemInHand.getItemMeta().getDisplayName().equals(GlobalUtilities.getColorByName(KeineKohle.CHESTDISPLAYNAME) + KeineKohle.CHESTDISPLAYNAME)) {
+                    player.sendMessage("3");
                     player.openInventory(InventoryUtilities.createShopInventroy(player));
                 }
             }
         }
+    }
+
+    private boolean checkAction(PlayerInteractEvent event) {
+        return event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR;
     }
 }
