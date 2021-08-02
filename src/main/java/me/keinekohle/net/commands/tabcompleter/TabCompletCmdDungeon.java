@@ -13,22 +13,28 @@ public class TabCompletCmdDungeon implements TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> tabComplete = new ArrayList<>();
-        if(command.getName().equalsIgnoreCase("dungeon")) {
-            if(sender instanceof Player player && player.hasPermission(KeineKohle.PERMISSIONPREFIX + "*")) {
-                if (args.length == 1) {
+        if (command.getName().equalsIgnoreCase("dungeon") && sender instanceof Player player && player.hasPermission(KeineKohle.PERMISSIONPREFIX + "*")) {
+            switch (args.length) {
+                case 1:
                     tabComplete.add("buildmode");
                     tabComplete.add("create");
-                } else if(args.length == 2) {
+                    break;
+                case 2:
                     tabComplete.add("class");
-                } else if(args.length == 3) {
-
-                } else if(args.length == 4) {
-                    for(int i = 0; i < 6; i++) {
-                        tabComplete.add(String.valueOf(i));
-                    }
-                }
+                    break;
+                case 4:
+                    outPutPossibleClassLevels(tabComplete);
+                    break;
+                default:
+                    break;
             }
         }
         return tabComplete;
+    }
+
+    private void outPutPossibleClassLevels(List<String> tabComplete) {
+        for (int i = 1; i < 7; i++) {
+            tabComplete.add(String.valueOf(i));
+        }
     }
 }

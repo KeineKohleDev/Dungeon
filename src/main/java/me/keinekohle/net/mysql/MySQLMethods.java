@@ -11,7 +11,7 @@ import java.util.UUID;
 public class MySQLMethods {
 
     private final MySQLConnection mySQLConnection = new MySQLConnection();
-    private Connection connection = mySQLConnection.getConnection();
+    private final Connection connection = mySQLConnection.getConnection();
 
     public void createDungeonPlayerTable() {
         Statement statement = null;

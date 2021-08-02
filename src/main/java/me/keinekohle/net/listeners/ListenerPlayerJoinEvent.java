@@ -3,7 +3,6 @@ package me.keinekohle.net.listeners;
 import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.mysql.MySQLConnection;
 import me.keinekohle.net.mysql.MySQLMethods;
-import me.keinekohle.net.scoreboard.LobbyScoreboard;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import me.keinekohle.net.utilities.Language;
 import me.keinekohle.net.utilities.PlayerUtilities;

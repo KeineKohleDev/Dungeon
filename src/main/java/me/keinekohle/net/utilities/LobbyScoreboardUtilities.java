@@ -1,6 +1,5 @@
 package me.keinekohle.net.utilities;
 
-import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.mysql.MySQLConnection;
 import me.keinekohle.net.mysql.MySQLMethods;
 import org.bukkit.entity.Player;

@@ -3,7 +3,6 @@ package me.keinekohle.net.utilities;
 import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.scoreboard.LobbyScoreboard;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 
 public class PlayerUtilities {

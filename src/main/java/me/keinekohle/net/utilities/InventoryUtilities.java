@@ -12,7 +12,7 @@ public class InventoryUtilities {
         throw new IllegalStateException("Utility class");
     }
 
-    public static String fillDisplayname = "§a";
+    public static final String FILLDIESPLAYNAME = "§a";
 
     public static Inventory createShopInventroy(Player player) {
         Inventory inventory = Bukkit.createInventory(player, 9 * 3, GlobalUtilities.getColorByName(KeineKohle.CHESTDISPLAYNAME) + KeineKohle.CHESTDISPLAYNAME);
@@ -23,7 +23,7 @@ public class InventoryUtilities {
 
     public static void fillInventory(Inventory inventory, Material fillMaterial) {
         for(int i = 0; i < inventory.getSize(); i++) {
-            inventory.setItem(i, ItemBuilder.createItemStack(fillMaterial, 1, fillDisplayname));
+            inventory.setItem(i, ItemBuilder.createItemStack(fillMaterial, 1, FILLDIESPLAYNAME));
         }
     }
 

@@ -3,7 +3,6 @@ package me.keinekohle.net.utilities;
 import me.keinekohle.net.main.KeineKohle;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 public class GlobalUtilities {
 
@@ -13,38 +12,23 @@ public class GlobalUtilities {
 
     public static String getColorByName(String name) {
 
-        switch (name) {
-            case KeineKohle.ANVILDISPLAYNAME:
-                return ChatColor.of("#4815ED").toString();
-            case KeineKohle.COMPARATORDISPLAYNAME:
-                return ChatColor.of("#F70C24").toString();
-            case KeineKohle.CHESTDISPLAYNAME:
-                return ChatColor.of("#F75CCB").toString();
-            case KeineKohle.BOOKDISPLAYNAME:
-                return ChatColor.of("#76B7F0").toString();
-            case KeineKohle.DISPLAYNAME:
-                return ChatColor.GOLD.toString();
-            case KeineKohle.COINS:
-                return ChatColor.of("#F29C1B").toString();
-            case KeineKohle.BRACKETSCOLOR, Classes.NONECLASS:
-                return ChatColor.DARK_GRAY.toString();
-            case KeineKohle.CHATCOLOR:
-                return ChatColor.of("#FCE23A").toString();
-            case Classes.TANKCLASS:
-                return ChatColor.of("#38373B").toString();
-            case Classes.HEALERCLASS:
-                return ChatColor.of("#FA6A66").toString();
-            case Classes.SURVIVORCLASS:
-                return ChatColor.of("#3FE334").toString();
-            case Classes.ARCHERCLASS:
-                return ChatColor.of("#E3914B").toString();
-            case Classes.BOMBERCLASS:
-                return ChatColor.of("#C73B1C").toString();
-            case Classes.SHOPCLASSES:
-                return ChatColor.of("#39F6D3").toString();
-            default:
-                return "getColorByName: default! for input " + name;
-        }
+        return switch (name) {
+            case KeineKohle.ANVILDISPLAYNAME -> ChatColor.of("#4815ED").toString();
+            case KeineKohle.COMPARATORDISPLAYNAME -> ChatColor.of("#F70C24").toString();
+            case KeineKohle.CHESTDISPLAYNAME -> ChatColor.of("#F75CCB").toString();
+            case KeineKohle.BOOKDISPLAYNAME -> ChatColor.of("#76B7F0").toString();
+            case KeineKohle.DISPLAYNAME -> ChatColor.GOLD.toString();
+            case KeineKohle.COINS -> ChatColor.of("#F29C1B").toString();
+            case KeineKohle.BRACKETSCOLOR, Classes.NONECLASS -> ChatColor.DARK_GRAY.toString();
+            case KeineKohle.CHATCOLOR -> ChatColor.of("#FCE23A").toString();
+            case Classes.TANKCLASS -> ChatColor.of("#38373B").toString();
+            case Classes.HEALERCLASS -> ChatColor.of("#FA6A66").toString();
+            case Classes.SURVIVORCLASS -> ChatColor.of("#3FE334").toString();
+            case Classes.ARCHERCLASS -> ChatColor.of("#E3914B").toString();
+            case Classes.BOMBERCLASS -> ChatColor.of("#C73B1C").toString();
+            case Classes.SHOPCLASSES -> ChatColor.of("#39F6D3").toString();
+            default -> "getColorByName: default! for input " + name;
+        };
     }
 
     public static String surroundWithBracketsAndColorCodes(String tosurround) {
@@ -61,7 +45,7 @@ public class GlobalUtilities {
 
     public static boolean isNumeric(String toBeChecked) {
         try {
-            int temp = Integer.parseInt(toBeChecked);
+            Integer.parseInt(toBeChecked);
         } catch (NumberFormatException exception) {
             return false;
         }

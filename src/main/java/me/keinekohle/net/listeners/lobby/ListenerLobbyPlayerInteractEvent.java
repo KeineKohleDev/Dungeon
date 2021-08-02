@@ -3,7 +3,6 @@ package me.keinekohle.net.listeners.lobby;
 import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import me.keinekohle.net.utilities.InventoryUtilities;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
