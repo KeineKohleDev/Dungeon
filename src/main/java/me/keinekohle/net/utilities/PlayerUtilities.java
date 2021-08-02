@@ -27,7 +27,7 @@ public class PlayerUtilities {
         player.getInventory().setItem(0, ItemBuilder.createItemStack(Material.CHEST, 1, GlobalUtilities.getColorByName(KeineKohle.CHESTDISPLAYNAME) + KeineKohle.CHESTDISPLAYNAME));
         player.getInventory().setItem(1, ItemBuilder.createItemStack(Material.COMPARATOR, 1, GlobalUtilities.getColorByName(KeineKohle.COMPARATORDISPLAYNAME)  + KeineKohle.COMPARATORDISPLAYNAME));
         player.getInventory().setItem(4, ItemBuilder.createItemStack(Material.ANVIL, 1, GlobalUtilities.getColorByName(KeineKohle.ANVILDISPLAYNAME) + KeineKohle.ANVILDISPLAYNAME));
-        player.getInventory().setItem(9, ItemBuilder.createItemStack(Material.BOOK, 1, GlobalUtilities.getColorByName(KeineKohle.BOOKDISPLAYNAME) + KeineKohle.BOOKDISPLAYNAME));
+        player.getInventory().setItem(8, ItemBuilder.createItemStack(Material.BOOK, 1, GlobalUtilities.getColorByName(KeineKohle.BOOKDISPLAYNAME) + KeineKohle.BOOKDISPLAYNAME));
     }
 
     public static void sendLastUsedClassGotSelectedMessage(Player player) {
