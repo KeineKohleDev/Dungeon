@@ -2,6 +2,7 @@ package me.keinekohle.net.utilities;
 
 import me.keinekohle.net.mysql.MySQLConnection;
 import me.keinekohle.net.mysql.MySQLMethods;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public final class Classes {
@@ -12,6 +13,8 @@ public final class Classes {
     public static final String SURVIVORCLASS = "SURVIVOR";
     public static final String ARCHERCLASS = "ARCHER";
     public static final String BOMBERCLASS = "BOMBER";
+
+    public static final Material TANKCLASSREPRESENTATIVEITEM = Material.IRON_CHESTPLATE;
 
     public static final String SHOPCLASSES = "Classes";
 

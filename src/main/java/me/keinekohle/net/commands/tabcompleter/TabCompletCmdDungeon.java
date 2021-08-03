@@ -1,6 +1,8 @@
 package me.keinekohle.net.commands.tabcompleter;
 
 import me.keinekohle.net.main.KeineKohle;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -32,7 +34,6 @@ public class TabCompletCmdDungeon implements TabCompleter {
         }
         return tabComplete;
     }
-
     private void outPutPossibleClassLevels(List<String> tabComplete) {
         for (int i = 1; i < 7; i++) {
             tabComplete.add(String.valueOf(i));

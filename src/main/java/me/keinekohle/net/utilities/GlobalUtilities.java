@@ -4,8 +4,6 @@ import me.keinekohle.net.main.KeineKohle;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 
-import java.util.Locale;
-
 public final class GlobalUtilities {
 
     private GlobalUtilities() {
@@ -29,6 +27,10 @@ public final class GlobalUtilities {
             case Classes.ARCHERCLASS -> ChatColor.of("#E3914B").toString();
             case Classes.BOMBERCLASS -> ChatColor.of("#C73B1C").toString();
             case Classes.SHOPCLASSES -> ChatColor.of("#39F6D3").toString();
+            case KeineKohle.DIFICULTYEASY -> ChatColor.of("#9DFC58").toString();
+            case KeineKohle.DIFICULTYNORMAL -> ChatColor.of("#1EE62F").toString();
+            case KeineKohle.DIFICULTYHARD -> ChatColor.of("#F6814C").toString();
+            case KeineKohle.DIFICULTYVERYHARD -> ChatColor.of("#EB140B").toString();
             default -> "getColorByName: default! for input " + name;
         };
     }

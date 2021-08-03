@@ -31,12 +31,22 @@ public class KeineKohle extends JavaPlugin {
     public static final String ANVILDISPLAYNAME  = "Upgrade";
     public static final String BOOKDISPLAYNAME  = "Settings";
 
+    public static String CHESTDISPLAYNAMEANDCOLOR = GlobalUtilities.getColorByName(CHESTDISPLAYNAME) + CHESTDISPLAYNAME;
+    public static final String COMPARATORDISPLAYNAMEANDCOLOR = GlobalUtilities.getColorByName(COMPARATORDISPLAYNAME) + COMPARATORDISPLAYNAME;
+    public static final String ANVILDISPLAYNAMEANDCOLOR = GlobalUtilities.getColorByName(ANVILDISPLAYNAME) + ANVILDISPLAYNAME;
+    public static final String BOOKDISPLAYNAMEANDCOLOR = GlobalUtilities.getColorByName(BOOKDISPLAYNAME) + BOOKDISPLAYNAME;
+
 
     //BRACKETS
     public static final String BRACKETSCOLOR = "BRACKETSCOLOR";
     public static final String CHATCOLOR = "CHATCOLOR";
 
     public static final String DISPLAYNAME = "Dungeon";
+
+    public static final String DIFICULTYEASY = "Easy";
+    public static final String DIFICULTYNORMAL = "Normal";
+    public static final String DIFICULTYHARD = "Hard";
+    public static final String DIFICULTYVERYHARD = "Very hard";
 
     //-- Global --
     public static final String COINS = "Coins";

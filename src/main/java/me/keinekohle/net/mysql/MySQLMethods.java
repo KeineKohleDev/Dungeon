@@ -151,7 +151,51 @@ public class MySQLMethods {
     public void insertClassItemstack(String className, int classLevel, int slot, String itemstackyaml) {
         Statement statement = null;
         try {
-            String sql = "INSERT into dungeon_classes (classname, classlevel, slot, itemstackyaml) values ('" + className + "', '" + classLevel + "', '" + slot + "', '" + itemstackyaml + "')";
+            String sql = "INSERT into dungeon_classlevels (classname, classlevel, slot, itemstackyaml) values ('" + className + "', '" + classLevel + "', '" + slot + "', '" + itemstackyaml + "')";
+            statement = connection.createStatement();
+            statement.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(statement);
+        }
+    }
+
+    public void insertClass(String className, String classColor, String representativeItem) {
+        Statement statement = null;
+        try {
+            String sql = "INSERT into dungeon_classes (classname, classcolor, representativeitem) values ('" + className + "', '" + classColor + "', '" + representativeItem + "')";
+            statement = connection.createStatement();
+            statement.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(statement);
+        }
+    }
+
+    public boolean checkIfClassExists(String className) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT classname FROM dungeon_classes WHERE classname='" + className + "'";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return false;
+    }
+
+    public void updateClass(String className, String classColor, String representativeItem) {
+        Statement statement = null;
+        try {
+            String sql = "UPDATE dungeon_classes SET (classColor, representativeItem) VALUES ('"+classColor+"', '"+representativeItem+"') WHERE classname='" + className +"'";
             statement = connection.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {
@@ -164,7 +208,7 @@ public class MySQLMethods {
     public void updateClassItemstack(String className, int classLevel, int slot, String itemstackyaml) {
         Statement statement = null;
         try {
-            String sql = "UPDATE dungeon_classes SET itemstackyaml='" + itemstackyaml + "' WHERE " + whereClassNameAndSlotAndClasslevel(className, classLevel, slot);
+            String sql = "UPDATE dungeon_classlevels SET itemstackyaml='" + itemstackyaml + "' WHERE " + whereClassNameAndSlotAndClasslevel(className, classLevel, slot);
             statement = connection.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {
@@ -178,12 +222,12 @@ public class MySQLMethods {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-            String sql = "SELECT itemstackyaml FROM dungeon_classes WHERE " + whereClassNameAndSlotAndClasslevel(className, classLevel, slot);
+            String sql = "SELECT itemstackyaml FROM dungeon_classlevels WHERE " + whereClassNameAndSlotAndClasslevel(className, classLevel, slot);
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
                 YamlConfiguration configuration = new YamlConfiguration();
-                String cfg = resultSet.getString("itemstackyaml").replace("*", "'");
+                String cfg = resultSet.getString("itemstackyaml").replace("-|-", "'");
                 configuration.loadFromString(cfg);
                 return configuration.getItemStack("i", null);
             }
@@ -199,7 +243,7 @@ public class MySQLMethods {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-            String sql = "SELECT slot FROM dungeon_classes WHERE classname='" + classname + "' AND classlevel='" + classlevel + "'";
+            String sql = "SELECT slot FROM dungeon_classlevels WHERE classname='" + classname + "' AND classlevel='" + classlevel + "'";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
@@ -214,15 +258,14 @@ public class MySQLMethods {
         }
     }
 
-    public boolean checkIfClassExists(String className, int classLevel, int slot) {
+    public boolean checkIfClassItemStackExists(String className, int classLevel, int slot) {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-            String sql = "SELECT itemstackyaml FROM dungeon_classes WHERE " + whereClassNameAndSlotAndClasslevel(className, classLevel, slot);
+            String sql = "SELECT itemstackyaml FROM dungeon_classlevels WHERE " + whereClassNameAndSlotAndClasslevel(className, classLevel, slot);
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
-                resultSet.close();
                 return true;
             }
         } catch (SQLException e) {

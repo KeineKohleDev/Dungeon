@@ -4,13 +4,15 @@ import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.mysql.MySQLMethods;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import me.keinekohle.net.utilities.Language;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import java.nio.charset.StandardCharsets;
 
 public class CmdDungeon implements CommandExecutor {
 
@@ -52,29 +54,29 @@ public class CmdDungeon implements CommandExecutor {
     }
 
     private void createNewClass(String[] args, Player player) {
-        if (args[0].equalsIgnoreCase("create") && args[1].equalsIgnoreCase("class") && args[2] != null && GlobalUtilities.isNumeric(args[3])) {
+        if (args[0].equalsIgnoreCase("create") && args[1].equalsIgnoreCase("class") && args[2] != null && GlobalUtilities.isNumeric(args[3]) && GlobalUtilities.isNumeric(args[4]) && player.getInventory().getItem(17) != null && args[5] != null) {
             int slot = 0;
+            int cost = Integer.parseInt(args[4]);
             int classlevel = Integer.parseInt(args[3]);
+            String representativeItem = player.getInventory().getItem(17).getType().toString();
             MySQLMethods mySQLMethods = new MySQLMethods();
-            for (ItemStack itemStack : player.getInventory().getContents()) {
-                if (itemStack != null) {
-                    updateOrInsertItemStack(args, player, slot, classlevel, mySQLMethods, itemStack);
-                }
-                slot++;
-            }
-        }
-    }
+            if(!mySQLMethods.checkIfClassExists(args[2])) {
+                mySQLMethods.insertClass(args[2], args[5], representativeItem);
 
-    private void updateOrInsertItemStack(String[] args, Player player, int slot, int classlevel, MySQLMethods mySQLMethods, ItemStack itemStack) {
-        YamlConfiguration configuration = new YamlConfiguration();
-        configuration.set("i", itemStack);
-        String itemstackYAML = configuration.saveToString().replace("'", "*");
-        if(mySQLMethods.checkIfClassExists(args[2], classlevel, slot)) {
-            player.sendMessage("ture");
-            mySQLMethods.updateClassItemstack(args[2], classlevel, slot, itemstackYAML);
-        } else {
-            player.sendMessage("false");
-            mySQLMethods.insertClassItemstack(args[2], classlevel, slot, itemstackYAML);
+                for (ItemStack itemStack : player.getInventory().getContents()) {
+                    if(slot != 17) {
+                        if (itemStack != null) {
+                            YamlConfiguration configuration = new YamlConfiguration();
+                            configuration.set("i", itemStack);
+                            String itemstackYAML = configuration.saveToString().replace("'", "-|-");
+                            if(mySQLMethods.checkIfClassItemStackExists(args[2], classlevel, slot)) {
+                                mySQLMethods.insertClassItemstack(args[2], classlevel, slot, itemstackYAML);
+                            }
+                        }
+                    }
+                    slot++;
+                }
+            }
         }
     }
 
