@@ -195,7 +195,7 @@ public class MySQLMethods {
     public void updateClass(String className, String classColor, String representativeItem) {
         Statement statement = null;
         try {
-            String sql = "UPDATE dungeon_classes SET (classColor, representativeItem) VALUES ('"+classColor+"', '"+representativeItem+"') WHERE classname='" + className +"'";
+            String sql = "UPDATE dungeon_classes SET classColor="+classColor+", representativeItem='"+representativeItem+"' WHERE classname='" + className +"'";
             statement = connection.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {

@@ -4,15 +4,12 @@ import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.mysql.MySQLMethods;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import me.keinekohle.net.utilities.Language;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import java.nio.charset.StandardCharsets;
 
 public class CmdDungeon implements CommandExecutor {
 
@@ -25,6 +22,8 @@ public class CmdDungeon implements CommandExecutor {
                     case 1:
                         buildmode(args, player);
                         break;
+                    case 3:
+
                     case 4:
                         createNewClass(args, player);
                         getClass(args, player);
@@ -43,7 +42,12 @@ public class CmdDungeon implements CommandExecutor {
     }
 
     private void sendHelp(Player player) {
-        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "---- Help ----");
+        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "---- Dungeon - Help ----");
+        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "/dungeon <create | update> <class> <class name> <class level> <coast> (holed the item that should be the icon of this class in your main hand!");
+        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "/dungeon <delete> <class> <class name> <class leve | all>");
+        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "/dungeon <select> <class> <class name> <class leve>");
+        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "/dungeon buildmode (on/off)");
+        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "---- Dungeon - Help ----");
     }
 
     private void getClass(String[] args, Player player) {
@@ -58,25 +62,27 @@ public class CmdDungeon implements CommandExecutor {
             int slot = 0;
             int cost = Integer.parseInt(args[4]);
             int classlevel = Integer.parseInt(args[3]);
-            String representativeItem = player.getInventory().getItem(17).getType().toString();
+            String representativeItem = player.getInventory().getItemInMainHand().getType().toString();
+            player.getInventory().remove(player.getInventory().getItemInMainHand());
             MySQLMethods mySQLMethods = new MySQLMethods();
-            if(!mySQLMethods.checkIfClassExists(args[2])) {
+            if (!mySQLMethods.checkIfClassExists(args[2])) {
                 mySQLMethods.insertClass(args[2], args[5], representativeItem);
+                savePlayerInventoryToClassLevel(args, player, slot, classlevel, mySQLMethods);
+            }
+        }
+    }
 
-                for (ItemStack itemStack : player.getInventory().getContents()) {
-                    if(slot != 17) {
-                        if (itemStack != null) {
-                            YamlConfiguration configuration = new YamlConfiguration();
-                            configuration.set("i", itemStack);
-                            String itemstackYAML = configuration.saveToString().replace("'", "-|-");
-                            if(mySQLMethods.checkIfClassItemStackExists(args[2], classlevel, slot)) {
-                                mySQLMethods.insertClassItemstack(args[2], classlevel, slot, itemstackYAML);
-                            }
-                        }
-                    }
-                    slot++;
+    private void savePlayerInventoryToClassLevel(String[] args, Player player, int slot, int classlevel, MySQLMethods mySQLMethods) {
+        for (ItemStack itemStack : player.getInventory().getContents()) {
+            if (itemStack != null) {
+                YamlConfiguration configuration = new YamlConfiguration();
+                configuration.set("i", itemStack);
+                String itemstackYAML = configuration.saveToString().replace("'", "-|-");
+                if (mySQLMethods.checkIfClassItemStackExists(args[2], classlevel, slot)) {
+                    mySQLMethods.insertClassItemstack(args[2], classlevel, slot, itemstackYAML);
                 }
             }
+            slot++;
         }
     }
 
