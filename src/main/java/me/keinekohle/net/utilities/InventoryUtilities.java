@@ -6,6 +6,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+import java.util.List;
+
 public final class InventoryUtilities {
 
     public static final String FILLDIESPLAYNAME = "§a";
@@ -43,14 +45,36 @@ public final class InventoryUtilities {
 
     public static Inventory createAbilitiesInventory(Player player) {
         Inventory inventory = Bukkit.createInventory(player, 9 * 3, GlobalUtilities.getColorByName(KeineKohle.ABILITIESDISPLAYNAME) + KeineKohle.ABILITIESDISPLAYNAME);
+
+        addAbilityToInventory(inventory, Material.FIRE_CHARGE, Abilites.FIRE, Abilites.FIRELOREDESCRIPTION);
+        addAbilityToInventory(inventory, Material.BLAZE_POWDER, Abilites.FIREGRENADE, Abilites.FIREGRENADELOREDESCRIPTION);
+
+        addAbilityToInventory(inventory, Material.DIRT, Abilites.EARTH, Abilites.EARTHLOREDESCRIPTION);
+        addAbilityToInventory(inventory, Material.NETHERRACK, Abilites.HELL, Abilites.HELLLOREDESCRIPTION);
+
+        addAbilityToInventory(inventory, Material.BLUE_ICE, Abilites.FREEZE, Abilites.FREEZELOREDESCRIPTION);
+        addAbilityToInventory(inventory, Material.SPLASH_POTION, Abilites.FREEZEGRANDE, Abilites.FREEZEGRANDELOREDESCRIPTION);
+
+        addAbilityToInventory(inventory, Material.TNT, Abilites.C4, Abilites.C4LOREDESCRIPTION);
+        addAbilityToInventory(inventory, Material.FIREWORK_STAR, Abilites.GRENADE, Abilites.GRENADELOREDESCRIPTION);
+
+        addAbilityToInventory(inventory, Material.BEACON, Abilites.HEALBEACON, Abilites.HEALBEACONLOREDESCRIPTION);
+        addAbilityToInventory(inventory, Material.MAGMA_CREAM, Abilites.HEALGRENADE, Abilites.HEALGRENADELOREDESCRIPTION);
+
+        addAbilityToInventory(inventory, Material.POTION, Abilites.WEAKNESS, Abilites.WEAKNESSLOREDESCRIPTION);
+        addAbilityToInventory(inventory, Material.SPLASH_POTION, Abilites.WWEAKNESSGRANDE, Abilites.WWEAKNESSGRANDELOREDESCRIPTION);
+
         fillInventory(inventory, Material.BLACK_STAINED_GLASS_PANE);
-        inventory.addItem(ItemBuilder.createItemStackWithLore(Material.FIRE_CHARGE, 1, GlobalUtilities.getColorByName(Abilites.ABILITYFIRE) + Abilites.ABILITYFIRE, Abilites.ABILITYFIREDESCRIPTION));
         return inventory;
+    }
+
+    private static void addAbilityToInventory(Inventory inventory, Material material, String ability, List<String> abilityDescription) {
+        inventory.addItem(ItemBuilder.createItemStackWithLore(material, 1, GlobalUtilities.getColorByName(ability) + ability, abilityDescription));
     }
 
     public static void fillInventory(Inventory inventory, Material fillMaterial) {
         for(int i = 0; i < inventory.getSize(); i++) {
-            if(inventory.getItem(i).getType() == Material.AIR) {
+            if(inventory.getItem(i) == null) {
                 inventory.setItem(i, ItemBuilder.createItemStack(fillMaterial, 1, FILLDIESPLAYNAME));
             }
         }

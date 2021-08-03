@@ -32,7 +32,18 @@ public final class GlobalUtilities {
             case KeineKohle.DIFICULTYHARD -> ChatColor.of("#F6814C").toString();
             case KeineKohle.DIFICULTYVERYHARD -> ChatColor.of("#EB140B").toString();
             case KeineKohle.ABILITIESDISPLAYNAME -> ChatColor.of("#BEF679").toString();
-            case Abilites.ABILITYFIRE -> ChatColor.of("#D9211A").toString();
+            case Abilites.FIRE -> ChatColor.of("#D9211A").toString();
+            case Abilites.FIREGRENADE -> ChatColor.of("#DB4944").toString();
+            case Abilites.EARTH -> ChatColor.of("#6AF22E").toString();
+            case Abilites.HELL -> ChatColor.of("#E8322A").toString();
+            case Abilites.C4 -> ChatColor.of("#DB1401").toString();
+            case Abilites.GRENADE -> ChatColor.of("#CACBEB").toString();
+            case Abilites.FREEZEGRANDE -> ChatColor.of("#55B7FA").toString();
+            case Abilites.FREEZE -> ChatColor.of("#4B7CDE").toString();
+            case Abilites.HEALBEACON -> ChatColor.of("#DE615D").toString();
+            case Abilites.HEALGRENADE -> ChatColor.of("#F58573").toString();
+            case Abilites.WEAKNESS -> ChatColor.of("#B6BCBF").toString();
+            case Abilites.WWEAKNESSGRANDE -> ChatColor.of("#DDE5E9").toString();
             default -> "getColorByName: default! for input " + name;
         };
     }

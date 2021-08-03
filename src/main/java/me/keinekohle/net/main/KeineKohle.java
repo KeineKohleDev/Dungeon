@@ -24,8 +24,6 @@ public class KeineKohle extends JavaPlugin {
     public static final String PREFIX = GlobalUtilities.surroundWithBracketsAndColorCodes(GlobalUtilities.getColorByName(KeineKohle.DISPLAYNAME) + KeineKohle.DISPLAYNAME);
     public static final String PERMISSIONPREFIX = "Dungeon.";
 
-    public static KeineKohle main;
-
     //-- Lists --
     //buildmode
     public static final HashMap<Player, CreateNewClass> PLAYERCREATENEWCLASS = new HashMap<>();
@@ -62,7 +60,6 @@ public class KeineKohle extends JavaPlugin {
     //loaded on startup
     @Override
     public void onEnable() {
-        main = this;
         // NEED TO BE ADDED: LICENSE CHECK!
 
         loadCommonListeners();

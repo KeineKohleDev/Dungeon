@@ -136,7 +136,7 @@ public class ListenerSetupAsyncPlayerChatEvent implements Listener {
     private void handleStageOpenAbilitiesInventory(Player player, String message) {
         if (message.equalsIgnoreCase("next")) {
             // run in main thread
-            Bukkit.getScheduler().runTask(KeineKohle.main, () -> player.openInventory(InventoryUtilities.createAbilitiesInventory(player)));
+            Bukkit.getScheduler().runTask(KeineKohle.getPlugin(KeineKohle.class), () -> player.openInventory(InventoryUtilities.createAbilitiesInventory(player)));
         } else {
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please type 'next'");
 
