@@ -41,9 +41,18 @@ public final class InventoryUtilities {
         return inventory;
     }
 
+    public static Inventory createAbilitiesInventory(Player player) {
+        Inventory inventory = Bukkit.createInventory(player, 9 * 3, GlobalUtilities.getColorByName(KeineKohle.ABILITIESDISPLAYNAME) + KeineKohle.ABILITIESDISPLAYNAME);
+        fillInventory(inventory, Material.BLACK_STAINED_GLASS_PANE);
+        inventory.addItem(ItemBuilder.createItemStackWithLore(Material.FIRE_CHARGE, 1, GlobalUtilities.getColorByName(Abilites.ABILITYFIRE) + Abilites.ABILITYFIRE, Abilites.ABILITYFIREDESCRIPTION));
+        return inventory;
+    }
+
     public static void fillInventory(Inventory inventory, Material fillMaterial) {
         for(int i = 0; i < inventory.getSize(); i++) {
-            inventory.setItem(i, ItemBuilder.createItemStack(fillMaterial, 1, FILLDIESPLAYNAME));
+            if(inventory.getItem(i).getType() == Material.AIR) {
+                inventory.setItem(i, ItemBuilder.createItemStack(fillMaterial, 1, FILLDIESPLAYNAME));
+            }
         }
     }
 

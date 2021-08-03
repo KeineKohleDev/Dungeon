@@ -6,6 +6,8 @@ import me.keinekohle.net.listeners.*;
 import me.keinekohle.net.listeners.lobby.ListenerLobbyEntityDamageByEntityEvent;
 import me.keinekohle.net.listeners.lobby.ListenerLobbyEntityDamageEvent;
 import me.keinekohle.net.listeners.lobby.ListenerLobbyPlayerInteractEvent;
+import me.keinekohle.net.listeners.setup.ListenerSetupAsyncPlayerChatEvent;
+import me.keinekohle.net.utilities.CreateNewClass;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -13,6 +15,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class KeineKohle extends JavaPlugin {
@@ -21,8 +24,11 @@ public class KeineKohle extends JavaPlugin {
     public static final String PREFIX = GlobalUtilities.surroundWithBracketsAndColorCodes(GlobalUtilities.getColorByName(KeineKohle.DISPLAYNAME) + KeineKohle.DISPLAYNAME);
     public static final String PERMISSIONPREFIX = "Dungeon.";
 
-    //-- ArrayLists --
+    public static KeineKohle main;
+
+    //-- Lists --
     //buildmode
+    public static final HashMap<Player, CreateNewClass> PLAYERCREATENEWCLASS = new HashMap<>();
     public static final List<Player> buildmode = new ArrayList<>();
 
     //-- Player lobby hotbar --
@@ -31,11 +37,7 @@ public class KeineKohle extends JavaPlugin {
     public static final String ANVILDISPLAYNAME  = "Upgrade";
     public static final String BOOKDISPLAYNAME  = "Settings";
 
-    public static String CHESTDISPLAYNAMEANDCOLOR = GlobalUtilities.getColorByName(CHESTDISPLAYNAME) + CHESTDISPLAYNAME;
-    public static final String COMPARATORDISPLAYNAMEANDCOLOR = GlobalUtilities.getColorByName(COMPARATORDISPLAYNAME) + COMPARATORDISPLAYNAME;
-    public static final String ANVILDISPLAYNAMEANDCOLOR = GlobalUtilities.getColorByName(ANVILDISPLAYNAME) + ANVILDISPLAYNAME;
-    public static final String BOOKDISPLAYNAMEANDCOLOR = GlobalUtilities.getColorByName(BOOKDISPLAYNAME) + BOOKDISPLAYNAME;
-
+    public static final String ABILITIESDISPLAYNAME  = "Abilities";
 
     //BRACKETS
     public static final String BRACKETSCOLOR = "BRACKETSCOLOR";
@@ -60,6 +62,7 @@ public class KeineKohle extends JavaPlugin {
     //loaded on startup
     @Override
     public void onEnable() {
+        main = this;
         // NEED TO BE ADDED: LICENSE CHECK!
 
         loadCommonListeners();
@@ -91,6 +94,9 @@ public class KeineKohle extends JavaPlugin {
         pm.registerEvents(new ListenerLobbyPlayerInteractEvent(), this);
         pm.registerEvents(new ListenerLobbyEntityDamageByEntityEvent(), this);
         pm.registerEvents(new ListenerLobbyEntityDamageEvent(), this);
+
+        //Setup only
+        pm.registerEvents(new ListenerSetupAsyncPlayerChatEvent(), this);
     }
 
 }

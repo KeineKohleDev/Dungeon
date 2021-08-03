@@ -31,6 +31,8 @@ public final class GlobalUtilities {
             case KeineKohle.DIFICULTYNORMAL -> ChatColor.of("#1EE62F").toString();
             case KeineKohle.DIFICULTYHARD -> ChatColor.of("#F6814C").toString();
             case KeineKohle.DIFICULTYVERYHARD -> ChatColor.of("#EB140B").toString();
+            case KeineKohle.ABILITIESDISPLAYNAME -> ChatColor.of("#BEF679").toString();
+            case Abilites.ABILITYFIRE -> ChatColor.of("#D9211A").toString();
             default -> "getColorByName: default! for input " + name;
         };
     }

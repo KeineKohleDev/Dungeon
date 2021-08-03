@@ -161,10 +161,10 @@ public class MySQLMethods {
         }
     }
 
-    public void insertClass(String className, String classColor, String representativeItem) {
+    public void insertClass(String className, int classLevel, int classCoast, String classColor, String representativeItem) {
         Statement statement = null;
         try {
-            String sql = "INSERT into dungeon_classes (classname, classcolor, representativeitem) values ('" + className + "', '" + classColor + "', '" + representativeItem + "')";
+            String sql = "INSERT into dungeon_classes (classname, classlevel, classcoast, classcolor, representativeitem) values ('" + className + "', '" + classLevel + "', '" + classCoast + "', '" + classColor + "', '" + representativeItem + "')";
             statement = connection.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {
@@ -174,11 +174,29 @@ public class MySQLMethods {
         }
     }
 
-    public boolean checkIfClassExists(String className) {
+    public boolean checkIfClassNameExists(String className) {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
             String sql = "SELECT classname FROM dungeon_classes WHERE classname='" + className + "'";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return false;
+    }
+
+    public boolean checkIfClassLevelExists(String className, int classLevel) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT classlevel FROM dungeon_classes WHERE classname='" + className + "' AND classlevel='" + classLevel +"'";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {

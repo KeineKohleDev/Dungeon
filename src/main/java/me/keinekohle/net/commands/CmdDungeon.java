@@ -1,9 +1,13 @@
 package me.keinekohle.net.commands;
 
+import me.keinekohle.net.listeners.setup.ListenerSetupAsyncPlayerChatEvent;
 import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.mysql.MySQLMethods;
+import me.keinekohle.net.utilities.CreateNewClass;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import me.keinekohle.net.utilities.Language;
+import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,9 +26,10 @@ public class CmdDungeon implements CommandExecutor {
                     case 1:
                         buildmode(args, player);
                         break;
-                    case 3:
-
-                    case 4:
+                    case 2:
+                        startCreateNewClassSetup(args, player);
+                        break;
+                    case 6:
                         createNewClass(args, player);
                         getClass(args, player);
                         break;
@@ -43,7 +48,7 @@ public class CmdDungeon implements CommandExecutor {
 
     private void sendHelp(Player player) {
         player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "---- Dungeon - Help ----");
-        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "/dungeon <create | update> <class> <class name> <class level> <coast> (holed the item that should be the icon of this class in your main hand!");
+        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "/dungeon <create | update> <class>");
         player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "/dungeon <delete> <class> <class name> <class leve | all>");
         player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "/dungeon <select> <class> <class name> <class leve>");
         player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "/dungeon buildmode (on/off)");
@@ -57,17 +62,37 @@ public class CmdDungeon implements CommandExecutor {
         }
     }
 
+    private void startCreateNewClassSetup(String[] args, Player player) {
+        if(args[0].equalsIgnoreCase("create") && args[1].equalsIgnoreCase("class")) {
+            if(KeineKohle.PLAYERCREATENEWCLASS.containsKey(player)) {
+                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "If you want to quit the setup please type 'cancel' in the chat!");
+            } else {
+                CreateNewClass createNewClass = new CreateNewClass();
+                KeineKohle.PLAYERCREATENEWCLASS.put(player, createNewClass);
+                ListenerSetupAsyncPlayerChatEvent.messageStageInfo(player, createNewClass);
+                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please type the §l§aname§r" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "of the class.");
+                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: You can't use white spaces!");
+                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: You can type 'back', to go to the previous stage!");
+            }
+        }
+    }
+
     private void createNewClass(String[] args, Player player) {
-        if (args[0].equalsIgnoreCase("create") && args[1].equalsIgnoreCase("class") && args[2] != null && GlobalUtilities.isNumeric(args[3]) && GlobalUtilities.isNumeric(args[4]) && player.getInventory().getItem(17) != null && args[5] != null) {
+        if (args[0].equalsIgnoreCase("create") && args[1].equalsIgnoreCase("class") && args[2] != null && GlobalUtilities.isNumeric(args[3]) && GlobalUtilities.isNumeric(args[4]) && args[5] != null && player.getInventory().getItemInMainHand().getType() != Material.AIR) {
+            player.sendMessage("1");
             int slot = 0;
-            int cost = Integer.parseInt(args[4]);
+            int coast = Integer.parseInt(args[4]);
             int classlevel = Integer.parseInt(args[3]);
             String representativeItem = player.getInventory().getItemInMainHand().getType().toString();
-            player.getInventory().remove(player.getInventory().getItemInMainHand());
             MySQLMethods mySQLMethods = new MySQLMethods();
-            if (!mySQLMethods.checkIfClassExists(args[2])) {
-                mySQLMethods.insertClass(args[2], args[5], representativeItem);
+            if (!mySQLMethods.checkIfClassNameExists(args[2])) {
+                mySQLMethods.insertClass(args[2], classlevel, coast, args[5], representativeItem);
+                player.getInventory().remove(player.getInventory().getItemInMainHand());
                 savePlayerInventoryToClassLevel(args, player, slot, classlevel, mySQLMethods);
+                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You have §acreated" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " the class §l" + ChatColor.of(args[5]) + args[2] + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " +
+                 "level §l§b" + args[3] + "!");
+            } else {
+                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "This class allready exists! Please use '/dungeon update class' insted!");
             }
         }
     }
@@ -78,7 +103,7 @@ public class CmdDungeon implements CommandExecutor {
                 YamlConfiguration configuration = new YamlConfiguration();
                 configuration.set("i", itemStack);
                 String itemstackYAML = configuration.saveToString().replace("'", "-|-");
-                if (mySQLMethods.checkIfClassItemStackExists(args[2], classlevel, slot)) {
+                if (!mySQLMethods.checkIfClassItemStackExists(args[2], classlevel, slot)) {
                     mySQLMethods.insertClassItemstack(args[2], classlevel, slot, itemstackYAML);
                 }
             }
