@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class ServerIdentifier {
+public final class ServerIdentifier {
 
     private ServerIdentifier() {
         throw new IllegalStateException("Utility class");

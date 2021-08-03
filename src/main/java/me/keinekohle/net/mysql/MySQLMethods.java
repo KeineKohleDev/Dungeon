@@ -20,30 +20,6 @@ public class MySQLMethods {
         return "classname='" + classname + "' AND slot='" + slot + "' AND classlevel='" + classlevel + "'";
     }
 
-    public void createDungeonPlayerTable() {
-        Statement statement = null;
-        String sql = "CREATE TABLE IF NOT EXISTS dungeon_player (" +
-                "username VARCHAR(50) null," +
-                "uuid VARCHAR(50) null," +
-                "coins INTEGER(11) null," +
-                "lastClass VARCHAR(50) null" +
-                ")";
-        try {
-            statement = connection.createStatement();
-            statement.executeQuery(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
     private void closeStatementAndResultSet(Statement statement, ResultSet resultSet) {
         if(resultSet != null) {
             try {
@@ -67,6 +43,24 @@ public class MySQLMethods {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void createDungeonPlayerTable() {
+        Statement statement = null;
+        String sql = "CREATE TABLE IF NOT EXISTS dungeon_player (" +
+                "username VARCHAR(50) null," +
+                "uuid VARCHAR(50) null," +
+                "coins INTEGER(11) null," +
+                "lastClass VARCHAR(50) null" +
+                ")";
+        try {
+            statement = connection.createStatement();
+            statement.executeQuery(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(statement);
         }
     }
 

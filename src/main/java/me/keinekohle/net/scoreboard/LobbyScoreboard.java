@@ -12,7 +12,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
-public class LobbyScoreboard {
+public final class LobbyScoreboard {
 
     private LobbyScoreboard() {
         throw new IllegalStateException("Utility class");
