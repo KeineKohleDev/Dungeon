@@ -51,6 +51,7 @@ public class MySQLMethods {
             String sql = "SELECT " + select + " FROM " + table + " WHERE " + where + "='" + is + "'";
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
+            resultSet.close();
             if (resultSet.next()) {
                 return resultSet.getString(select);
             }
@@ -116,8 +117,8 @@ public class MySQLMethods {
         try {
             String sql = "SELECT uuid from dungeon_player WHERE uuid='" + uuid + "'";
             statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(sql);
-            if (rs.next()) {
+            ResultSet resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
                 return true;
             }
         } catch (SQLException e) {
