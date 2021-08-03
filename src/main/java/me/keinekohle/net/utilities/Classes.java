@@ -14,8 +14,6 @@ public final class Classes {
     public static final String ARCHERCLASS = "ARCHER";
     public static final String BOMBERCLASS = "BOMBER";
 
-    public static final Material TANKCLASSREPRESENTATIVEITEM = Material.IRON_CHESTPLATE;
-
     public static final String SHOPCLASSES = "Classes";
 
     private Classes() {

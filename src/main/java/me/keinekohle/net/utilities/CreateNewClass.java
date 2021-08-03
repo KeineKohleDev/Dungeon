@@ -5,7 +5,7 @@ import org.bukkit.inventory.Inventory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateNewClass {
+public final class CreateNewClass {
 
     private Integer stage = 0;
     private Integer stageMax = 10;

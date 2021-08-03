@@ -23,19 +23,10 @@ public class CmdDungeon implements CommandExecutor {
         if (sender instanceof Player player) {
             if (player.hasPermission(KeineKohle.PERMISSIONPREFIX + "*")) {
                 switch (args.length) {
-                    case 1:
-                        buildmode(args, player);
-                        break;
-                    case 2:
-                        startCreateNewClassSetup(args, player);
-                        break;
-                    case 6:
-                        createNewClass(args, player);
-                        getClass(args, player);
-                        break;
-                    default:
-                        sendHelp(player);
-                        break;
+                    case 1 -> buildmode(args, player);
+                    case 2 -> startCreateNewClassSetup(args, player);
+                    case 6 -> getClass(args, player);
+                    default -> sendHelp(player);
                 }
             } else {
                 noPermissions(player);
@@ -73,26 +64,6 @@ public class CmdDungeon implements CommandExecutor {
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please type the §l§aname§r" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "of the class.");
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: You can't use white spaces!");
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: You can type 'back', to go to the previous stage!");
-            }
-        }
-    }
-
-    private void createNewClass(String[] args, Player player) {
-        if (args[0].equalsIgnoreCase("create") && args[1].equalsIgnoreCase("class") && args[2] != null && GlobalUtilities.isNumeric(args[3]) && GlobalUtilities.isNumeric(args[4]) && args[5] != null && player.getInventory().getItemInMainHand().getType() != Material.AIR) {
-            player.sendMessage("1");
-            int slot = 0;
-            int coast = Integer.parseInt(args[4]);
-            int classlevel = Integer.parseInt(args[3]);
-            String representativeItem = player.getInventory().getItemInMainHand().getType().toString();
-            MySQLMethods mySQLMethods = new MySQLMethods();
-            if (!mySQLMethods.checkIfClassNameExists(args[2])) {
-                mySQLMethods.insertClass(args[2], classlevel, coast, args[5], representativeItem);
-                player.getInventory().remove(player.getInventory().getItemInMainHand());
-                savePlayerInventoryToClassLevel(args, player, slot, classlevel, mySQLMethods);
-                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You have §acreated" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " the class §l" + ChatColor.of(args[5]) + args[2] + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " +
-                 "level §l§b" + args[3] + "!");
-            } else {
-                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "This class allready exists! Please use '/dungeon update class' insted!");
             }
         }
     }
