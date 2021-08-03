@@ -31,11 +31,10 @@ public class MySQLMethods {
         try {
             statement = connection.createStatement();
             statement.executeQuery(sql);
-            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if(statement != null) {
+            if (statement != null) {
                 try {
                     statement.close();
                 } catch (SQLException e) {
@@ -44,6 +43,33 @@ public class MySQLMethods {
             }
         }
     }
+
+    private void closeStatementAndResultSet(Statement statement, ResultSet resultSet) {
+        if(resultSet != null) {
+            try {
+                resultSet.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if (statement != null) {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private void closeStatement(Statement statement) {
+        if (statement != null) {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     public String selectString(String table, String select, String where, String is) {
         Statement statement = null;
@@ -58,14 +84,7 @@ public class MySQLMethods {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if(statement != null && resultSet != null) {
-                try {
-                    resultSet.close();
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            closeStatementAndResultSet(statement, resultSet);
         }
         return null;
     }
@@ -83,14 +102,7 @@ public class MySQLMethods {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if(statement != null && resultSet != null) {
-                try {
-                    resultSet.close();
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            closeStatementAndResultSet(statement, resultSet);
         }
         return null;
     }
@@ -104,38 +116,25 @@ public class MySQLMethods {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if(statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            closeStatement(statement);
         }
     }
 
 
     public boolean checkIsPlayerInDataBase(UUID uuid) {
         Statement statement = null;
-        ResultSet resultSet = null;
         try {
             String sql = "SELECT uuid from dungeon_player WHERE uuid='" + uuid + "'";
             statement = connection.createStatement();
-            resultSet = statement.executeQuery(sql);
+            ResultSet resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
+                resultSet.close();
                 return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if(statement != null && resultSet != null) {
-                try {
-                    resultSet.close();
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            closeStatement(statement);
         }
 
         return false;
@@ -151,32 +150,20 @@ public class MySQLMethods {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if(statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            closeStatement(statement);
         }
     }
 
     public void insertClassItemstack(String className, int classLevel, int slot, String itemstackyaml) {
         Statement statement = null;
         try {
-            String sql = "INSERT into dungeon_classes (classname, classlevel, slot, itemstackyaml) values ('" + className + "', '" + classLevel + "', '" + slot +"', '" + itemstackyaml +"')";
+            String sql = "INSERT into dungeon_classes (classname, classlevel, slot, itemstackyaml) values ('" + className + "', '" + classLevel + "', '" + slot + "', '" + itemstackyaml + "')";
             statement = connection.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if(statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            closeStatement(statement);
         }
     }
 
@@ -189,13 +176,7 @@ public class MySQLMethods {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if(statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            closeStatement(statement);
         }
     }
 
@@ -215,14 +196,7 @@ public class MySQLMethods {
         } catch (SQLException | InvalidConfigurationException e) {
             e.printStackTrace();
         } finally {
-            if(statement != null && resultSet != null) {
-                try {
-                    resultSet.close();
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            closeStatementAndResultSet(statement, resultSet);
         }
         return null;
     }
@@ -231,7 +205,7 @@ public class MySQLMethods {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-            String sql = "SELECT slot FROM dungeon_classes WHERE classname='" + classname + "' AND classlevel='" + classlevel +"'";
+            String sql = "SELECT slot FROM dungeon_classes WHERE classname='" + classname + "' AND classlevel='" + classlevel + "'";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
@@ -242,14 +216,7 @@ public class MySQLMethods {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if(statement != null && resultSet != null) {
-                try {
-                    resultSet.close();
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            closeStatementAndResultSet(statement, resultSet);
         }
     }
 
@@ -261,19 +228,13 @@ public class MySQLMethods {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
+                resultSet.close();
                 return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if(statement != null && resultSet != null) {
-                try {
-                    resultSet.close();
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            closeStatementAndResultSet(statement, resultSet);
         }
         return false;
     }
