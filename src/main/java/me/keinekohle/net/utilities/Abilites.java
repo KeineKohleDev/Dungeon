@@ -6,6 +6,7 @@ import java.util.List;
 public final class Abilites {
     
     public static final String SELECT = "§aSelect (Right click)";
+    public static final String DESELECT = "§cDeselect (Right click)";
 
     public static final String FIRE = "Fire";
     public static final List<String> FIRELOREDESCRIPTION = Arrays.asList("Sets the enemies around the player on fire", SELECT);

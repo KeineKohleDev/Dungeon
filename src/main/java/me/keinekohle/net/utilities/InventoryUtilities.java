@@ -28,8 +28,8 @@ public final class InventoryUtilities {
         fillInventory(inventory, Material.BLACK_STAINED_GLASS_PANE);
         inventory.setItem(10, ItemBuilder.createItemStack(Material.LIME_DYE, 1, GlobalUtilities.getColorByName(KeineKohle.DIFICULTYEASY) + KeineKohle.DIFICULTYEASY));
         inventory.setItem(12, ItemBuilder.createItemStack(Material.GREEN_DYE, 1, GlobalUtilities.getColorByName(KeineKohle.DIFICULTYNORMAL) + KeineKohle.DIFICULTYNORMAL));
-        inventory.setItem(14, ItemBuilder.createItemStack(Material.ORANGE_DYE, 1, GlobalUtilities.getColorByName(KeineKohle.DIFICULTYNORMAL) + KeineKohle.DIFICULTYNORMAL));
-        inventory.setItem(16, ItemBuilder.createItemStack(Material.RED_DYE, 1, GlobalUtilities.getColorByName(KeineKohle.DIFICULTYNORMAL) + KeineKohle.DIFICULTYNORMAL));
+        inventory.setItem(14, ItemBuilder.createItemStack(Material.ORANGE_DYE, 1, GlobalUtilities.getColorByName(KeineKohle.DIFICULTYHARD) + KeineKohle.DIFICULTYHARD));
+        inventory.setItem(16, ItemBuilder.createItemStack(Material.RED_DYE, 1, GlobalUtilities.getColorByName(KeineKohle.DIFICULTYVERYHARD) + KeineKohle.DIFICULTYVERYHARD));
         return inventory;
     }
 

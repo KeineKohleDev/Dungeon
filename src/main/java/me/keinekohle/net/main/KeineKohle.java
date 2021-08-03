@@ -7,6 +7,7 @@ import me.keinekohle.net.listeners.lobby.ListenerLobbyEntityDamageByEntityEvent;
 import me.keinekohle.net.listeners.lobby.ListenerLobbyEntityDamageEvent;
 import me.keinekohle.net.listeners.lobby.ListenerLobbyPlayerInteractEvent;
 import me.keinekohle.net.listeners.setup.ListenerSetupAsyncPlayerChatEvent;
+import me.keinekohle.net.listeners.setup.ListenerSetupInventoryClickEvent;
 import me.keinekohle.net.utilities.CreateNewClass;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import org.bukkit.Bukkit;
@@ -94,6 +95,7 @@ public class KeineKohle extends JavaPlugin {
 
         //Setup only
         pm.registerEvents(new ListenerSetupAsyncPlayerChatEvent(), this);
+        pm.registerEvents(new ListenerSetupInventoryClickEvent(), this);
     }
 
 }
