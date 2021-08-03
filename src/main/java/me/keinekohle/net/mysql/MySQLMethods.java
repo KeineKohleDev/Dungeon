@@ -47,19 +47,20 @@ public class MySQLMethods {
 
     public String selectString(String table, String select, String where, String is) {
         Statement statement = null;
+        ResultSet resultSet = null;
         try {
             String sql = "SELECT " + select + " FROM " + table + " WHERE " + where + "='" + is + "'";
             statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            resultSet.close();
+            resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
                 return resultSet.getString(select);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if(statement != null) {
+            if(statement != null && resultSet != null) {
                 try {
+                    resultSet.close();
                     statement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -71,18 +72,20 @@ public class MySQLMethods {
 
     public Integer selectInteger(String table, String select, String where, String is) {
         Statement statement = null;
+        ResultSet resultSet = null;
         try {
             String sql = "SELECT " + select + " FROM " + table + " WHERE " + where + "='" + is + "'";
             statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
                 return resultSet.getInt(select);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if(statement != null) {
+            if(statement != null && resultSet != null) {
                 try {
+                    resultSet.close();
                     statement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -114,18 +117,20 @@ public class MySQLMethods {
 
     public boolean checkIsPlayerInDataBase(UUID uuid) {
         Statement statement = null;
+        ResultSet resultSet = null;
         try {
             String sql = "SELECT uuid from dungeon_player WHERE uuid='" + uuid + "'";
             statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
                 return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if(statement != null) {
+            if(statement != null && resultSet != null) {
                 try {
+                    resultSet.close();
                     statement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -196,10 +201,11 @@ public class MySQLMethods {
 
     public ItemStack selectItemFromClass(String className, int classLevel, int slot) {
         Statement statement = null;
+        ResultSet resultSet = null;
         try {
             String sql = "SELECT itemstackyaml FROM dungeon_classes WHERE " + whereClassNameAndSlotAndClasslevel(className, classLevel, slot);
             statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
                 YamlConfiguration configuration = new YamlConfiguration();
                 String cfg = resultSet.getString("itemstackyaml").replace("*", "'");
@@ -209,8 +215,9 @@ public class MySQLMethods {
         } catch (SQLException | InvalidConfigurationException e) {
             e.printStackTrace();
         } finally {
-            if(statement != null) {
+            if(statement != null && resultSet != null) {
                 try {
+                    resultSet.close();
                     statement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -222,10 +229,11 @@ public class MySQLMethods {
 
     public void giveClassItems(Player player, String classname, int classlevel) {
         Statement statement = null;
+        ResultSet resultSet = null;
         try {
             String sql = "SELECT slot FROM dungeon_classes WHERE classname='" + classname + "' AND classlevel='" + classlevel +"'";
             statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 int slot = resultSet.getInt("slot");
                 ItemStack itemStack = selectItemFromClass(classname, classlevel, slot);
@@ -234,8 +242,9 @@ public class MySQLMethods {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if(statement != null) {
+            if(statement != null && resultSet != null) {
                 try {
+                    resultSet.close();
                     statement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -246,18 +255,20 @@ public class MySQLMethods {
 
     public boolean checkIfClassExists(String className, int classLevel, int slot) {
         Statement statement = null;
+        ResultSet resultSet = null;
         try {
             String sql = "SELECT itemstackyaml FROM dungeon_classes WHERE " + whereClassNameAndSlotAndClasslevel(className, classLevel, slot);
             statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
                 return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if(statement != null) {
+            if(statement != null && resultSet != null) {
                 try {
+                    resultSet.close();
                     statement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();

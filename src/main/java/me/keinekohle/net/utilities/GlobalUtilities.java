@@ -4,7 +4,9 @@ import me.keinekohle.net.main.KeineKohle;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 
-public class GlobalUtilities {
+import java.util.Locale;
+
+public final class GlobalUtilities {
 
     private GlobalUtilities() {
         throw new IllegalStateException("Utility class");
