@@ -27,38 +27,19 @@ public class ListenerSetupAsyncPlayerChatEvent implements Listener {
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You can't use white spaces!");
             } else {
                 CreateNewClass createNewClass = KeineKohle.PLAYERCREATENEWCLASS.get(player);
-                System.out.println("Befor: " + createNewClass.getStage());
                 if (message.equalsIgnoreCase("back")) {
                     goBock(player, createNewClass);
-                    System.out.println(messageBlackList(message));
                 }
                 int stage = createNewClass.getStage();
-                System.out.println("After: " + stage);
                 switch (stage) {
-                    case 0:
-                        handleStageClassName(player, message, createNewClass);
-                        break;
-                    case 1:
-                        handleStageClassLevel(player, message, createNewClass);
-                        break;
-                    case 2:
-                        handleStageClassLevelCoast(player, message, createNewClass);
-                        break;
-                    case 3:
-                        handleStageClassColorHexCode(player, message, createNewClass);
-                        break;
-                    case 4:
-                        handleStageRepresentativeItem(player, message, createNewClass);
-                        break;
-                    case 5:
-                        handleStageInventory(player, message, createNewClass);
-                        break;
-                    case 6:
-                        handleStageOpenAbilitiesInventory(player, message);
-                        break;
-                    default:
-                        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Error: please restart the setup!");
-                        break;
+                    case 0 -> handleStageClassName(player, message, createNewClass);
+                    case 1 -> handleStageClassLevel(player, message, createNewClass);
+                    case 2 -> handleStageClassLevelCoast(player, message, createNewClass);
+                    case 3 -> handleStageClassColorHexCode(player, message, createNewClass);
+                    case 4 -> handleStageRepresentativeItem(player, message, createNewClass);
+                    case 5 -> handleStageInventory(player, message, createNewClass);
+                    case 6 -> handleStageOpenAbilitiesInventory(player, message);
+                    default -> player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Error: please restart the setup!");
                 }
             }
             event.setCancelled(true);
@@ -155,9 +136,7 @@ public class ListenerSetupAsyncPlayerChatEvent implements Listener {
     private void handleStageOpenAbilitiesInventory(Player player, String message) {
         if (message.equalsIgnoreCase("next")) {
             // run in main thread
-            Bukkit.getScheduler().runTask(KeineKohle.main, () -> {
-                player.openInventory(InventoryUtilities.createAbilitiesInventory(player));
-            });
+            Bukkit.getScheduler().runTask(KeineKohle.main, () -> player.openInventory(InventoryUtilities.createAbilitiesInventory(player)));
         } else {
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please type 'next'");
 
