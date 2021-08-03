@@ -6,13 +6,13 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-public class InventoryUtilities {
+public final class InventoryUtilities {
+
+    public static final String FILLDIESPLAYNAME = "§a";
 
     private InventoryUtilities() {
         throw new IllegalStateException("Utility class");
     }
-
-    public static final String FILLDIESPLAYNAME = "§a";
 
     public static Inventory createShopInventroy(Player player) {
         Inventory inventory = Bukkit.createInventory(player, 9 * 3, GlobalUtilities.getColorByName(KeineKohle.CHESTDISPLAYNAME) + KeineKohle.CHESTDISPLAYNAME);

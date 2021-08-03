@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Replacements {
+public final class Replacements {
 
     private Replacements() {
         throw new IllegalStateException("Utility class");
@@ -28,7 +28,11 @@ public class Replacements {
     }
 
     public static String replaceClassName(String toReplace, String className) {
-        return toReplace.replace("%class%", className);
+        return toReplace.replace("%classname%", className);
+    }
+
+    public static String replaceClassLevel(String toReplace, int classLevel) {
+        return toReplace.replace("%classlevel", String.valueOf(classLevel));
     }
 
     public static String replaceMessage(String toReplace, String msg) {

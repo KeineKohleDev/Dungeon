@@ -16,6 +16,10 @@ public class MySQLMethods {
     private final MySQLConnection mySQLConnection = new MySQLConnection();
     private final Connection connection = mySQLConnection.getConnection();
 
+    private String whereClassNameAndSlotAndClasslevel(String classname, int classlevel, int slot) {
+        return "classname='" + classname + "' AND slot='" + slot + "' AND classlevel='" + classlevel + "'";
+    }
+
     public void createDungeonPlayerTable() {
         Statement statement = null;
         String sql = "CREATE TABLE IF NOT EXISTS dungeon_player (" +
@@ -173,7 +177,7 @@ public class MySQLMethods {
     public void updateClassItemstack(String className, int classLevel, int slot, String itemstackyaml) {
         Statement statement = null;
         try {
-            String sql = "UPDATE dungeon_classes SET itemstackyaml='" + itemstackyaml + "' WHERE className='" + className + "' AND slot='" + slot + "' AND classLevel='" + classLevel +"'";
+            String sql = "UPDATE dungeon_classes SET itemstackyaml='" + itemstackyaml + "' WHERE " + whereClassNameAndSlotAndClasslevel(className, classLevel, slot);
             statement = connection.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {
@@ -189,18 +193,17 @@ public class MySQLMethods {
         }
     }
 
-    public ItemStack selectItemFromClass(String classname, int classlevel, int slot) {
+    public ItemStack selectItemFromClass(String className, int classLevel, int slot) {
         Statement statement = null;
         try {
-            String sql = "SELECT itemstackyaml FROM dungeon_classes WHERE classname='" + classname + "' AND slot='" + slot +"' AND classlevel='" + classlevel +"'";
+            String sql = "SELECT itemstackyaml FROM dungeon_classes WHERE " + whereClassNameAndSlotAndClasslevel(className, classLevel, slot);
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
                 YamlConfiguration configuration = new YamlConfiguration();
                 String cfg = resultSet.getString("itemstackyaml").replace("*", "'");
                 configuration.loadFromString(cfg);
-                ItemStack itemStack = configuration.getItemStack("i", null);
-                return itemStack;
+                return configuration.getItemStack("i", null);
             }
         } catch (SQLException | InvalidConfigurationException e) {
             e.printStackTrace();
@@ -240,14 +243,13 @@ public class MySQLMethods {
         }
     }
 
-    public boolean checkIfClassExists(String classname, int classlevel, int slot) {
+    public boolean checkIfClassExists(String className, int classLevel, int slot) {
         Statement statement = null;
         try {
-            String sql = "SELECT itemstackyaml FROM dungeon_classes WHERE classname='" + classname + "' AND slot='" + slot + "' AND classlevel='" + classlevel +"'";
+            String sql = "SELECT itemstackyaml FROM dungeon_classes WHERE " + whereClassNameAndSlotAndClasslevel(className, classLevel, slot);
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
-                System.out.println("true");
                 return true;
             }
         } catch (SQLException e) {
@@ -261,7 +263,6 @@ public class MySQLMethods {
                 }
             }
         }
-        System.out.println("false");
         return false;
     }
 }

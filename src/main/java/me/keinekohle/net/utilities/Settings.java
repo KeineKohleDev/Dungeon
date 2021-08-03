@@ -1,11 +1,11 @@
 package me.keinekohle.net.utilities;
 
-public class Settings {
+public final class Settings {
+
+    public static boolean frendlyfire = false;
 
     private Settings() {
         throw new IllegalStateException("Utility class");
     }
-
-    public static boolean frendlyfire = false;
 
 }

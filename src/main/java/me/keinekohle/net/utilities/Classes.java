@@ -4,11 +4,7 @@ import me.keinekohle.net.mysql.MySQLConnection;
 import me.keinekohle.net.mysql.MySQLMethods;
 import org.bukkit.entity.Player;
 
-public class Classes {
-
-    private Classes() {
-        throw new IllegalStateException("Utility class");
-    }
+public final class Classes {
 
     public static final String NONECLASS = "NONE";
     public static final String TANKCLASS = "TANK";
@@ -19,6 +15,9 @@ public class Classes {
 
     public static final String SHOPCLASSES = "Classes";
 
+    private Classes() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static String getLastUsedClass(Player player) {
         String lastClass = getLastUsedClassFromDataBase(player);

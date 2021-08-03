@@ -5,7 +5,7 @@ import me.keinekohle.net.scoreboard.LobbyScoreboard;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-public class PlayerUtilities {
+public final class PlayerUtilities {
 
     private PlayerUtilities() {
         throw new IllegalStateException("Utility class");

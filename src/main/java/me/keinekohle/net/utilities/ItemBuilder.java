@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class ItemBuilder {
+public final class ItemBuilder {
 
     private ItemBuilder() {
         throw new IllegalStateException("Utility class");

@@ -1,4 +1,4 @@
 package me.keinekohle.net.utilities;
 
-public class MapUtilities {
+public final class MapUtilities {
 }

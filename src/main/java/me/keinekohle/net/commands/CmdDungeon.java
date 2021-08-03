@@ -53,29 +53,30 @@ public class CmdDungeon implements CommandExecutor {
 
     private void createNewClass(String[] args, Player player) {
         if (args[0].equalsIgnoreCase("create") && args[1].equalsIgnoreCase("class") && args[2] != null && GlobalUtilities.isNumeric(args[3])) {
-            Inventory inv = player.getInventory();
             int slot = 0;
             int classlevel = Integer.parseInt(args[3]);
             MySQLMethods mySQLMethods = new MySQLMethods();
-            for (ItemStack itemStack : inv.getContents()) {
+            for (ItemStack itemStack : player.getInventory().getContents()) {
                 if (itemStack != null) {
-                    YamlConfiguration configuration = new YamlConfiguration();
-                    configuration.set("i", itemStack);
-                    String itemstackYAML = configuration.saveToString().replace("'", "*");
-                    if(mySQLMethods.checkIfClassExists(args[2], classlevel, slot)) {
-                        player.sendMessage("ture");
-                        mySQLMethods.updateClassItemstack(args[2], classlevel, slot, itemstackYAML);
-                    } else {
-                        player.sendMessage("false");
-                        mySQLMethods.insertClassItemstack(args[2], classlevel, slot, itemstackYAML);
-                    }
+                    updateOrInsertItemStack(args, player, slot, classlevel, mySQLMethods, itemStack);
                 }
                 slot++;
             }
         }
     }
 
-
+    private void updateOrInsertItemStack(String[] args, Player player, int slot, int classlevel, MySQLMethods mySQLMethods, ItemStack itemStack) {
+        YamlConfiguration configuration = new YamlConfiguration();
+        configuration.set("i", itemStack);
+        String itemstackYAML = configuration.saveToString().replace("'", "*");
+        if(mySQLMethods.checkIfClassExists(args[2], classlevel, slot)) {
+            player.sendMessage("ture");
+            mySQLMethods.updateClassItemstack(args[2], classlevel, slot, itemstackYAML);
+        } else {
+            player.sendMessage("false");
+            mySQLMethods.insertClassItemstack(args[2], classlevel, slot, itemstackYAML);
+        }
+    }
 
     private void noPermissions(Player player) {
         player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.noPermissions);

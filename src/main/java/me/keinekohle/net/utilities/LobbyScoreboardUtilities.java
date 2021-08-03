@@ -4,7 +4,7 @@ import me.keinekohle.net.mysql.MySQLConnection;
 import me.keinekohle.net.mysql.MySQLMethods;
 import org.bukkit.entity.Player;
 
-public class LobbyScoreboardUtilities {
+public final class LobbyScoreboardUtilities {
 
     private LobbyScoreboardUtilities() {
         throw new IllegalStateException("Utility class");
