@@ -17,7 +17,10 @@ public final class Language {
     public static String playerLeaveMessage = Replacements.replaceHexColors("#51AAFC%player% §8[#E83139-§8]");
 
     public static final String PURCHASEDCLASS = Replacements.replaceHexColors("You purchased the class %classname% for %coins% coins!");
+    public static final String NOTENOUGHTCOINS = Replacements.replaceHexColors("You have not enough coins to be able to buy the class %classname%");
 
+    public static final String PREVIEWSTART = Replacements.replaceHexColors("Preview ended because you moved!");
+    public static final String PREVIEWEND = Replacements.replaceHexColors("If you move, the preview will stop.");
     private Language() {
         throw new IllegalStateException("Utility class");
     }

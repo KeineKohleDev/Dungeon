@@ -2,6 +2,7 @@ package me.keinekohle.net.listeners.lobby;
 
 import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.utilities.GlobalUtilities;
+import me.keinekohle.net.utilities.Language;
 import me.keinekohle.net.utilities.PlayerUtilities;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,11 +15,13 @@ public class ListenerLobbyPlayerMoveEvent implements Listener {
     public void onMove(PlayerMoveEvent event) {
         if (!KeineKohle.INGAME) {
             Player player = event.getPlayer();
-            if (KeineKohle.INPRIVIEW.contains(player) && movedX(event) || movedZ(event)) {
-                PlayerUtilities.clearPlayerInventory(player);
-                PlayerUtilities.giveLobbyItemsToPlayer(player);
-                KeineKohle.INPRIVIEW.remove(player);
-                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Preview ended because you moved!");
+            if (KeineKohle.INPRIVIEW.contains(player)) {
+                if (movedX(event) || movedZ(event)) {
+                    PlayerUtilities.clearPlayerInventory(player);
+                    PlayerUtilities.giveLobbyItemsToPlayer(player);
+                    KeineKohle.INPRIVIEW.remove(player);
+                    player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.PREVIEWEND);
+                }
             }
         }
     }

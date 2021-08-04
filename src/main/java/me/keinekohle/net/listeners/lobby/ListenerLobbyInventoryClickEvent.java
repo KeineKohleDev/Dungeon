@@ -3,10 +3,7 @@ package me.keinekohle.net.listeners.lobby;
 import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.mysql.MySQLMethods;
 import me.keinekohle.net.scoreboard.LobbyScoreboard;
-import me.keinekohle.net.utilities.Classes;
-import me.keinekohle.net.utilities.GlobalUtilities;
-import me.keinekohle.net.utilities.InventoryUtilities;
-import me.keinekohle.net.utilities.PlayerUtilities;
+import me.keinekohle.net.utilities.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -57,21 +54,24 @@ public class ListenerLobbyInventoryClickEvent implements Listener {
         KeineKohle.INPRIVIEW.add(player);
         PlayerUtilities.clearPlayerInventory(player);
         mySQLMethods.giveClassItems(player, GlobalUtilities.getNameWithoutColorCode(clickedItem.getItemMeta().getDisplayName()), 1);
-        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "If you move, the preview will stop.");
+        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.PREVIEWSTART);
         player.closeInventory();
     }
 
     private void purchaseClass(Player player, ItemStack clickedItem) {
         MySQLMethods mySQLMethods = new MySQLMethods();
         String className = GlobalUtilities.getNameWithoutColorCode(clickedItem.getItemMeta().getDisplayName());
+        if(mySQLMethods.checkIfPlayerAlreadyPurchasedClass(player, className)) return;
         int playerCoins = mySQLMethods.selectCoinsFromPlayerUUID(player);
         int classCoast = mySQLMethods.selectClassCoastFromClasses(className, 1);
         if (playerCoins >= classCoast) {
             mySQLMethods.updatePlayerCoins(player, (playerCoins - classCoast));
             mySQLMethods.giveClassAccessToPlayer(player, className);
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You purchased the class " + clickedItem.getItemMeta().getDisplayName() + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "for " + classCoast + " coins!");
+            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Replacements.replaceCoins(Replacements.replaceClassName(Language.PURCHASEDCLASS, className), classCoast));
             player.openInventory(InventoryUtilities.createClassesInventory(player));
             LobbyScoreboard.sendLobbyScoreboard(player);
+        } else {
+            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Replacements.replaceClassName(Language.NOTENOUGHTCOINS, className));
         }
     }
 }

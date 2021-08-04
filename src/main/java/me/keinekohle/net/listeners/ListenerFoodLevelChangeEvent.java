@@ -9,6 +9,6 @@ public class ListenerFoodLevelChangeEvent implements Listener {
 
     @EventHandler
     public void onFoodLevelChangeEvent(FoodLevelChangeEvent event) {
-        if(event instanceof Player) event.setCancelled(true);
+        if(event.getEntity() instanceof Player) event.setCancelled(true);
     }
 }

@@ -461,6 +461,24 @@ public class MySQLMethods {
         }
     }
 
+    public boolean checkIfPlayerAlreadyPurchasedClass(Player player, String className) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT classname FROM dungeon_player_classes WHERE classname='" + className + "' AND uuid='" + player.getUniqueId() + "'";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return false;
+    }
+
 
 
 

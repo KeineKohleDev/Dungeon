@@ -21,11 +21,6 @@ public final class GlobalUtilities {
             case KeineKohle.COINS -> ChatColor.of("#F29C1B").toString();
             case KeineKohle.BRACKETSCOLOR, Classes.NONECLASS -> ChatColor.DARK_GRAY.toString();
             case KeineKohle.CHATCOLOR -> ChatColor.of("#FCE23A").toString();
-            case Classes.TANKCLASS -> ChatColor.of("#38373B").toString();
-            case Classes.HEALERCLASS -> ChatColor.of("#FA6A66").toString();
-            case Classes.SURVIVORCLASS -> ChatColor.of("#3FE334").toString();
-            case Classes.ARCHERCLASS -> ChatColor.of("#E3914B").toString();
-            case Classes.BOMBERCLASS -> ChatColor.of("#C73B1C").toString();
             case Classes.SHOPCLASSES -> ChatColor.of("#39F6D3").toString();
             case KeineKohle.DIFICULTYEASY -> ChatColor.of("#9DFC58").toString();
             case KeineKohle.DIFICULTYNORMAL -> ChatColor.of("#1EE62F").toString();
