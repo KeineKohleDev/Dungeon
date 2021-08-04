@@ -13,15 +13,13 @@ public class ListenerLobbyPlayerMoveEvent implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
-        if (!KeineKohle.INGAME) {
-            Player player = event.getPlayer();
-            if (KeineKohle.INPRIVIEW.contains(player)) {
-                if (movedX(event) || movedZ(event)) {
-                    PlayerUtilities.clearPlayerInventory(player);
-                    PlayerUtilities.giveLobbyItemsToPlayer(player);
-                    KeineKohle.INPRIVIEW.remove(player);
-                    player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.PREVIEWEND);
-                }
+        if (!KeineKohle.INGAME && KeineKohle.INPRIVIEW.contains(event.getPlayer())) {
+            if (movedX(event) || movedZ(event)) {
+                Player player = event.getPlayer();
+                PlayerUtilities.clearPlayerInventory(player);
+                PlayerUtilities.giveLobbyItemsToPlayer(player);
+                KeineKohle.INPRIVIEW.remove(player);
+                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.PREVIEWEND);
             }
         }
     }
