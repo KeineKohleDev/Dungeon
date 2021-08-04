@@ -4,6 +4,7 @@ import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.utilities.Abilites;
 import me.keinekohle.net.utilities.CreateNewClass;
 import me.keinekohle.net.utilities.GlobalUtilities;
+import me.keinekohle.net.utilities.setup.Stages;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -53,7 +54,7 @@ public class ListenerSetupInventoryClickEvent implements Listener {
             CreateNewClass createNewClass = KeineKohle.PLAYERCREATENEWCLASS.get(player);
             createNewClass.setAbilities(classAbilities);
             player.sendMessage(classAbilities.toString());
-            ListenerSetupAsyncPlayerChatEvent.prepareNextStage(player, createNewClass);
+            Stages.prepareNextStage(player, createNewClass);
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "To save the class type 'finish'!");
         }
     }
