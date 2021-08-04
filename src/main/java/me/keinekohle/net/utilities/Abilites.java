@@ -5,7 +5,7 @@ import java.util.List;
 
 public final class Abilites {
     
-    public static final String SELECT = "§aSelect (Right click)";
+    public static final String SELECT = "§aSelect (Left click)";
     public static final String DESELECT = "§cDeselect (Right click)";
 
     public static final String FIRE = "Fire";

@@ -29,6 +29,9 @@ public class ListenerSetupAsyncPlayerChatEvent implements Listener {
                 CreateNewClass createNewClass = KeineKohle.PLAYERCREATENEWCLASS.get(player);
                 if (message.equalsIgnoreCase("back")) {
                     goBock(player, createNewClass);
+                } else if (message.equalsIgnoreCase("cancel")) {
+                    KeineKohle.PLAYERCREATENEWCLASS.remove(player);
+                    player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You left the setup!");
                 }
                 int stage = createNewClass.getStage();
                 switch (stage) {
@@ -36,15 +39,17 @@ public class ListenerSetupAsyncPlayerChatEvent implements Listener {
                     case 1 -> handleStageClassLevel(player, message, createNewClass);
                     case 2 -> handleStageClassLevelCoast(player, message, createNewClass);
                     case 3 -> handleStageClassColorHexCode(player, message, createNewClass);
-                    case 4 -> handleStageRepresentativeItem(player, message, createNewClass);
+                    case 4 -> handleStageIcon(player, message, createNewClass);
                     case 5 -> handleStageInventory(player, message, createNewClass);
                     case 6 -> handleStageOpenAbilitiesInventory(player, message);
+                    case 7 -> handleStageSave(player, message, createNewClass);
                     default -> player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Error: please restart the setup!");
                 }
             }
             event.setCancelled(true);
         }
     }
+
 
     private void handleStageClassName(Player player, String message, CreateNewClass createNewClass) {
         MySQLMethods mySQLMethods = new MySQLMethods();
@@ -93,10 +98,11 @@ public class ListenerSetupAsyncPlayerChatEvent implements Listener {
         Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
         Matcher match = pattern.matcher(message);
         if (match.find()) {
-            createNewClass.setClassColor(message);
+            String color = message.substring(match.start(), match.end());
+            createNewClass.setClassColor(color);
             prepareNextStage(player, createNewClass);
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: You have selected the color: " + ChatColor.of(message) + message);
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please select the §l§arepresentative item§r" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "for this class.");
+            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: You have selected the color: " + ChatColor.of(color) + color);
+            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please select the §l§aicon§r" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "for this class.");
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: put the item into your main hand and type 'next', the item is removed afterwards!");
         } else {
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please use the right format: #123456");
@@ -104,10 +110,10 @@ public class ListenerSetupAsyncPlayerChatEvent implements Listener {
         }
     }
 
-    private void handleStageRepresentativeItem(Player player, String message, CreateNewClass createNewClass) {
+    private void handleStageIcon(Player player, String message, CreateNewClass createNewClass) {
         if (message.equalsIgnoreCase("next")) {
             if (player.getInventory().getItemInMainHand().getType() != Material.AIR) {
-                createNewClass.setRepresentativeItem(player.getInventory().getItemInMainHand().getType().toString());
+                createNewClass.setIcon(player.getInventory().getItemInMainHand().getType().toString());
                 player.getInventory().remove(player.getInventory().getItemInMainHand());
                 prepareNextStage(player, createNewClass);
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please equip the §l§aclass items" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + ".");
@@ -143,7 +149,18 @@ public class ListenerSetupAsyncPlayerChatEvent implements Listener {
         }
     }
 
-    private void prepareNextStage(Player player, CreateNewClass createNewClass) {
+    private void handleStageSave(Player player, String message, CreateNewClass createNewClass) {
+        if (message.equalsIgnoreCase("finish")) {
+            createNewClass.SaveClass();
+            KeineKohle.PLAYERCREATENEWCLASS.remove(player);
+            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "The class got saved!");
+            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: You will left the setup!");
+        } else {
+            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please type 'finish'");
+        }
+    }
+
+    public static void prepareNextStage(Player player, CreateNewClass createNewClass) {
         nextStage(createNewClass);
         sendSpace(player);
         messageStageInfo(player, createNewClass);
@@ -153,11 +170,11 @@ public class ListenerSetupAsyncPlayerChatEvent implements Listener {
         player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Setup stage " + (createNewClass.getStage() + 1) + " of " + createNewClass.getStageMax());
     }
 
-    private void nextStage(CreateNewClass createNewClass) {
+    private static void nextStage(CreateNewClass createNewClass) {
         createNewClass.setStage(createNewClass.getStage() + 1);
     }
 
-    private void sendSpace(Player player) {
+    private static void sendSpace(Player player) {
         player.sendMessage("");
     }
 
@@ -176,7 +193,7 @@ public class ListenerSetupAsyncPlayerChatEvent implements Listener {
 
     private boolean messageBlackList(String message) {
         return switch (message) {
-            case "back", "Back" -> true;
+            case "back", "Back", "cancel", "Cancel" -> true;
             default -> false;
         };
     }

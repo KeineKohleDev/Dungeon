@@ -48,6 +48,10 @@ public final class GlobalUtilities {
         };
     }
 
+    public static String getNameWithoutColorCode(String colorName) {
+        return colorName.substring(14);
+    }
+
     public static String surroundWithBracketsAndColorCodes(String tosurround) {
         return getColorByName(KeineKohle.BRACKETSCOLOR) + "[" + tosurround + getColorByName(KeineKohle.BRACKETSCOLOR) + "]";
     }

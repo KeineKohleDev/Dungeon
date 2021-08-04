@@ -6,14 +6,10 @@ import me.keinekohle.net.mysql.MySQLMethods;
 import me.keinekohle.net.utilities.CreateNewClass;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import me.keinekohle.net.utilities.Language;
-import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class CmdDungeon implements CommandExecutor {
 
@@ -68,31 +64,17 @@ public class CmdDungeon implements CommandExecutor {
         }
     }
 
-    private void savePlayerInventoryToClassLevel(String[] args, Player player, int slot, int classlevel, MySQLMethods mySQLMethods) {
-        for (ItemStack itemStack : player.getInventory().getContents()) {
-            if (itemStack != null) {
-                YamlConfiguration configuration = new YamlConfiguration();
-                configuration.set("i", itemStack);
-                String itemstackYAML = configuration.saveToString().replace("'", "-|-");
-                if (!mySQLMethods.checkIfClassItemStackExists(args[2], classlevel, slot)) {
-                    mySQLMethods.insertClassItemstack(args[2], classlevel, slot, itemstackYAML);
-                }
-            }
-            slot++;
-        }
-    }
-
     private void noPermissions(Player player) {
         player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.noPermissions);
     }
 
     private void buildmode(String[] args, Player player) {
         if (args[0].equalsIgnoreCase("buildmode")) {
-            if (KeineKohle.buildmode.contains(player)) {
-                KeineKohle.buildmode.remove(player);
+            if (KeineKohle.BUILDMODE.contains(player)) {
+                KeineKohle.BUILDMODE.remove(player);
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.cmdDungeonBuildnodeOff);
             } else {
-                KeineKohle.buildmode.add(player);
+                KeineKohle.BUILDMODE.add(player);
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.cmdDungeonBuildnodeOn);
             }
         }

@@ -10,7 +10,7 @@ public class ListenerEntityPickupItemEvent implements Listener {
 
     @EventHandler
     public void onEntityPickupItemEvent(EntityPickupItemEvent event) {
-        if (event.getEntity() instanceof Player player && !KeineKohle.buildmode.contains(player)) event.setCancelled(true);
+        if (event.getEntity() instanceof Player player && !KeineKohle.BUILDMODE.contains(player)) event.setCancelled(true);
 
     }
 

@@ -2,7 +2,6 @@ package me.keinekohle.net.utilities;
 
 import me.keinekohle.net.mysql.MySQLConnection;
 import me.keinekohle.net.mysql.MySQLMethods;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public final class Classes {

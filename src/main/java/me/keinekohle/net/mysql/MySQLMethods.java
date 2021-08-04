@@ -1,5 +1,7 @@
 package me.keinekohle.net.mysql;
 
+import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -9,6 +11,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class MySQLMethods {
@@ -21,7 +26,7 @@ public class MySQLMethods {
     }
 
     private void closeStatementAndResultSet(Statement statement, ResultSet resultSet) {
-        if(resultSet != null) {
+        if (resultSet != null) {
             try {
                 resultSet.close();
             } catch (SQLException e) {
@@ -36,6 +41,7 @@ public class MySQLMethods {
             }
         }
     }
+
     private void closeStatement(Statement statement) {
         if (statement != null) {
             try {
@@ -161,10 +167,10 @@ public class MySQLMethods {
         }
     }
 
-    public void insertClass(String className, int classLevel, int classCoast, String classColor, String representativeItem) {
+    public void insertClass(String className, int classLevel, int classCoast, String classColor, String icon, String abilities) {
         Statement statement = null;
         try {
-            String sql = "INSERT into dungeon_classes (classname, classlevel, classcoast, classcolor, representativeitem) values ('" + className + "', '" + classLevel + "', '" + classCoast + "', '" + classColor + "', '" + representativeItem + "')";
+            String sql = "INSERT into dungeon_classes (classname, classlevel, classcoast, classcolor, icon, abilities) values ('" + className + "', '" + classLevel + "', '" + classCoast + "', '" + classColor + "', '" + icon + "', '" + abilities + "')";
             statement = connection.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {
@@ -196,7 +202,7 @@ public class MySQLMethods {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-            String sql = "SELECT classlevel FROM dungeon_classes WHERE classname='" + className + "' AND classlevel='" + classLevel +"'";
+            String sql = "SELECT classlevel FROM dungeon_classes WHERE classname='" + className + "' AND classlevel='" + classLevel + "'";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
@@ -208,32 +214,6 @@ public class MySQLMethods {
             closeStatementAndResultSet(statement, resultSet);
         }
         return false;
-    }
-
-    public void updateClass(String className, String classColor, String representativeItem) {
-        Statement statement = null;
-        try {
-            String sql = "UPDATE dungeon_classes SET classColor="+classColor+", representativeItem='"+representativeItem+"' WHERE classname='" + className +"'";
-            statement = connection.createStatement();
-            statement.execute(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeStatement(statement);
-        }
-    }
-
-    public void updateClassItemstack(String className, int classLevel, int slot, String itemstackyaml) {
-        Statement statement = null;
-        try {
-            String sql = "UPDATE dungeon_classlevels SET itemstackyaml='" + itemstackyaml + "' WHERE " + whereClassNameAndSlotAndClasslevel(className, classLevel, slot);
-            statement = connection.createStatement();
-            statement.execute(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeStatement(statement);
-        }
     }
 
     public ItemStack selectItemFromClass(String className, int classLevel, int slot) {
@@ -293,4 +273,118 @@ public class MySQLMethods {
         }
         return false;
     }
+
+    public List<String> selectAllClasses() {
+        List<String> classes = new ArrayList<>();
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT classname FROM dungeon_classes";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                if (!classes.contains(resultSet.getString("classname"))) {
+                    classes.add(resultSet.getString("classname"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return classes;
+    }
+
+    public List<String> selectAllBoughtClasses(Player player) {
+        List<String> boughtClasses = new ArrayList<>();
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT classname FROM dungeon_player_classes WHERE uuid='" + player.getUniqueId() + "'";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                boughtClasses.add(resultSet.getString("classname"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return boughtClasses;
+    }
+
+    public Material selectIconFromClasses(String className) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT icon FROM dungeon_classes WHERE classname='" + className + "'";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return Material.getMaterial(resultSet.getString("icon"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return null;
+    }
+
+    public Integer selectClassCoastFromClasses(String className, int classLevel) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT classcoast FROM dungeon_classes WHERE classname='" + className + "' AND classlevel='" + classLevel + "'";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return resultSet.getInt("classcoast");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return null;
+    }
+
+    public ChatColor selectClassColorFromClasses(String className, int classLevel) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT classcolor FROM dungeon_classes WHERE classname='" + className + "' AND classlevel='" + classLevel + "'";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return ChatColor.of(resultSet.getString("classcolor"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return null;
+    }
+
+    public String selectAbilitiesFromClasses(String className, int classLevel) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT abilities FROM dungeon_classes WHERE classname='" + className + "' AND classlevel='" + classLevel + "'";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return resultSet.getString("abilities");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return null;
+    }
+
+
 }

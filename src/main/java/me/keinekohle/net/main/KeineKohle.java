@@ -3,9 +3,7 @@ package me.keinekohle.net.main;
 import me.keinekohle.net.commands.CmdDungeon;
 import me.keinekohle.net.commands.tabcompleter.TabCompletCmdDungeon;
 import me.keinekohle.net.listeners.*;
-import me.keinekohle.net.listeners.lobby.ListenerLobbyEntityDamageByEntityEvent;
-import me.keinekohle.net.listeners.lobby.ListenerLobbyEntityDamageEvent;
-import me.keinekohle.net.listeners.lobby.ListenerLobbyPlayerInteractEvent;
+import me.keinekohle.net.listeners.lobby.*;
 import me.keinekohle.net.listeners.setup.ListenerSetupAsyncPlayerChatEvent;
 import me.keinekohle.net.listeners.setup.ListenerSetupInventoryClickEvent;
 import me.keinekohle.net.utilities.CreateNewClass;
@@ -28,7 +26,8 @@ public class KeineKohle extends JavaPlugin {
     //-- Lists --
     //buildmode
     public static final HashMap<Player, CreateNewClass> PLAYERCREATENEWCLASS = new HashMap<>();
-    public static final List<Player> buildmode = new ArrayList<>();
+    public static final List<Player> INPRIVIEW = new ArrayList<>();
+    public static final List<Player> BUILDMODE = new ArrayList<>();
 
     //-- Player lobby hotbar --
     public static final String CHESTDISPLAYNAME = "Shop";
@@ -53,7 +52,7 @@ public class KeineKohle extends JavaPlugin {
     public static final String COINS = "Coins";
 
     //Stage
-    public static boolean inGame = false;
+    public static final boolean INGAME = false;
 
 
     //server identifier
@@ -82,6 +81,7 @@ public class KeineKohle extends JavaPlugin {
         PluginManager pm = Bukkit.getPluginManager();
         //Global
         pm.registerEvents(new ListenerPlayerJoinEvent(), this);
+        pm.registerEvents(new ListenerPlayerQuitEvent(), this);
         pm.registerEvents(new ListenerEntityPickupItemEvent(), this);
         pm.registerEvents(new ListenerPlayerDropItemEvent(), this);
         pm.registerEvents(new ListenerBlockBreakEvent(), this);
@@ -92,6 +92,8 @@ public class KeineKohle extends JavaPlugin {
         pm.registerEvents(new ListenerLobbyPlayerInteractEvent(), this);
         pm.registerEvents(new ListenerLobbyEntityDamageByEntityEvent(), this);
         pm.registerEvents(new ListenerLobbyEntityDamageEvent(), this);
+        pm.registerEvents(new ListenerLobbyInventoryClickEvent(), this);
+        pm.registerEvents(new ListenerLobbyPlayerMoveEvent(), this);
 
         //Setup only
         pm.registerEvents(new ListenerSetupAsyncPlayerChatEvent(), this);

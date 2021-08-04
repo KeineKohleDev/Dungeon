@@ -14,6 +14,7 @@ public final class Language {
 
     //PlayerJoinEvent
     public static String playerJoinMessage = Replacements.replaceHexColors("#51AAFC%player% §8[#44FC44+§8]");
+    public static String playerLeaveMessage = Replacements.replaceHexColors("#51AAFC%player% §8[#E83139-§8]");
 
     private Language() {
         throw new IllegalStateException("Utility class");

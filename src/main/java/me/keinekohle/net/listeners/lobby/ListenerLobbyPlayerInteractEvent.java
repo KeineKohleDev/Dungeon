@@ -13,7 +13,7 @@ public class ListenerLobbyPlayerInteractEvent implements Listener {
 
     @EventHandler
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
-        if(!KeineKohle.inGame) {
+        if(!KeineKohle.INGAME) {
             Player player = event.getPlayer();
             if(event.getItem() != null && checkAction(event) && event.getItem().hasItemMeta() && event.getItem().getItemMeta().hasDisplayName()) {
                 String itemDisplayName = event.getItem().getItemMeta().getDisplayName();

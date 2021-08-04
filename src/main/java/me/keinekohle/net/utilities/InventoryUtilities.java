@@ -1,16 +1,28 @@
 package me.keinekohle.net.utilities;
 
 import me.keinekohle.net.main.KeineKohle;
+import me.keinekohle.net.mysql.MySQLMethods;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public final class InventoryUtilities {
 
     public static final String FILLDIESPLAYNAME = "§a";
+    public static final String BUY = "§bBuy (Double left click)";
+    public static final String PREVIEW = "§bPreview (Right click)";
+    public static final String BOUGHT = "§e§lBought";
 
     private InventoryUtilities() {
         throw new IllegalStateException("Utility class");
@@ -53,7 +65,7 @@ public final class InventoryUtilities {
         addAbilityToInventory(inventory, Material.NETHERRACK, Abilites.HELL, Abilites.HELLLOREDESCRIPTION);
 
         addAbilityToInventory(inventory, Material.BLUE_ICE, Abilites.FREEZE, Abilites.FREEZELOREDESCRIPTION);
-        addAbilityToInventory(inventory, Material.SPLASH_POTION, Abilites.FREEZEGRANDE, Abilites.FREEZEGRANDELOREDESCRIPTION);
+        addAbilityToInventoryNotShowingPotionEffects(inventory, Material.SPLASH_POTION, Abilites.FREEZEGRANDE, Abilites.FREEZEGRANDELOREDESCRIPTION, Color.BLUE);
 
         addAbilityToInventory(inventory, Material.TNT, Abilites.C4, Abilites.C4LOREDESCRIPTION);
         addAbilityToInventory(inventory, Material.FIREWORK_STAR, Abilites.GRENADE, Abilites.GRENADELOREDESCRIPTION);
@@ -61,15 +73,55 @@ public final class InventoryUtilities {
         addAbilityToInventory(inventory, Material.BEACON, Abilites.HEALBEACON, Abilites.HEALBEACONLOREDESCRIPTION);
         addAbilityToInventory(inventory, Material.MAGMA_CREAM, Abilites.HEALGRENADE, Abilites.HEALGRENADELOREDESCRIPTION);
 
-        addAbilityToInventory(inventory, Material.POTION, Abilites.WEAKNESS, Abilites.WEAKNESSLOREDESCRIPTION);
-        addAbilityToInventory(inventory, Material.SPLASH_POTION, Abilites.WWEAKNESSGRANDE, Abilites.WWEAKNESSGRANDELOREDESCRIPTION);
+        addAbilityToInventoryNotShowingPotionEffects(inventory, Material.POTION, Abilites.WEAKNESS, Abilites.WEAKNESSLOREDESCRIPTION, Color.GRAY);
+        addAbilityToInventoryNotShowingPotionEffects(inventory, Material.SPLASH_POTION, Abilites.WWEAKNESSGRANDE, Abilites.WWEAKNESSGRANDELOREDESCRIPTION, Color.GRAY);
 
+        inventory.setItem(26, ItemBuilder.createItemStack(Material.GREEN_STAINED_GLASS_PANE, 1, "§aNext"));
         fillInventory(inventory, Material.BLACK_STAINED_GLASS_PANE);
         return inventory;
     }
 
+    public static Inventory createClassesInventory(Player player) {
+        Inventory inventory = Bukkit.createInventory(player, 9*6, GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Classes.SHOPCLASSES);
+        fillInventoryWithClassesLevelOne(inventory, player);
+        fillInventory(inventory, Material.BLACK_STAINED_GLASS_PANE);
+        return inventory;
+    }
+
+    public static void fillInventoryWithClassesLevelOne(Inventory inventory, Player player) {
+        MySQLMethods mySQLMethods = new MySQLMethods();
+        List<String> classes = mySQLMethods.selectAllClasses();
+        List<String> boughtClasses = mySQLMethods.selectAllBoughtClasses(player);
+        if(classes != null) {
+            for (String className : classes) {
+
+                Material representativeItem = mySQLMethods.selectIconFromClasses(className);
+                int classCoast = mySQLMethods.selectClassCoastFromClasses(className, 1);
+                ChatColor color = mySQLMethods.selectClassColorFromClasses(className, 1);
+                String abilities = mySQLMethods.selectAbilitiesFromClasses(className, 1).replace("[", "").replace("]", "");
+                String abilityOne = abilities.substring(0, abilities.indexOf(","));
+                String abilityTwo = abilities.substring(abilities.indexOf(",")+2);
+                if(boughtClasses.contains(className)) {
+                    ItemStack itemStack = ItemBuilder.createItemStackWithLore(representativeItem, 1, color + className, Arrays.asList(BOUGHT));
+                    ItemMeta itemMeta = itemStack.getItemMeta();
+                    itemMeta.addEnchant(Enchantment.LUCK, 1, false);
+                    itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                    itemStack.setItemMeta(itemMeta);
+                    inventory.addItem(itemStack);
+                } else {
+                    List<String> lore = Arrays.asList("§aPrice:§c " + classCoast, "",GlobalUtilities.getColorByName(KeineKohle.ABILITIESDISPLAYNAME) + KeineKohle.ABILITIESDISPLAYNAME + ":", GlobalUtilities.getColorByName(abilityOne) + "  " + abilityOne, GlobalUtilities.getColorByName(abilityTwo) + "  " + abilityTwo, "", BUY, PREVIEW);
+                    inventory.addItem(ItemBuilder.createItemStackWithLore(representativeItem, 1, color + className, lore));
+                }
+            }
+        }
+    }
+
     private static void addAbilityToInventory(Inventory inventory, Material material, String ability, List<String> abilityDescription) {
         inventory.addItem(ItemBuilder.createItemStackWithLore(material, 1, GlobalUtilities.getColorByName(ability) + ability, abilityDescription));
+    }
+
+    private static void addAbilityToInventoryNotShowingPotionEffects(Inventory inventory, Material material, String ability, List<String> abilityDescription, Color color) {
+        inventory.addItem(ItemBuilder.createItemStackWithLoreWithOutShowingPotionEffects(material, 1, GlobalUtilities.getColorByName(ability) + ability, abilityDescription, color));
     }
 
     public static void fillInventory(Inventory inventory, Material fillMaterial) {

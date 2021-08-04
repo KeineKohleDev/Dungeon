@@ -1,6 +1,9 @@
 package me.keinekohle.net.utilities;
 
+import me.keinekohle.net.mysql.MySQLMethods;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +16,8 @@ public final class CreateNewClass {
     private Integer classLevel;
     private Integer classCoast;
     private String classColor;
-    private String representativeItem;
-    private List<String> ability = new ArrayList<>();
+    private String icon;
+    private List<String> abilities = new ArrayList<>();
     private Inventory inventory;
 
 
@@ -43,12 +46,12 @@ public final class CreateNewClass {
         this.inventory = inventory;
     }
 
-    public List<String> getAbility() {
-        return ability;
+    public List<String> getAbilities() {
+        return abilities;
     }
 
-    public void setAbility(List<String> ability) {
-        this.ability = ability;
+    public void setAbilities(List<String> abilities) {
+        this.abilities = abilities;
     }
 
     public String getClassColor() {
@@ -59,12 +62,12 @@ public final class CreateNewClass {
         this.classColor = classColor;
     }
 
-    public String getRepresentativeItem() {
-        return representativeItem;
+    public String getIcon() {
+        return icon;
     }
 
-    public void setRepresentativeItem(String representativeItem) {
-        this.representativeItem = representativeItem;
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
 
@@ -90,6 +93,25 @@ public final class CreateNewClass {
 
     public void setClassName(String className) {
         this.className = className;
+    }
+
+    public void SaveClass() {
+        MySQLMethods mySQLMethods = new MySQLMethods();
+        mySQLMethods.insertClass(this.getClassName(), this.getClassLevel(), this.getClassCoast(), this.getClassColor(), this.getIcon(), this.getAbilities().toString());
+        savePlayerInventoryToClassLevel(mySQLMethods);
+    }
+
+    private void savePlayerInventoryToClassLevel(MySQLMethods mySQLMethods) {
+        int slot = 0;
+        for (ItemStack itemStack : this.getInventory().getContents()) {
+            if (itemStack != null) {
+                YamlConfiguration configuration = new YamlConfiguration();
+                configuration.set("i", itemStack);
+                String itemstackYAML = configuration.saveToString().replace("'", "-|-");
+                mySQLMethods.insertClassItemstack(this.getClassName(), this.getClassLevel(), slot, itemstackYAML);
+            }
+            slot++;
+        }
     }
 
 

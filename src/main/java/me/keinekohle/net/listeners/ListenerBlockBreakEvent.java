@@ -11,7 +11,7 @@ public class ListenerBlockBreakEvent implements Listener {
     @EventHandler
     public void onBlockBreakEvent(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        if(!KeineKohle.buildmode.contains(player)) event.setCancelled(true);
+        if(!KeineKohle.BUILDMODE.contains(player)) event.setCancelled(true);
 
     }
 }
