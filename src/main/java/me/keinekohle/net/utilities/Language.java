@@ -10,11 +10,13 @@ public final class Language {
 
     public static String classGotAutoSelected = Replacements.replaceHexColors("The Class you used the last time got auto selected!");
 
-    public static String classItemsReceived = Replacements.replaceHexColors("You received the class %classname% level %classlevel%!");
+    public static String classItemsReceived = Replacements.replaceHexColors("You received the class %classname%, level %classlevel%!");
 
     //PlayerJoinEvent
     public static String playerJoinMessage = Replacements.replaceHexColors("#51AAFC%player% §8[#44FC44+§8]");
     public static String playerLeaveMessage = Replacements.replaceHexColors("#51AAFC%player% §8[#E83139-§8]");
+
+    public static final String PURCHASEDCLASS = Replacements.replaceHexColors("You purchased the class %classname% for %coins% coins!");
 
     private Language() {
         throw new IllegalStateException("Utility class");

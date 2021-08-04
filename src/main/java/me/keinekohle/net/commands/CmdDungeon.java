@@ -6,6 +6,8 @@ import me.keinekohle.net.mysql.MySQLMethods;
 import me.keinekohle.net.utilities.CreateNewClass;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import me.keinekohle.net.utilities.Language;
+import me.keinekohle.net.utilities.PlayerUtilities;
+import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -72,9 +74,13 @@ public class CmdDungeon implements CommandExecutor {
         if (args[0].equalsIgnoreCase("buildmode")) {
             if (KeineKohle.BUILDMODE.contains(player)) {
                 KeineKohle.BUILDMODE.remove(player);
+                PlayerUtilities.clearPlayerInventory(player);
+                PlayerUtilities.giveLobbyItemsToPlayer(player);
+                player.setGameMode(GameMode.SURVIVAL);
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.cmdDungeonBuildnodeOff);
             } else {
                 KeineKohle.BUILDMODE.add(player);
+                player.setGameMode(GameMode.CREATIVE);
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.cmdDungeonBuildnodeOn);
             }
         }

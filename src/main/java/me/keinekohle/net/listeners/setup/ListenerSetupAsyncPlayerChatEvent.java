@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,8 +53,8 @@ public class ListenerSetupAsyncPlayerChatEvent implements Listener {
 
 
     private void handleStageClassName(Player player, String message, CreateNewClass createNewClass) {
+        if (messageBlackList(message)) return;
         MySQLMethods mySQLMethods = new MySQLMethods();
-        if (!messageBlackList(message)) {
             if (mySQLMethods.checkIfClassNameExists(message)) {
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: This class name is already used!");
             } else {
@@ -62,10 +63,10 @@ public class ListenerSetupAsyncPlayerChatEvent implements Listener {
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please type the §l§alevel§r" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "of the class.");
                 messageOnlyNumbersHere(player);
             }
-        }
     }
 
     private void handleStageClassLevel(Player player, String message, CreateNewClass createNewClass) {
+        if (messageBlackList(message)) return;
         if (GlobalUtilities.isNumeric(message)) {
             int classLevel = Integer.parseInt(message);
             MySQLMethods mySQLMethods = new MySQLMethods();
@@ -83,6 +84,7 @@ public class ListenerSetupAsyncPlayerChatEvent implements Listener {
 
 
     private void handleStageClassLevelCoast(Player player, String message, CreateNewClass createNewClass) {
+        if (messageBlackList(message)) return;
         if (GlobalUtilities.isNumeric(message)) {
             createNewClass.setClassCoast(Integer.parseInt(message));
             prepareNextStage(player, createNewClass);
@@ -95,6 +97,7 @@ public class ListenerSetupAsyncPlayerChatEvent implements Listener {
     }
 
     private void handleStageClassColorHexCode(Player player, String message, CreateNewClass createNewClass) {
+        if (messageBlackList(message)) return;
         Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
         Matcher match = pattern.matcher(message);
         if (match.find()) {
@@ -111,10 +114,11 @@ public class ListenerSetupAsyncPlayerChatEvent implements Listener {
     }
 
     private void handleStageIcon(Player player, String message, CreateNewClass createNewClass) {
+        if (messageBlackList(message)) return;
         if (message.equalsIgnoreCase("next")) {
             if (player.getInventory().getItemInMainHand().getType() != Material.AIR) {
                 createNewClass.setIcon(player.getInventory().getItemInMainHand().getType().toString());
-                player.getInventory().remove(player.getInventory().getItemInMainHand());
+                player.getInventory().setItem(player.getInventory().getHeldItemSlot(), new ItemStack(Material.AIR));
                 prepareNextStage(player, createNewClass);
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please equip the §l§aclass items" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + ".");
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: when you are finisched, typr 'next'!");
@@ -128,6 +132,7 @@ public class ListenerSetupAsyncPlayerChatEvent implements Listener {
     }
 
     private void handleStageInventory(Player player, String message, CreateNewClass createNewClass) {
+        if (messageBlackList(message)) return;
         if (message.equalsIgnoreCase("next")) {
             createNewClass.setInventory(player.getInventory());
             prepareNextStage(player, createNewClass);
@@ -140,6 +145,7 @@ public class ListenerSetupAsyncPlayerChatEvent implements Listener {
     }
 
     private void handleStageOpenAbilitiesInventory(Player player, String message) {
+        if (messageBlackList(message)) return;
         if (message.equalsIgnoreCase("next")) {
             // run in main thread
             Bukkit.getScheduler().runTask(KeineKohle.getPlugin(KeineKohle.class), () -> player.openInventory(InventoryUtilities.createAbilitiesInventory(player)));
@@ -150,6 +156,7 @@ public class ListenerSetupAsyncPlayerChatEvent implements Listener {
     }
 
     private void handleStageSave(Player player, String message, CreateNewClass createNewClass) {
+        if (messageBlackList(message)) return;
         if (message.equalsIgnoreCase("finish")) {
             createNewClass.SaveClass();
             KeineKohle.PLAYERCREATENEWCLASS.remove(player);

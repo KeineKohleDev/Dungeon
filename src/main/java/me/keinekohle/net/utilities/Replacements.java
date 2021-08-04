@@ -31,6 +31,10 @@ public final class Replacements {
         return toReplace.replace("%classname%", className);
     }
 
+    public static String replaceCoins(String toReplace, int coins) {
+        return toReplace.replace("%coins%", String.valueOf(coins));
+    }
+
     public static String replaceClassLevel(String toReplace, int classLevel) {
         return toReplace.replace("%classlevel", String.valueOf(classLevel));
     }

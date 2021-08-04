@@ -2,6 +2,7 @@ package me.keinekohle.net.listeners.lobby;
 
 import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.mysql.MySQLMethods;
+import me.keinekohle.net.scoreboard.LobbyScoreboard;
 import me.keinekohle.net.utilities.Classes;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import me.keinekohle.net.utilities.InventoryUtilities;
@@ -32,15 +33,25 @@ public class ListenerLobbyInventoryClickEvent implements Listener {
                     }
                 } else if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Classes.SHOPCLASSES)) {
                     if (clickedItem.hasItemMeta() && clickedItem.getItemMeta().hasDisplayName()) {
-                        if (event.getClick() == ClickType.RIGHT && clickedItem.getItemMeta().hasLore() && clickedItem.getItemMeta().getLore().contains(InventoryUtilities.PREVIEW)) {
+                        if (event.getClick() == ClickType.LEFT && clickedItem.getItemMeta().hasLore() && clickedItem.getItemMeta().getLore().contains(InventoryUtilities.PREVIEW)) {
                             MySQLMethods mySQLMethods = new MySQLMethods();
                             KeineKohle.INPRIVIEW.add(player);
                             PlayerUtilities.clearPlayerInventory(player);
                             mySQLMethods.giveClassItems(player, GlobalUtilities.getNameWithoutColorCode(clickedItem.getItemMeta().getDisplayName()), 1);
                             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "If you move, the preview will stop.");
                             player.closeInventory();
-                        } else if (event.getClick() == ClickType.DOUBLE_CLICK) {
-                            player.sendMessage("DOUBLE_CLICK");
+                        } else if (event.getClick() == ClickType.RIGHT) {
+                            MySQLMethods mySQLMethods = new MySQLMethods();
+                            String className = GlobalUtilities.getNameWithoutColorCode(clickedItem.getItemMeta().getDisplayName());
+                            int playerCoins = mySQLMethods.selectCoinsFromPlayerUUID(player);
+                            int classCoast = mySQLMethods.selectClassCoastFromClasses(className, 1);
+                            if(playerCoins >= classCoast) {
+                                mySQLMethods.updatePlayerCoins(player, (playerCoins-classCoast));
+                                mySQLMethods.giveClassAccessToPlayer(player, className);
+                                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You purchased the class " + clickedItem.getItemMeta().getDisplayName() + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "for " + classCoast + " coins!");
+                                player.openInventory(InventoryUtilities.createClassesInventory(player));
+                                LobbyScoreboard.sendLobbyScoreboard(player);
+                            }
                         }
                     }
                 }

@@ -279,7 +279,7 @@ public class MySQLMethods {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-            String sql = "SELECT classname FROM dungeon_classes";
+            String sql = "SELECT classname FROM dungeon_classes ORDER  BY classcoast ASC";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
@@ -385,6 +385,83 @@ public class MySQLMethods {
         }
         return null;
     }
+
+    public Integer selectCoinsFromClassLevel(String className, int classLevel) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT classcoast FROM dungeon_classes WHERE classname='" + className + "' AND classlevel='" + classLevel + "'";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return resultSet.getInt("classcoast");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return null;
+    }
+
+    public Integer selectCoinsFromPlayerUUID(Player player) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT coins FROM dungeon_player WHERE uuid='" + player.getUniqueId() + "'";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return resultSet.getInt("coins");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return null;
+    }
+
+    public void updatePlayerCoins(Player player, int coins) {
+        Statement statement = null;
+        try {
+            String sql = "UPDATE dungeon_player SET coins='" + coins +"' WHERE uuid='" +player.getUniqueId() + "'";
+            statement = connection.createStatement();
+            statement.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(statement);
+        }
+    }
+
+    public void giveClassAccessToPlayer(Player player, String className) {
+        Statement statement = null;
+        try {
+            String sql = "INSERT into dungeon_player_classes (uuid, classname) values ('" + player.getUniqueId() + "', '" + className + "')";
+            statement = connection.createStatement();
+            statement.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(statement);
+        }
+    }
+
+    public void updateClassLevelAccessToPlayer(Player player, String className, int classLevel) {
+        Statement statement = null;
+        try {
+            String sql = "UPDATE dungeon_player_classes SET classlevel='" + classLevel +"' WHERE uuid='" +player.getUniqueId() + "' AND classname='" + className + "'";
+            statement = connection.createStatement();
+            statement.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(statement);
+        }
+    }
+
+
 
 
 }

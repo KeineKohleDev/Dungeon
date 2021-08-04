@@ -21,7 +21,7 @@ public final class InventoryUtilities {
 
     public static final String FILLDIESPLAYNAME = "§a";
     public static final String BUY = "§bBuy (Double left click)";
-    public static final String PREVIEW = "§bPreview (Right click)";
+    public static final String PREVIEW = "§bPreview (Left click)";
     public static final String BOUGHT = "§e§lBought";
 
     private InventoryUtilities() {
