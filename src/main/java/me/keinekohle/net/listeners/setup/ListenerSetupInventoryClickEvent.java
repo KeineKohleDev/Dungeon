@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public final class ListenerSetupInventoryClickEvent implements Listener {
+public class ListenerSetupInventoryClickEvent implements Listener {
 
     @EventHandler
     public void onInventoryClickEvent(InventoryClickEvent event) {

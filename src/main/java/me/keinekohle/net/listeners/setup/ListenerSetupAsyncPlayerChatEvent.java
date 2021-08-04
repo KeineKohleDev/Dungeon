@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class ListenerSetupAsyncPlayerChatEvent implements Listener {
+public class ListenerSetupAsyncPlayerChatEvent implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
