@@ -18,12 +18,13 @@ public class ListenerLobbyShopClick implements Listener {
     @EventHandler
     public void onClick(InventoryClickEvent event) {
         if (event.getWhoClicked() instanceof Player player && !KeineKohle.INGAME && !KeineKohle.BUILDMODE.contains(player)) {
-            event.setCancelled(true);
             if (event.getCurrentItem() != null) {
                 ItemStack clickedItem = event.getCurrentItem();
                 if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(KeineKohle.CHESTDISPLAYNAME) + KeineKohle.CHESTDISPLAYNAME)) {
+                    event.setCancelled(true);
                     handleShopInventorActions(player, clickedItem);
                 } else if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Classes.SHOPCLASSES)) {
+                    event.setCancelled(true);
                     handleClassesInventoryActions(event, player, clickedItem);
                 }
             }

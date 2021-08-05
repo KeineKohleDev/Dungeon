@@ -26,10 +26,9 @@ public class ListenerSetupCreateNewClassLevel implements Listener {
                     GlobalStages.handleBlacklist(player, message, classFabric);
                     int stage = classFabric.getStage();
                     switch (stage) {
-                        case 0 -> CreateNewClassLevelStages.handleStageCheckClassName(player, message, classFabric);
-                        case 1 -> CreateNewClassLevelStages.handleStageClassCoast(player, message, classFabric);
-                        case 2 -> CreateNewClassLevelStages.handleStageInventory(player, message, classFabric);
-                        case 3 -> GlobalStages.handleStageSave(player, message, classFabric);
+                        case 0 -> CreateNewClassLevelStages.handleStageClassCoast(player, message, classFabric);
+                        case 1 -> CreateNewClassLevelStages.handleStageInventory(player, message, classFabric);
+                        case 2 -> GlobalStages.handleStageSave(player, message, classFabric);
                         default -> player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Error: please restart the setup!");
                     }
                 }

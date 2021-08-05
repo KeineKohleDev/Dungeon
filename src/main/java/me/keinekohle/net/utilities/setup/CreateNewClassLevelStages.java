@@ -12,19 +12,6 @@ public class CreateNewClassLevelStages {
         throw new IllegalStateException("Utility class");
     }
 
-    public static void handleStageCheckClassName(Player player, String message, ClassFabric classFabric) {
-        if (GlobalStages.messageBlackList(message)) return;
-        MySQLMethods mySQLMethods = new MySQLMethods();
-        if (mySQLMethods.checkIfClassNameExists(message)) {
-            classFabric.setClassName(message);
-            classFabric.setClassLevel(mySQLMethods.selectHighestClassLevelFromClasses(message)+1);
-            GlobalStages.prepareNextStage(player, classFabric);
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please type the §l§acoast§r" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "of the class.");
-        } else {
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "This class doesn't exists!");
-        }
-    }
-
     public static void handleStageClassCoast(Player player, String message, ClassFabric classFabric) {
         if (GlobalStages.messageBlackList(message)) return;
         if (GlobalUtilities.isNumeric(message)) {

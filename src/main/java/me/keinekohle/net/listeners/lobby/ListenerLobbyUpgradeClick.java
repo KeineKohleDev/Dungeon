@@ -18,10 +18,10 @@ public class ListenerLobbyUpgradeClick implements Listener {
     @EventHandler
     public void onClick(InventoryClickEvent event) {
         if (event.getWhoClicked() instanceof Player player && !KeineKohle.INGAME && !KeineKohle.BUILDMODE.contains(player)) {
-            event.setCancelled(true);
             if (event.getCurrentItem() != null) {
                 ItemStack clickedItem = event.getCurrentItem();
                 if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(KeineKohle.ANVILDISPLAYNAME) + KeineKohle.ANVILDISPLAYNAME)) {
+                    event.setCancelled(true);
                     handleUpgradeInventorActions(event, player, clickedItem);
                 }
             }
