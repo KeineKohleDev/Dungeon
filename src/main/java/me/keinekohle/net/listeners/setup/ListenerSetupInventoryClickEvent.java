@@ -2,9 +2,11 @@ package me.keinekohle.net.listeners.setup;
 
 import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.utilities.Abilites;
-import me.keinekohle.net.utilities.CreateNewClass;
+import me.keinekohle.net.utilities.ClassFabric;
 import me.keinekohle.net.utilities.GlobalUtilities;
-import me.keinekohle.net.utilities.setup.Stages;
+import me.keinekohle.net.utilities.setup.CreateNewClassStages;
+import me.keinekohle.net.utilities.setup.GlobalStages;
+import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,15 +25,15 @@ public class ListenerSetupInventoryClickEvent implements Listener {
 
     @EventHandler
     public void onInventoryClickEvent(InventoryClickEvent event) {
-        if (event.getWhoClicked() instanceof Player player && KeineKohle.PLAYERCREATENEWCLASS.containsKey(player)) {
-            CreateNewClass createNewClass = KeineKohle.PLAYERCREATENEWCLASS.get(player);
+        if (event.getWhoClicked() instanceof Player player && KeineKohle.SETUPMODE.containsKey(player)) {
+            ClassFabric classFabric = KeineKohle.SETUPMODE.get(player);
             ItemStack itemStack = event.getCurrentItem();
-            if(createNewClass.getStage() == 6 && itemStack != null) {
+            if(classFabric.getMode().equals(classFabric.getMODECREATENEWCLASS()) && classFabric.getStage() == 5 && itemStack != null) {
                 if (event.getClick() == ClickType.LEFT && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore() && itemStack.getItemMeta().getLore().contains(Abilites.SELECT)) {
                     int selected = countSelectedAbilities(event);
                     addClickedAbilityMaxTwo(player, itemStack, selected);
                 } else if (event.getClick() == ClickType.RIGHT && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore() && itemStack.getItemMeta().getLore().contains(Abilites.DESELECT)) {
-                    deselectAbility(itemStack);
+                    deselectAbility(itemStack, player);
                 }
                 if(itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName() && itemStack.getItemMeta().getDisplayName().equals("§aNext")) {
                     saveSelectedAbilities(event, player);
@@ -51,19 +53,20 @@ public class ListenerSetupInventoryClickEvent implements Listener {
                 }
             }
             player.closeInventory();
-            CreateNewClass createNewClass = KeineKohle.PLAYERCREATENEWCLASS.get(player);
-            createNewClass.setAbilities(classAbilities);
+            ClassFabric classFabric = KeineKohle.SETUPMODE.get(player);
+            classFabric.setAbilities(classAbilities);
             player.sendMessage(classAbilities.toString());
-            Stages.prepareNextStage(player, createNewClass);
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "To save the class type 'finish'!");
+            GlobalStages.prepareNextStage(player, classFabric);
+            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "To save the class, type 'finish'!");
         }
     }
 
-    private void deselectAbility(ItemStack itemStack) {
+    private void deselectAbility(ItemStack itemStack, Player player) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setLore(Arrays.asList(itemMeta.getLore().get(0), Abilites.SELECT));
         itemMeta.removeEnchant(Enchantment.LUCK);
         itemStack.setItemMeta(itemMeta);
+        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 1);
     }
 
     private void addClickedAbilityMaxTwo(Player player, ItemStack itemStack, int selected) {
@@ -73,6 +76,7 @@ public class ListenerSetupInventoryClickEvent implements Listener {
             itemMeta.addEnchant(Enchantment.LUCK, 1, false);
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             itemStack.setItemMeta(itemMeta);
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
         } else {
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You can only select two abilities!");
         }

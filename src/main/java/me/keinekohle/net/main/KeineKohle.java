@@ -4,9 +4,10 @@ import me.keinekohle.net.commands.CmdDungeon;
 import me.keinekohle.net.commands.tabcompleter.TabCompletCmdDungeon;
 import me.keinekohle.net.listeners.*;
 import me.keinekohle.net.listeners.lobby.*;
-import me.keinekohle.net.listeners.setup.ListenerSetupAsyncPlayerChatEvent;
+import me.keinekohle.net.listeners.setup.ListenerSetupCreateNewClass;
+import me.keinekohle.net.listeners.setup.ListenerSetupCreateNewClassLevel;
 import me.keinekohle.net.listeners.setup.ListenerSetupInventoryClickEvent;
-import me.keinekohle.net.utilities.CreateNewClass;
+import me.keinekohle.net.utilities.ClassFabric;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -25,9 +26,10 @@ public class KeineKohle extends JavaPlugin {
 
     //-- Lists --
     //buildmode
-    public static final HashMap<Player, CreateNewClass> PLAYERCREATENEWCLASS = new HashMap<>();
+    public static final HashMap<Player, ClassFabric> SETUPMODE = new HashMap<>();
     public static final List<Player> INPRIVIEW = new ArrayList<>();
     public static final List<Player> BUILDMODE = new ArrayList<>();
+    public static final HashMap<Player, String> VOTEDIFICULTY = new HashMap<>();
 
     //-- Player lobby hotbar --
     public static final String CHESTDISPLAYNAME = "Shop";
@@ -92,12 +94,14 @@ public class KeineKohle extends JavaPlugin {
         pm.registerEvents(new ListenerLobbyPlayerInteractEvent(), this);
         pm.registerEvents(new ListenerLobbyEntityDamageByEntityEvent(), this);
         pm.registerEvents(new ListenerLobbyEntityDamageEvent(), this);
-        pm.registerEvents(new ListenerLobbyInventoryClickEvent(), this);
         pm.registerEvents(new ListenerLobbyPlayerMoveEvent(), this);
+        pm.registerEvents(new ListenerLobbyShopClick(), this);
+        pm.registerEvents(new ListenerLobbyUpgradeClick(), this);
 
         //Setup only
-        pm.registerEvents(new ListenerSetupAsyncPlayerChatEvent(), this);
+        pm.registerEvents(new ListenerSetupCreateNewClass(), this);
         pm.registerEvents(new ListenerSetupInventoryClickEvent(), this);
+        pm.registerEvents(new ListenerSetupCreateNewClassLevel(), this);
     }
 
 }

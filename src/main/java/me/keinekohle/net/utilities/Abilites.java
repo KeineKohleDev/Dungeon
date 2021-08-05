@@ -1,5 +1,8 @@
 package me.keinekohle.net.utilities;
 
+import me.keinekohle.net.mysql.MySQLMethods;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,5 +43,14 @@ public final class Abilites {
 
     private Abilites() {
         throw new IllegalStateException("Utility class");
+    }
+
+    public static List<String> selectClassAbilities(String className) {
+        List<String> abilities = new ArrayList<>();
+        MySQLMethods mySQLMethods = new MySQLMethods();
+        String abilitiesFormat = mySQLMethods.selectAbilitiesFromClasses(className, 1).replace("[", "").replace("]", "");
+        abilities.add(abilitiesFormat.substring(0, abilitiesFormat.indexOf(",")));
+        abilities.add(abilitiesFormat.substring(abilitiesFormat.indexOf(",") + 2));
+        return abilities;
     }
 }

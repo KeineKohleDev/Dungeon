@@ -29,6 +29,7 @@ public class MySQLMethods {
         if (resultSet != null) {
             try {
                 resultSet.close();
+                System.out.println("resultSet: "+ resultSet.isClosed());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -36,6 +37,7 @@ public class MySQLMethods {
         if (statement != null) {
             try {
                 statement.close();
+                System.out.println("statement: " + statement.isClosed());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -350,15 +352,33 @@ public class MySQLMethods {
         return null;
     }
 
-    public ChatColor selectClassColorFromClasses(String className, int classLevel) {
+    public ChatColor selectClassColorFromClasses(String className) {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-            String sql = "SELECT classcolor FROM dungeon_classes WHERE classname='" + className + "' AND classlevel='" + classLevel + "'";
+            String sql = "SELECT classcolor FROM dungeon_classes WHERE classname='" + className + "' AND classlevel='1'";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
                 return ChatColor.of(resultSet.getString("classcolor"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return null;
+    }
+
+    public String selectLastUsedClassFromPlayer(Player player) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT lastclass FROM dungeon_player WHERE uuid='" + player.getUniqueId() + "'";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return resultSet.getString("lastclass");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -477,6 +497,42 @@ public class MySQLMethods {
             closeStatementAndResultSet(statement, resultSet);
         }
         return false;
+    }
+
+    public Integer selectHighestClassLevelFromClasses(String className) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT classlevel FROM dungeon_classes WHERE classname='" + className + "' ORDER BY classlevel DESC";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return resultSet.getInt("classlevel");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return null;
+    }
+
+    public Integer selectClassLevelFromPlayerByClassName(Player player, String className) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT classlevel FROM dungeon_player_classes WHERE uuid='" + player.getUniqueId() + "' AND classname='" + className + "'";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return resultSet.getInt("classlevel");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return null;
     }
 
 

@@ -1,6 +1,7 @@
 package me.keinekohle.net.scoreboard;
 
 import me.keinekohle.net.main.KeineKohle;
+import me.keinekohle.net.mysql.MySQLMethods;
 import me.keinekohle.net.utilities.Classes;
 import me.keinekohle.net.utilities.LobbyScoreboardUtilities;
 import me.keinekohle.net.utilities.GlobalUtilities;
@@ -19,6 +20,7 @@ public final class LobbyScoreboard {
     }
 
     public static void sendLobbyScoreboard(Player player) {
+        MySQLMethods mySQLMethods = new MySQLMethods();
         //-- Get the scoreboard manager --
         ScoreboardManager manager = Bukkit.getScoreboardManager();
 
@@ -39,7 +41,7 @@ public final class LobbyScoreboard {
         setScore(objective, "§aSelected Class", score);
         score -= 1;
 
-        setScore(objective, GlobalUtilities.getColorByName(Classes.getLastUsedClass(player)) + GlobalUtilities.capitalizeFirstLetter(Classes.getLastUsedClass(player)), score);
+        setScore(objective,  mySQLMethods.selectClassColorFromClasses(Classes.getLastUsedClass(player)) + GlobalUtilities.capitalizeFirstLetter(Classes.getLastUsedClass(player)), score);
         score -= 1;
 
         //Space

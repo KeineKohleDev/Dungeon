@@ -1,14 +1,13 @@
 package me.keinekohle.net.commands;
 
-import me.keinekohle.net.listeners.setup.ListenerSetupAsyncPlayerChatEvent;
 import me.keinekohle.net.main.KeineKohle;
-import me.keinekohle.net.mysql.MySQLMethods;
-import me.keinekohle.net.utilities.CreateNewClass;
+import me.keinekohle.net.utilities.ClassFabric;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import me.keinekohle.net.utilities.Language;
 import me.keinekohle.net.utilities.PlayerUtilities;
-import me.keinekohle.net.utilities.setup.Stages;
+import me.keinekohle.net.utilities.setup.GlobalStages;
 import org.bukkit.GameMode;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,7 +23,7 @@ public class CmdDungeon implements CommandExecutor {
                 switch (args.length) {
                     case 1 -> buildmode(args, player);
                     case 2 -> startCreateNewClassSetup(args, player);
-                    case 6 -> getClass(args, player);
+                    case 3 -> startCreateNewClassLevelSetup(args, player);
                     default -> sendHelp(player);
                 }
             } else {
@@ -45,26 +44,40 @@ public class CmdDungeon implements CommandExecutor {
         player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "---- Dungeon - Help ----");
     }
 
-    private void getClass(String[] args, Player player) {
-        if (args[0].equalsIgnoreCase("select") && args[1].equalsIgnoreCase("class") && args[2] != null && GlobalUtilities.isNumeric(args[3])) {
-            MySQLMethods mySQLMethods = new MySQLMethods();
-            mySQLMethods.giveClassItems(player, args[2], Integer.parseInt(args[3]));
-        }
-    }
 
     private void startCreateNewClassSetup(String[] args, Player player) {
-        if(args[0].equalsIgnoreCase("create") && args[1].equalsIgnoreCase("class")) {
-            if(KeineKohle.PLAYERCREATENEWCLASS.containsKey(player)) {
-                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "If you want to quit the setup please type 'cancel' in the chat!");
+        if (args[0].equalsIgnoreCase("create") && args[1].equalsIgnoreCase("class")) {
+            if (KeineKohle.SETUPMODE.containsKey(player)) {
+                howToQuitTheSetupMode(player);
             } else {
-                CreateNewClass createNewClass = new CreateNewClass();
-                KeineKohle.PLAYERCREATENEWCLASS.put(player, createNewClass);
-                Stages.messageStageInfo(player, createNewClass);
+                ClassFabric classFabric = new ClassFabric(player);
+                classFabric.setMode(classFabric.getMODECREATENEWCLASS());
+                classFabric.setStageMax(7);
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please type the §l§aname§r" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "of the class.");
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: You can't use white spaces!");
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: You can type 'back', to go to the previous stage!");
             }
         }
+    }
+
+    private void startCreateNewClassLevelSetup(String[] args, Player player) {
+        if (args[0].equalsIgnoreCase("create") && args[1].equalsIgnoreCase("class") && args[2].equalsIgnoreCase("level")) {
+            if (KeineKohle.SETUPMODE.containsKey(player)) {
+                howToQuitTheSetupMode(player);
+            } else {
+                ClassFabric classFabric = new ClassFabric(player);
+                classFabric.setMode(classFabric.getMODECREATENEWCLASSLEVEL());
+                classFabric.setStageMax(4);
+                GlobalStages.messageStageInfo(player, classFabric);
+                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please type the §l§aname§r" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "of the class.");
+                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: You can't use white spaces!");
+                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: You can type 'back', to go to the previous stage!");
+            }
+        }
+    }
+
+    private void howToQuitTheSetupMode(Player player) {
+        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "If you want to quit the setup please type 'cancel' in the chat!");
     }
 
     private void noPermissions(Player player) {

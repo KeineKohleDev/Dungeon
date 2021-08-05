@@ -18,10 +18,12 @@ public class TabCompletCmdDungeon implements TabCompleter {
                 case 1:
                     tabComplete.add("buildmode");
                     tabComplete.add("create");
-                    tabComplete.add("select");
                     break;
                 case 2:
                     tabComplete.add("class");
+                    break;
+                case 3:
+                    tabComplete.add("level");
                     break;
                 case 4:
                     outPutPossibleClassLevels(tabComplete);

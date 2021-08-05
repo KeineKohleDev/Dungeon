@@ -1,17 +1,24 @@
 package me.keinekohle.net.utilities;
 
+import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.mysql.MySQLMethods;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateNewClass {
+public class ClassFabric {
+
+    private final Integer MODECREATENEWCLASS = 0;
+    private final Integer MODECREATENEWCLASSLEVEL = 1;
 
     private Integer stage = 0;
-    private Integer stageMax = 10;
+    private Integer stageMax = 7;
+    private Integer mode;
     private String className;
     private Integer classLevel;
     private Integer classCoast;
@@ -20,6 +27,30 @@ public class CreateNewClass {
     private List<String> abilities = new ArrayList<>();
     private Inventory inventory;
 
+    public ClassFabric(Player player) {
+        player.playSound(player.getLocation(), Sound.BLOCK_PISTON_EXTEND, 1, 1);
+        putPlayerIntoSetupMode(player);
+    }
+
+    private void putPlayerIntoSetupMode(Player player) {
+        KeineKohle.SETUPMODE.put(player, this);
+    }
+
+    public Integer getMode() {
+        return mode;
+    }
+
+    public void setMode(Integer mode) {
+        this.mode = mode;
+    }
+
+    public Integer getMODECREATENEWCLASSLEVEL() {
+        return MODECREATENEWCLASSLEVEL;
+    }
+
+    public Integer getMODECREATENEWCLASS() {
+        return MODECREATENEWCLASS;
+    }
 
     public Integer getStageMax() {
         return stageMax;
@@ -70,7 +101,6 @@ public class CreateNewClass {
         this.icon = icon;
     }
 
-
     public Integer getClassLevel() {
         return classLevel;
     }
@@ -113,7 +143,6 @@ public class CreateNewClass {
             slot++;
         }
     }
-
 
 
 }

@@ -27,8 +27,20 @@ public final class Replacements {
         return toReplace.replace("%player%", player.getName());
     }
 
+    public static String replaceVoteDifficulty(String toReplace, String difficulty) {
+        return toReplace.replace("%vote%", difficulty);
+    }
+
     public static String replaceClassName(String toReplace, String className) {
         return toReplace.replace("%classname%", className);
+    }
+
+    public static String replaceFromLevel(String toReplace, int fromLevel) {
+        return toReplace.replace("%fromlevel%", String.valueOf(fromLevel));
+    }
+
+    public static String replaceToLevel(String toReplace, int toLevel) {
+        return toReplace.replace("%tolevel%", String.valueOf(toLevel));
     }
 
     public static String replaceCoins(String toReplace, int coins) {

@@ -6,23 +6,20 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public final class InventoryUtilities {
 
     public static final String FILLDIESPLAYNAME = "§a";
-    public static final String BUY = "§bBuy (Double left click)";
+    public static final String BUY = "§bBuy (Right click)";
+    public static final String UPGRADE = "§bUpgrade (Right click)";
     public static final String PREVIEW = "§bPreview (Left click)";
     public static final String BOUGHT = "§e§lBought";
+    public static final String HIGHESTCLASS = "§e§lHighest level reached!";
 
     private InventoryUtilities() {
         throw new IllegalStateException("Utility class");
@@ -45,14 +42,18 @@ public final class InventoryUtilities {
         return inventory;
     }
 
-    public static Inventory createUpgradeInventroy(Player player) {
-        Inventory inventory = Bukkit.createInventory(player, 9 * 3, GlobalUtilities.getColorByName(KeineKohle.ANVILDISPLAYNAME) + KeineKohle.ANVILDISPLAYNAME);
-        fillInventory(inventory, Material.BLACK_STAINED_GLASS_PANE);
-        inventory.setItem(0, ItemBuilder.createItemStack(Material.IRON_CHESTPLATE, 1, GlobalUtilities.getColorByName(Classes.TANKCLASS) + Classes.TANKCLASS));
-        inventory.setItem(1, ItemBuilder.createItemStack(Material.GREEN_DYE, 1, GlobalUtilities.getColorByName(Classes.HEALERCLASS) + Classes.HEALERCLASS));
-        inventory.setItem(2, ItemBuilder.createItemStack(Material.ORANGE_DYE, 1, GlobalUtilities.getColorByName(Classes.ARCHERCLASS) + Classes.ARCHERCLASS));
-        inventory.setItem(3, ItemBuilder.createItemStack(Material.RED_DYE, 1, GlobalUtilities.getColorByName(Classes.SURVIVORCLASS) + Classes.SURVIVORCLASS));
-        return inventory;
+    public static void createUpgradeInventroy(Player player) {
+        MySQLMethods mySQLMethods = new MySQLMethods();
+        List<String> boughtClasses = mySQLMethods.selectAllBoughtClasses(player);
+        Inventory inventory = Bukkit.createInventory(player, GlobalUtilities.calculateInventorySize(boughtClasses.size()), GlobalUtilities.getColorByName(KeineKohle.ANVILDISPLAYNAME) + KeineKohle.ANVILDISPLAYNAME);
+
+        if (boughtClasses != null) {
+            fillInventoryWithUpgradableClasses(inventory, player, boughtClasses, mySQLMethods);
+            fillInventory(inventory, Material.BLACK_STAINED_GLASS_PANE);
+            player.openInventory(inventory);
+        } else {
+            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.NOCLASSESBOUGHTYET);
+        }
     }
 
     public static Inventory createAbilitiesInventory(Player player) {
@@ -81,36 +82,51 @@ public final class InventoryUtilities {
         return inventory;
     }
 
-    public static Inventory createClassesInventory(Player player) {
-        Inventory inventory = Bukkit.createInventory(player, 9*6, GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Classes.SHOPCLASSES);
-        fillInventoryWithClassesLevelOne(inventory, player);
-        fillInventory(inventory, Material.BLACK_STAINED_GLASS_PANE);
-        return inventory;
-    }
-
-    public static void fillInventoryWithClassesLevelOne(Inventory inventory, Player player) {
+    public static void createClassesInventory(Player player) {
         MySQLMethods mySQLMethods = new MySQLMethods();
         List<String> classes = mySQLMethods.selectAllClasses();
-        List<String> boughtClasses = mySQLMethods.selectAllBoughtClasses(player);
-        if(classes != null) {
-            for (String className : classes) {
+        if (classes != null) {
+            Inventory inventory = Bukkit.createInventory(player, GlobalUtilities.calculateInventorySize(classes.size()), GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Classes.SHOPCLASSES);
+            fillInventoryWithClassesLevelOne(inventory, player, classes, mySQLMethods);
+            fillInventory(inventory, Material.BLACK_STAINED_GLASS_PANE);
+            player.openInventory(inventory);
+        } else {
+            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "There are no classes!");
+        }
+    }
 
-                Material representativeItem = mySQLMethods.selectIconFromClasses(className);
+    public static void fillInventoryWithUpgradableClasses(Inventory inventory, Player player, List<String> boughtClasses, MySQLMethods mySQLMethods) {
+        for (String className : boughtClasses) {
+            int highestClassLevel = mySQLMethods.selectHighestClassLevelFromClasses(className);
+            int classLevel = mySQLMethods.selectClassLevelFromPlayerByClassName(player, className);
+            ChatColor color = mySQLMethods.selectClassColorFromClasses(className);
+            List<String> abilities = Abilites.selectClassAbilities(className);
+            Material classIcon = mySQLMethods.selectIconFromClasses(className);
+            if (classLevel == highestClassLevel) {
+                inventory.addItem(ItemBuilder.createItemStackEnchantedWithLore(classIcon, 1, color + className, Arrays.asList(HIGHESTCLASS, "§aLevel:§c " + highestClassLevel)));
+            } else {
+                int nextClassLevel = classLevel+1;
+                int classCoast = mySQLMethods.selectClassCoastFromClasses(className, nextClassLevel);
+                List<String> lore = Arrays.asList("§aLevel:§c " + nextClassLevel, "§aPrice:§c " + classCoast, "", GlobalUtilities.getColorByName(KeineKohle.ABILITIESDISPLAYNAME) + KeineKohle.ABILITIESDISPLAYNAME + ":", GlobalUtilities.getColorByName(abilities.get(0)) + "  " + abilities.get(0), GlobalUtilities.getColorByName(abilities.get(1)) + "  " + abilities.get(1), "", UPGRADE, PREVIEW);
+                inventory.addItem(ItemBuilder.createItemStackWithLore(classIcon, 1, color + className, lore));
+            }
+        }
+    }
+
+
+    public static void fillInventoryWithClassesLevelOne(Inventory inventory, Player player, List<String> classes, MySQLMethods mySQLMethods) {
+        List<String> boughtClasses = mySQLMethods.selectAllBoughtClasses(player);
+        if (classes != null) {
+            for (String className : classes) {
+                Material classIcon = mySQLMethods.selectIconFromClasses(className);
                 int classCoast = mySQLMethods.selectClassCoastFromClasses(className, 1);
-                ChatColor color = mySQLMethods.selectClassColorFromClasses(className, 1);
-                String abilities = mySQLMethods.selectAbilitiesFromClasses(className, 1).replace("[", "").replace("]", "");
-                String abilityOne = abilities.substring(0, abilities.indexOf(","));
-                String abilityTwo = abilities.substring(abilities.indexOf(",")+2);
-                if(boughtClasses.contains(className)) {
-                    ItemStack itemStack = ItemBuilder.createItemStackWithLore(representativeItem, 1, color + className, Arrays.asList(BOUGHT));
-                    ItemMeta itemMeta = itemStack.getItemMeta();
-                    itemMeta.addEnchant(Enchantment.LUCK, 1, false);
-                    itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                    itemStack.setItemMeta(itemMeta);
-                    inventory.addItem(itemStack);
+                ChatColor color = mySQLMethods.selectClassColorFromClasses(className);
+                List<String> abilities = Abilites.selectClassAbilities(className);
+                if (boughtClasses != null && boughtClasses.contains(className)) {
+                    inventory.addItem(ItemBuilder.createItemStackEnchantedWithLore(classIcon, 1, color + className, Arrays.asList(BOUGHT)));
                 } else {
-                    List<String> lore = Arrays.asList("§aPrice:§c " + classCoast, "",GlobalUtilities.getColorByName(KeineKohle.ABILITIESDISPLAYNAME) + KeineKohle.ABILITIESDISPLAYNAME + ":", GlobalUtilities.getColorByName(abilityOne) + "  " + abilityOne, GlobalUtilities.getColorByName(abilityTwo) + "  " + abilityTwo, "", BUY, PREVIEW);
-                    inventory.addItem(ItemBuilder.createItemStackWithLore(representativeItem, 1, color + className, lore));
+                    List<String> lore = Arrays.asList("§aPrice:§c " + classCoast, "", GlobalUtilities.getColorByName(KeineKohle.ABILITIESDISPLAYNAME) + KeineKohle.ABILITIESDISPLAYNAME + ":", GlobalUtilities.getColorByName(abilities.get(0)) + "  " + abilities.get(0), GlobalUtilities.getColorByName(abilities.get(1)) + "  " + abilities.get(1), "", BUY, PREVIEW);
+                    inventory.addItem(ItemBuilder.createItemStackWithLore(classIcon, 1, color + className, lore));
                 }
             }
         }
@@ -125,8 +141,8 @@ public final class InventoryUtilities {
     }
 
     public static void fillInventory(Inventory inventory, Material fillMaterial) {
-        for(int i = 0; i < inventory.getSize(); i++) {
-            if(inventory.getItem(i) == null) {
+        for (int i = 0; i < inventory.getSize(); i++) {
+            if (inventory.getItem(i) == null) {
                 inventory.setItem(i, ItemBuilder.createItemStack(fillMaterial, 1, FILLDIESPLAYNAME));
             }
         }

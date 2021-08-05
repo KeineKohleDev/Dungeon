@@ -1,8 +1,12 @@
 package me.keinekohle.net.utilities;
 
 import me.keinekohle.net.main.KeineKohle;
+import me.keinekohle.net.mysql.MySQLMethods;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public final class GlobalUtilities {
 
@@ -59,6 +63,10 @@ public final class GlobalUtilities {
         return tocapitalize.substring(0, 1).toUpperCase() + tocapitalize.substring(1).toLowerCase();
     }
 
+    public static Integer calculateInventorySize(int size) {
+        return (int) (9 * (Math.ceil(size / 9) + 1));
+    }
+
     public static boolean isNumeric(String toBeChecked) {
         try {
             Integer.parseInt(toBeChecked);
@@ -67,5 +75,19 @@ public final class GlobalUtilities {
         }
 
         return true;
+    }
+
+    public static void inventoryClickSound(Player player) {
+        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
+    }
+
+    public static void previewClass(Player player, ItemStack clickedItem, int classLevel) {
+        MySQLMethods mySQLMethods = new MySQLMethods();
+        KeineKohle.INPRIVIEW.add(player);
+        PlayerUtilities.clearPlayerInventory(player);
+        mySQLMethods.giveClassItems(player, GlobalUtilities.getNameWithoutColorCode(clickedItem.getItemMeta().getDisplayName()), classLevel);
+        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.PREVIEWSTART);
+        player.closeInventory();
+        player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 1, 1);
     }
 }

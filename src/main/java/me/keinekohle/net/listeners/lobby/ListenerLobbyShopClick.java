@@ -4,6 +4,7 @@ import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.mysql.MySQLMethods;
 import me.keinekohle.net.scoreboard.LobbyScoreboard;
 import me.keinekohle.net.utilities.*;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,7 +13,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class ListenerLobbyInventoryClickEvent implements Listener {
+public class ListenerLobbyShopClick implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
@@ -22,6 +23,7 @@ public class ListenerLobbyInventoryClickEvent implements Listener {
                 ItemStack clickedItem = event.getCurrentItem();
                 if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(KeineKohle.CHESTDISPLAYNAME) + KeineKohle.CHESTDISPLAYNAME)) {
                     handleShopInventorActions(player, clickedItem);
+                    GlobalUtilities.inventoryClickSound(player);
                 } else if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Classes.SHOPCLASSES)) {
                     handleClassesInventoryActions(event, player, clickedItem);
                 }
@@ -34,7 +36,7 @@ public class ListenerLobbyInventoryClickEvent implements Listener {
             ItemMeta clickedItemMeta = clickedItem.getItemMeta();
             String itemDisplayname = clickedItemMeta.getDisplayName();
             if (itemDisplayname.equals(GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Classes.SHOPCLASSES)) {
-                player.openInventory(InventoryUtilities.createClassesInventory(player));
+                InventoryUtilities.createClassesInventory(player);
             }
         }
     }
@@ -42,20 +44,11 @@ public class ListenerLobbyInventoryClickEvent implements Listener {
     private void handleClassesInventoryActions(InventoryClickEvent event, Player player, ItemStack clickedItem) {
         if (clickedItem.hasItemMeta() && clickedItem.getItemMeta().hasDisplayName()) {
             if (event.getClick() == ClickType.LEFT && clickedItem.getItemMeta().hasLore() && clickedItem.getItemMeta().getLore().contains(InventoryUtilities.PREVIEW)) {
-                previewClass(player, clickedItem);
+                GlobalUtilities.previewClass(player, clickedItem, 1);
             } else if (event.getClick() == ClickType.RIGHT) {
                 purchaseClass(player, clickedItem);
             }
         }
-    }
-
-    private void previewClass(Player player, ItemStack clickedItem) {
-        MySQLMethods mySQLMethods = new MySQLMethods();
-        KeineKohle.INPRIVIEW.add(player);
-        PlayerUtilities.clearPlayerInventory(player);
-        mySQLMethods.giveClassItems(player, GlobalUtilities.getNameWithoutColorCode(clickedItem.getItemMeta().getDisplayName()), 1);
-        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.PREVIEWSTART);
-        player.closeInventory();
     }
 
     private void purchaseClass(Player player, ItemStack clickedItem) {
@@ -68,8 +61,9 @@ public class ListenerLobbyInventoryClickEvent implements Listener {
             mySQLMethods.updatePlayerCoins(player, (playerCoins - classCoast));
             mySQLMethods.giveClassAccessToPlayer(player, className);
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Replacements.replaceCoins(Replacements.replaceClassName(Language.PURCHASEDCLASS, className), classCoast));
-            player.openInventory(InventoryUtilities.createClassesInventory(player));
+            InventoryUtilities.createClassesInventory(player);
             LobbyScoreboard.sendLobbyScoreboard(player);
+            player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1, 1);
         } else {
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Replacements.replaceClassName(Language.NOTENOUGHTCOINS, className));
         }

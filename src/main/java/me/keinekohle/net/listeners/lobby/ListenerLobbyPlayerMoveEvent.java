@@ -4,11 +4,11 @@ import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import me.keinekohle.net.utilities.Language;
 import me.keinekohle.net.utilities.PlayerUtilities;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-
 public class ListenerLobbyPlayerMoveEvent implements Listener {
 
     @EventHandler
@@ -20,6 +20,7 @@ public class ListenerLobbyPlayerMoveEvent implements Listener {
                 PlayerUtilities.giveLobbyItemsToPlayer(player);
                 KeineKohle.INPRIVIEW.remove(player);
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.PREVIEWEND);
+                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
             }
         }
     }
