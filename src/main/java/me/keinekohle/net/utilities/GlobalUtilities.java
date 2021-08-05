@@ -2,6 +2,7 @@ package me.keinekohle.net.utilities;
 
 import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.mysql.MySQLMethods;
+import me.keinekohle.net.utilities.cmd.CmdDungeonUtilities;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -25,11 +26,11 @@ public final class GlobalUtilities {
             case KeineKohle.COINS -> ChatColor.of("#F29C1B").toString();
             case KeineKohle.BRACKETSCOLOR, Classes.NONECLASS -> ChatColor.DARK_GRAY.toString();
             case KeineKohle.CHATCOLOR -> ChatColor.of("#FCE23A").toString();
-            case Classes.SHOPCLASSES -> ChatColor.of("#39F6D3").toString();
-            case KeineKohle.DIFICULTYEASY -> ChatColor.of("#9DFC58").toString();
-            case KeineKohle.DIFICULTYNORMAL -> ChatColor.of("#1EE62F").toString();
-            case KeineKohle.DIFICULTYHARD -> ChatColor.of("#F6814C").toString();
-            case KeineKohle.DIFICULTYVERYHARD -> ChatColor.of("#EB140B").toString();
+            case Classes.SHOPCLASSES-> ChatColor.of("#39F6D3").toString();
+            case KeineKohle.DIFFICULTYEASY -> ChatColor.of("#9DFC58").toString();
+            case KeineKohle.DIFFICULTYNORMAL -> ChatColor.of("#1EE62F").toString();
+            case KeineKohle.DIFFICULTYHARD -> ChatColor.of("#F6814C").toString();
+            case KeineKohle.DIFFICULTYVERYHARD -> ChatColor.of("#EB140B").toString();
             case KeineKohle.ABILITIESDISPLAYNAME -> ChatColor.of("#BEF679").toString();
             case Abilites.FIRE -> ChatColor.of("#D9211A").toString();
             case Abilites.FIREGRENADE -> ChatColor.of("#DB4944").toString();
@@ -43,6 +44,9 @@ public final class GlobalUtilities {
             case Abilites.HEALGRENADE -> ChatColor.of("#F58573").toString();
             case Abilites.WEAKNESS -> ChatColor.of("#B6BCBF").toString();
             case Abilites.WWEAKNESSGRANDE -> ChatColor.of("#DDE5E9").toString();
+            case KeineKohle.SHOPBOOSTER -> ChatColor.of("#E58AEB").toString();
+            case KeineKohle.SHOPTITLES -> ChatColor.of("#96DDF5").toString();
+            case CmdDungeonUtilities.BUILDMODE ->  ChatColor.of("#9EFF40").toString();
             default -> "getColorByName: default! for input " + name;
         };
     }

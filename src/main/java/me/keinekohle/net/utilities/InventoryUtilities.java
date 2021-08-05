@@ -9,8 +9,10 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 public final class InventoryUtilities {
 
@@ -25,21 +27,103 @@ public final class InventoryUtilities {
         throw new IllegalStateException("Utility class");
     }
 
-    public static Inventory createShopInventroy(Player player) {
+    public static void createShopInventroy(Player player) {
         Inventory inventory = Bukkit.createInventory(player, 9 * 3, GlobalUtilities.getColorByName(KeineKohle.CHESTDISPLAYNAME) + KeineKohle.CHESTDISPLAYNAME);
         fillInventory(inventory, Material.BLACK_STAINED_GLASS_PANE);
         inventory.setItem(10, ItemBuilder.createItemStack(Material.IRON_CHESTPLATE, 1, GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Classes.SHOPCLASSES));
-        return inventory;
+        inventory.setItem(13, ItemBuilder.createItemStack(Material.BEACON, 1, GlobalUtilities.getColorByName(KeineKohle.SHOPBOOSTER) + KeineKohle.SHOPBOOSTER));
+        inventory.setItem(16, ItemBuilder.createItemStack(Material.NAME_TAG, 1, GlobalUtilities.getColorByName(KeineKohle.SHOPTITLES) + KeineKohle.SHOPTITLES));
+        player.openInventory(inventory);
     }
 
-    public static Inventory createDifficultyInventroy(Player player) {
+    public static void createDifficultyInventroy(Player player) {
         Inventory inventory = Bukkit.createInventory(player, 9 * 3, GlobalUtilities.getColorByName(KeineKohle.COMPARATORDISPLAYNAME) + KeineKohle.COMPARATORDISPLAYNAME);
         fillInventory(inventory, Material.BLACK_STAINED_GLASS_PANE);
-        inventory.setItem(10, ItemBuilder.createItemStack(Material.LIME_DYE, 1, GlobalUtilities.getColorByName(KeineKohle.DIFICULTYEASY) + KeineKohle.DIFICULTYEASY));
-        inventory.setItem(12, ItemBuilder.createItemStack(Material.GREEN_DYE, 1, GlobalUtilities.getColorByName(KeineKohle.DIFICULTYNORMAL) + KeineKohle.DIFICULTYNORMAL));
-        inventory.setItem(14, ItemBuilder.createItemStack(Material.ORANGE_DYE, 1, GlobalUtilities.getColorByName(KeineKohle.DIFICULTYHARD) + KeineKohle.DIFICULTYHARD));
-        inventory.setItem(16, ItemBuilder.createItemStack(Material.RED_DYE, 1, GlobalUtilities.getColorByName(KeineKohle.DIFICULTYVERYHARD) + KeineKohle.DIFICULTYVERYHARD));
-        return inventory;
+        createDifficultyVote(inventory, player);
+        player.openInventory(inventory);
+    }
+
+    private static void createDifficultyVote(Inventory inventory, Player player) {
+        String youVoted = "§aYou";
+        List<String> difficulties = new ArrayList<>();
+        difficulties.add(KeineKohle.DIFFICULTYEASY);
+        difficulties.add(KeineKohle.DIFFICULTYNORMAL);
+        difficulties.add(KeineKohle.DIFFICULTYHARD);
+        difficulties.add(KeineKohle.DIFFICULTYVERYHARD);
+        int easy = 0;
+        int normal = 0;
+        int hard = 0;
+        int veryhard = 0;
+        for (String vote : KeineKohle.VOTEDIFFICULTY.values()) {
+            switch (vote) {
+                case KeineKohle.DIFFICULTYEASY:
+                    easy++;
+                    break;
+                case KeineKohle.DIFFICULTYNORMAL:
+                    normal++;
+                    break;
+                case KeineKohle.DIFFICULTYHARD:
+                    hard++;
+                    break;
+                case KeineKohle.DIFFICULTYVERYHARD:
+                    veryhard++;
+                    break;
+                default:
+                    System.getLogger(Logger.GLOBAL_LOGGER_NAME).log(System.Logger.Level.ERROR, "Vote count error");
+            }
+        }
+        if (KeineKohle.VOTEDIFFICULTY.containsKey(player)) {
+            markWhatThePlayerVotedFor(inventory, player, youVoted, difficulties, easy, normal, hard, veryhard);
+        }
+        addVoteMissingVoteItems(inventory, difficulties, easy, normal, hard, veryhard);
+    }
+
+    private static void addVoteMissingVoteItems(Inventory inventory, List<String> difficulties, int easy, int normal, int hard, int veryhard) {
+        for (String difficulty : difficulties) {
+            switch (difficulty) {
+                case KeineKohle.DIFFICULTYEASY:
+                    inventory.setItem(10, ItemBuilder.createItemStackWithLore(Material.LIME_DYE, 1, GlobalUtilities.getColorByName(KeineKohle.DIFFICULTYEASY) + KeineKohle.DIFFICULTYEASY, Arrays.asList(getVotes(easy))));
+                    break;
+                case KeineKohle.DIFFICULTYNORMAL:
+                    inventory.setItem(12, ItemBuilder.createItemStackWithLore(Material.GREEN_DYE, 1, GlobalUtilities.getColorByName(KeineKohle.DIFFICULTYNORMAL) + KeineKohle.DIFFICULTYNORMAL, Arrays.asList(getVotes(normal))));
+                    break;
+                case KeineKohle.DIFFICULTYHARD:
+                    inventory.setItem(14, ItemBuilder.createItemStackWithLore(Material.ORANGE_DYE, 1, GlobalUtilities.getColorByName(KeineKohle.DIFFICULTYHARD) + KeineKohle.DIFFICULTYHARD, Arrays.asList(getVotes(hard))));
+                    break;
+                case KeineKohle.DIFFICULTYVERYHARD:
+                    inventory.setItem(16, ItemBuilder.createItemStackWithLore(Material.RED_DYE, 1, GlobalUtilities.getColorByName(KeineKohle.DIFFICULTYVERYHARD) + KeineKohle.DIFFICULTYVERYHARD, Arrays.asList(getVotes(veryhard))));
+                    break;
+                default:
+                    System.getLogger(Logger.GLOBAL_LOGGER_NAME).log(System.Logger.Level.ERROR, "Add vote items error");
+            }
+        }
+    }
+
+    private static void markWhatThePlayerVotedFor(Inventory inventory, Player player, String youVoted, List<String> difficulties, int easy, int normal, int hard, int veryhard) {
+        switch (KeineKohle.VOTEDIFFICULTY.get(player)) {
+            case KeineKohle.DIFFICULTYEASY:
+                inventory.setItem(10, ItemBuilder.createItemStackEnchantedWithLore(Material.LIME_DYE, 1, GlobalUtilities.getColorByName(KeineKohle.DIFFICULTYEASY) + KeineKohle.DIFFICULTYEASY, Arrays.asList(youVoted, getVotes(easy))));
+                difficulties.remove(KeineKohle.DIFFICULTYEASY);
+                break;
+            case KeineKohle.DIFFICULTYNORMAL:
+                inventory.setItem(12, ItemBuilder.createItemStackEnchantedWithLore(Material.GREEN_DYE, 1, GlobalUtilities.getColorByName(KeineKohle.DIFFICULTYNORMAL) + KeineKohle.DIFFICULTYNORMAL, Arrays.asList(youVoted, getVotes(normal))));
+                difficulties.remove(KeineKohle.DIFFICULTYNORMAL);
+                break;
+            case KeineKohle.DIFFICULTYHARD:
+                inventory.setItem(14, ItemBuilder.createItemStackEnchantedWithLore(Material.ORANGE_DYE, 1, GlobalUtilities.getColorByName(KeineKohle.DIFFICULTYHARD) + KeineKohle.DIFFICULTYHARD, Arrays.asList(youVoted, getVotes(hard))));
+                difficulties.remove(KeineKohle.DIFFICULTYHARD);
+                break;
+            case KeineKohle.DIFFICULTYVERYHARD:
+                inventory.setItem(16, ItemBuilder.createItemStackEnchantedWithLore(Material.RED_DYE, 1, GlobalUtilities.getColorByName(KeineKohle.DIFFICULTYVERYHARD) + KeineKohle.DIFFICULTYVERYHARD, Arrays.asList(youVoted, getVotes(veryhard))));
+                difficulties.remove(KeineKohle.DIFFICULTYVERYHARD);
+                break;
+            default:
+                System.getLogger(Logger.GLOBAL_LOGGER_NAME).log(System.Logger.Level.ERROR, "Select vote error");
+        }
+    }
+
+    private static String getVotes(int votes) {
+        return "§aVotes:§c " + votes;
     }
 
     public static void createUpgradeInventroy(Player player) {
@@ -47,12 +131,12 @@ public final class InventoryUtilities {
         List<String> boughtClasses = mySQLMethods.selectAllBoughtClasses(player);
         Inventory inventory = Bukkit.createInventory(player, GlobalUtilities.calculateInventorySize(boughtClasses.size()), GlobalUtilities.getColorByName(KeineKohle.ANVILDISPLAYNAME) + KeineKohle.ANVILDISPLAYNAME);
 
-        if (boughtClasses != null) {
+        if (boughtClasses.isEmpty()) {
+            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.NOCLASSESBOUGHTYET);
+        } else {
             fillInventoryWithUpgradableClasses(inventory, player, boughtClasses, mySQLMethods);
             fillInventory(inventory, Material.BLACK_STAINED_GLASS_PANE);
             player.openInventory(inventory);
-        } else {
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.NOCLASSESBOUGHTYET);
         }
     }
 
@@ -105,7 +189,7 @@ public final class InventoryUtilities {
             if (classLevel == highestClassLevel) {
                 inventory.addItem(ItemBuilder.createItemStackEnchantedWithLore(classIcon, 1, color + className, Arrays.asList(HIGHESTCLASS, "§aLevel:§c " + highestClassLevel)));
             } else {
-                int nextClassLevel = classLevel+1;
+                int nextClassLevel = classLevel + 1;
                 int classCoast = mySQLMethods.selectClassCoastFromClasses(className, nextClassLevel);
                 List<String> lore = Arrays.asList("§aLevel:§c " + nextClassLevel, "§aPrice:§c " + classCoast, "", GlobalUtilities.getColorByName(KeineKohle.ABILITIESDISPLAYNAME) + KeineKohle.ABILITIESDISPLAYNAME + ":", GlobalUtilities.getColorByName(abilities.get(0)) + "  " + abilities.get(0), GlobalUtilities.getColorByName(abilities.get(1)) + "  " + abilities.get(1), "", UPGRADE, PREVIEW);
                 inventory.addItem(ItemBuilder.createItemStackWithLore(classIcon, 1, color + className, lore));
@@ -116,13 +200,13 @@ public final class InventoryUtilities {
 
     public static void fillInventoryWithClassesLevelOne(Inventory inventory, Player player, List<String> classes, MySQLMethods mySQLMethods) {
         List<String> boughtClasses = mySQLMethods.selectAllBoughtClasses(player);
-        if (classes != null) {
+        if (!classes.isEmpty()) {
             for (String className : classes) {
                 Material classIcon = mySQLMethods.selectIconFromClasses(className);
                 int classCoast = mySQLMethods.selectClassCoastFromClasses(className, 1);
                 ChatColor color = mySQLMethods.selectClassColorFromClasses(className);
                 List<String> abilities = Abilites.selectClassAbilities(className);
-                if (boughtClasses != null && boughtClasses.contains(className)) {
+                if (!boughtClasses.isEmpty() && boughtClasses.contains(className)) {
                     inventory.addItem(ItemBuilder.createItemStackEnchantedWithLore(classIcon, 1, color + className, Arrays.asList(BOUGHT)));
                 } else {
                     List<String> lore = Arrays.asList("§aPrice:§c " + classCoast, "", GlobalUtilities.getColorByName(KeineKohle.ABILITIESDISPLAYNAME) + KeineKohle.ABILITIESDISPLAYNAME + ":", GlobalUtilities.getColorByName(abilities.get(0)) + "  " + abilities.get(0), GlobalUtilities.getColorByName(abilities.get(1)) + "  " + abilities.get(1), "", BUY, PREVIEW);

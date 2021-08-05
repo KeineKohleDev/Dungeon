@@ -2,8 +2,10 @@ package me.keinekohle.net.listeners.lobby;
 
 import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.utilities.GlobalUtilities;
+import me.keinekohle.net.utilities.InventoryUtilities;
 import me.keinekohle.net.utilities.Language;
 import me.keinekohle.net.utilities.Replacements;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,19 +20,39 @@ public class ListenerLobbyDifficultyVoteClick implements Listener {
             event.setCancelled(true);
             if (event.getCurrentItem() != null) {
                 ItemStack clickedItem = event.getCurrentItem();
-                if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(KeineKohle.COMPARATORDISPLAYNAME) + KeineKohle.COMPARATORDISPLAYNAME)) {
-                    if (clickedItem.hasItemMeta()) {
-                        if (clickedItem.getItemMeta().getDisplayName().equals(GlobalUtilities.getColorByName(KeineKohle.DIFICULTYEASY) + KeineKohle.DIFICULTYEASY)) {
-                            if (KeineKohle.VOTEDIFICULTY.containsKey(player) && !KeineKohle.VOTEDIFICULTY.get(player).equals(KeineKohle.DIFICULTYEASY)) {
-                                KeineKohle.VOTEDIFICULTY.remove(player);
-                                KeineKohle.VOTEDIFICULTY.put(player, GlobalUtilities.getNameWithoutColorCode(clickedItem.getItemMeta().getDisplayName()));
-                                votedForMessage(player, clickedItem);
-                            }
-                        }
-                    }
+                if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(KeineKohle.COMPARATORDISPLAYNAME) + KeineKohle.COMPARATORDISPLAYNAME) & clickedItem.hasItemMeta() && clickedItem.hasItemMeta()) {
+                    vote(player, clickedItem, KeineKohle.DIFFICULTYEASY);
+                    vote(player, clickedItem, KeineKohle.DIFFICULTYNORMAL);
+                    vote(player, clickedItem, KeineKohle.DIFFICULTYHARD);
+                    vote(player, clickedItem, KeineKohle.DIFFICULTYVERYHARD);
                 }
             }
         }
+    }
+
+    private void vote(Player player, ItemStack clickedItem, String difficulty) {
+        if (clickedItem.getItemMeta().getDisplayName().equals(GlobalUtilities.getColorByName(difficulty) + difficulty)) {
+            if (KeineKohle.VOTEDIFFICULTY.containsKey(player)) {
+                if (!KeineKohle.VOTEDIFFICULTY.get(player).equals(difficulty)) {
+                    KeineKohle.VOTEDIFFICULTY.remove(player);
+                    addVoteAndSendVotedMessage(player, clickedItem, difficulty);
+                    refreshInventoryAndPlaySound(player);
+                }
+            } else {
+                addVoteAndSendVotedMessage(player, clickedItem, difficulty);
+                refreshInventoryAndPlaySound(player);
+            }
+        }
+    }
+
+    private void refreshInventoryAndPlaySound(Player player) {
+        player.playSound(player.getLocation(), Sound.BLOCK_SWEET_BERRY_BUSH_PLACE, 1, 1);
+        InventoryUtilities.createDifficultyInventroy(player);
+    }
+
+    private void addVoteAndSendVotedMessage(Player player, ItemStack clickedItem, String difficulty) {
+        KeineKohle.VOTEDIFFICULTY.put(player, difficulty);
+        votedForMessage(player, clickedItem);
     }
 
     private void votedForMessage(Player player, ItemStack clickedItem) {

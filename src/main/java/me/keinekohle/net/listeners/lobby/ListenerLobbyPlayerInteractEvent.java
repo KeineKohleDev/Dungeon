@@ -20,10 +20,10 @@ public class ListenerLobbyPlayerInteractEvent implements Listener {
             String itemDisplayName = event.getItem().getItemMeta().getDisplayName();
 
             if (itemDisplayName.equals(GlobalUtilities.getColorByName(KeineKohle.CHESTDISPLAYNAME) + KeineKohle.CHESTDISPLAYNAME)) {
-                player.openInventory(InventoryUtilities.createShopInventroy(player));
+                InventoryUtilities.createShopInventroy(player);
                 player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 1, 1);
             } else if (itemDisplayName.equals(GlobalUtilities.getColorByName(KeineKohle.COMPARATORDISPLAYNAME) + KeineKohle.COMPARATORDISPLAYNAME)) {
-                player.openInventory(InventoryUtilities.createDifficultyInventroy(player));
+                InventoryUtilities.createDifficultyInventroy(player);
                 player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, 1, 1);
             } else if (itemDisplayName.equals(GlobalUtilities.getColorByName(KeineKohle.ANVILDISPLAYNAME) + KeineKohle.ANVILDISPLAYNAME)) {
                 InventoryUtilities.createUpgradeInventroy(player);

@@ -1,5 +1,6 @@
 package me.keinekohle.net.mysql;
 
+import me.keinekohle.net.main.KeineKohle;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -12,9 +13,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 public class MySQLMethods {
 
@@ -29,7 +30,7 @@ public class MySQLMethods {
         if (resultSet != null) {
             try {
                 resultSet.close();
-                System.out.println("resultSet: "+ resultSet.isClosed());
+                System.getLogger(Logger.GLOBAL_LOGGER_NAME).log(System.Logger.Level.INFO, "resultSet: " + resultSet.isClosed());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -37,11 +38,14 @@ public class MySQLMethods {
         if (statement != null) {
             try {
                 statement.close();
-                System.out.println("statement: " + statement.isClosed());
+                System.getLogger(Logger.GLOBAL_LOGGER_NAME).log(System.Logger.Level.INFO, "statement: " + statement.isClosed());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
+        KeineKohle.connections++;
+        System.getLogger(Logger.GLOBAL_LOGGER_NAME).log(System.Logger.Level.INFO, "Verbindungen bis jetzt: " + KeineKohle.connections);
+
     }
 
     private void closeStatement(Statement statement) {
@@ -281,13 +285,11 @@ public class MySQLMethods {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-            String sql = "SELECT classname FROM dungeon_classes ORDER  BY classcoast ASC";
+            String sql = "SELECT classname FROM dungeon_classes WHERE classlevel='1' ORDER BY classcoast ASC";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                if (!classes.contains(resultSet.getString("classname"))) {
-                    classes.add(resultSet.getString("classname"));
-                }
+                classes.add(resultSet.getString("classname"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -445,7 +447,7 @@ public class MySQLMethods {
     public void updatePlayerCoins(Player player, int coins) {
         Statement statement = null;
         try {
-            String sql = "UPDATE dungeon_player SET coins='" + coins +"' WHERE uuid='" +player.getUniqueId() + "'";
+            String sql = "UPDATE dungeon_player SET coins='" + coins + "' WHERE uuid='" + player.getUniqueId() + "'";
             statement = connection.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {
@@ -471,7 +473,7 @@ public class MySQLMethods {
     public void updateClassLevelAccessToPlayer(Player player, String className, int classLevel) {
         Statement statement = null;
         try {
-            String sql = "UPDATE dungeon_player_classes SET classlevel='" + classLevel +"' WHERE uuid='" +player.getUniqueId() + "' AND classname='" + className + "'";
+            String sql = "UPDATE dungeon_player_classes SET classlevel='" + classLevel + "' WHERE uuid='" + player.getUniqueId() + "' AND classname='" + className + "'";
             statement = connection.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {
@@ -534,8 +536,6 @@ public class MySQLMethods {
         }
         return null;
     }
-
-
 
 
 }

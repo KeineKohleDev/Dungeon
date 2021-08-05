@@ -23,7 +23,6 @@ public class ListenerLobbyShopClick implements Listener {
                 ItemStack clickedItem = event.getCurrentItem();
                 if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(KeineKohle.CHESTDISPLAYNAME) + KeineKohle.CHESTDISPLAYNAME)) {
                     handleShopInventorActions(player, clickedItem);
-                    GlobalUtilities.inventoryClickSound(player);
                 } else if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Classes.SHOPCLASSES)) {
                     handleClassesInventoryActions(event, player, clickedItem);
                 }
@@ -37,6 +36,7 @@ public class ListenerLobbyShopClick implements Listener {
             String itemDisplayname = clickedItemMeta.getDisplayName();
             if (itemDisplayname.equals(GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Classes.SHOPCLASSES)) {
                 InventoryUtilities.createClassesInventory(player);
+                GlobalUtilities.inventoryClickSound(player);
             }
         }
     }

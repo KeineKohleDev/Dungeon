@@ -1,8 +1,8 @@
 package me.keinekohle.net.main;
 
 import me.keinekohle.net.commands.CmdDungeon;
-import me.keinekohle.net.commands.tabcompleter.TabCompletCmdDungeon;
 import me.keinekohle.net.listeners.*;
+import me.keinekohle.net.listeners.cmd.ListenerCmdClassesClick;
 import me.keinekohle.net.listeners.lobby.*;
 import me.keinekohle.net.listeners.setup.ListenerSetupCreateNewClass;
 import me.keinekohle.net.listeners.setup.ListenerSetupCreateNewClassLevel;
@@ -29,7 +29,7 @@ public class KeineKohle extends JavaPlugin {
     public static final HashMap<Player, ClassFabric> SETUPMODE = new HashMap<>();
     public static final List<Player> INPRIVIEW = new ArrayList<>();
     public static final List<Player> BUILDMODE = new ArrayList<>();
-    public static final HashMap<Player, String> VOTEDIFICULTY = new HashMap<>();
+    public static final HashMap<Player, String> VOTEDIFFICULTY = new HashMap<>();
 
     //-- Player lobby hotbar --
     public static final String CHESTDISPLAYNAME = "Shop";
@@ -39,16 +39,21 @@ public class KeineKohle extends JavaPlugin {
 
     public static final String ABILITIESDISPLAYNAME  = "Abilities";
 
+    public static final String SHOPBOOSTER = "Booster";
+    public static final String SHOPTITLES = "Titles";
+
+    public static  int connections = 0;
+
     //BRACKETS
     public static final String BRACKETSCOLOR = "BRACKETSCOLOR";
     public static final String CHATCOLOR = "CHATCOLOR";
 
     public static final String DISPLAYNAME = "Dungeon";
 
-    public static final String DIFICULTYEASY = "Easy";
-    public static final String DIFICULTYNORMAL = "Normal";
-    public static final String DIFICULTYHARD = "Hard";
-    public static final String DIFICULTYVERYHARD = "Very hard";
+    public static final String DIFFICULTYEASY = "Easy";
+    public static final String DIFFICULTYNORMAL = "Normal";
+    public static final String DIFFICULTYHARD = "Hard";
+    public static final String DIFFICULTYVERYHARD = "Very hard";
 
     //-- Global --
     public static final String COINS = "Coins";
@@ -66,17 +71,12 @@ public class KeineKohle extends JavaPlugin {
 
         loadCommonListeners();
         loadCommonCommands();
-        loadCommonTabCompleter();
         System.getLogger(Bukkit.getVersion());
 
     }
 
     private void loadCommonCommands() {
         getCommand("dungeon").setExecutor(new CmdDungeon());
-    }
-
-    private void loadCommonTabCompleter() {
-        getCommand("dungeon").setTabCompleter(new TabCompletCmdDungeon());
     }
 
     private void loadCommonListeners() {
@@ -90,6 +90,9 @@ public class KeineKohle extends JavaPlugin {
         pm.registerEvents(new ListenerBlockPlaceEvent(), this);
         pm.registerEvents(new ListenerFoodLevelChangeEvent(), this);
 
+        //cmd /dungeon
+        pm.registerEvents(new ListenerCmdClassesClick(), this);
+
         //Lobby only
         pm.registerEvents(new ListenerLobbyPlayerInteractEvent(), this);
         pm.registerEvents(new ListenerLobbyEntityDamageByEntityEvent(), this);
@@ -97,6 +100,8 @@ public class KeineKohle extends JavaPlugin {
         pm.registerEvents(new ListenerLobbyPlayerMoveEvent(), this);
         pm.registerEvents(new ListenerLobbyShopClick(), this);
         pm.registerEvents(new ListenerLobbyUpgradeClick(), this);
+        pm.registerEvents(new ListenerLobbyDifficultyVoteClick(), this);
+        pm.registerEvents(new ListenerLobbyInventoryCloseEvent(), this);
 
         //Setup only
         pm.registerEvents(new ListenerSetupCreateNewClass(), this);
