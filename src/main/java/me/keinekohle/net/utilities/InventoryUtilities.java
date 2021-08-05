@@ -70,6 +70,7 @@ public final class InventoryUtilities {
                     break;
                 default:
                     System.getLogger(Logger.GLOBAL_LOGGER_NAME).log(System.Logger.Level.ERROR, "Vote count error");
+                    break;
             }
         }
         if (KeineKohle.VOTEDIFFICULTY.containsKey(player)) {
@@ -95,6 +96,7 @@ public final class InventoryUtilities {
                     break;
                 default:
                     System.getLogger(Logger.GLOBAL_LOGGER_NAME).log(System.Logger.Level.ERROR, "Add vote items error");
+                    break;
             }
         }
     }
@@ -119,6 +121,7 @@ public final class InventoryUtilities {
                 break;
             default:
                 System.getLogger(Logger.GLOBAL_LOGGER_NAME).log(System.Logger.Level.ERROR, "Select vote error");
+                break;
         }
     }
 

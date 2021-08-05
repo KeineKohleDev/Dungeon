@@ -7,6 +7,7 @@ import me.keinekohle.net.listeners.lobby.*;
 import me.keinekohle.net.listeners.setup.ListenerSetupCreateNewClass;
 import me.keinekohle.net.listeners.setup.ListenerSetupCreateNewClassLevel;
 import me.keinekohle.net.listeners.setup.ListenerSetupInventoryClickEvent;
+import me.keinekohle.net.mysql.MySQLMethods;
 import me.keinekohle.net.utilities.ClassFabric;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import org.bukkit.Bukkit;
@@ -72,6 +73,9 @@ public class KeineKohle extends JavaPlugin {
         loadCommonListeners();
         loadCommonCommands();
         System.getLogger(Bukkit.getVersion());
+
+        MySQLMethods mySQLMethods = new MySQLMethods();
+        mySQLMethods.createTablesIfNotExists();
 
     }
 
