@@ -439,7 +439,7 @@ public class MySQLMethods {
     public void updateLastUsedClass(Player player, String className) {
         Statement statement = null;
         try {
-            String sql = "UPDATE dungeon_player SET lastclass='" + className + "' WHERE" + whereUUID(player);
+            String sql = "UPDATE dungeon_player SET lastclass='" + className + "' WHERE " + whereUUID(player);
             statement = connection.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {
@@ -569,6 +569,24 @@ public class MySQLMethods {
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
                 return resultSet.getInt("classlevel");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return null;
+    }
+
+    public String selectClassServerGroup(String className) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT servergroup FROM dungeon_classes WHERE classname='" + className + "' AND classlevel='1'";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return resultSet.getString("servergroup");
             }
         } catch (SQLException e) {
             e.printStackTrace();

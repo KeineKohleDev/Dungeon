@@ -1,5 +1,6 @@
 package me.keinekohle.net.listeners.cmd;
 
+import com.connorlinfoot.titleapi.TitleAPI;
 import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.mysql.MySQLMethods;
 import me.keinekohle.net.utilities.*;
@@ -10,7 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -61,7 +61,7 @@ public class ListenerCmdClassesClick implements Listener {
             configuration.set("loc", player.getLocation());
             String location = configuration.saveToString();
             MySQLMethods mySQLMethods = new MySQLMethods();
-            if(mySQLMethods.checkIfLocationAlreadyExists("Lobby")) {
+            if (mySQLMethods.checkIfLocationAlreadyExists("Lobby")) {
                 mySQLMethods.updateLocationToDataBase("Lobby", location);
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You have updated the Lobby spawn!");
             } else {
@@ -77,7 +77,7 @@ public class ListenerCmdClassesClick implements Listener {
             configuration.set("loc", player.getLocation());
             String location = configuration.saveToString();
             MySQLMethods mySQLMethods = new MySQLMethods();
-            if(mySQLMethods.checkIfLocationAlreadyExists("ClassSelection")) {
+            if (mySQLMethods.checkIfLocationAlreadyExists("ClassSelection")) {
                 mySQLMethods.updateLocationToDataBase("ClassSelection", location);
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You have updated the class selection spawn!");
             } else {
@@ -133,7 +133,13 @@ public class ListenerCmdClassesClick implements Listener {
                 int classCoast = mySQLMethods.selectClassCoastFromClasses(className, 1);
                 ChatColor color = mySQLMethods.selectClassColorFromClasses(className);
                 List<String> abilities = Abilites.selectClassAbilities(className);
-                List<String> lore = Arrays.asList("§aPrice:§c " + classCoast, "", GlobalUtilities.getColorByName(KeineKohle.ABILITIESDISPLAYNAME) + KeineKohle.ABILITIESDISPLAYNAME + ":", GlobalUtilities.getColorByName(abilities.get(0)) + "  " + abilities.get(0), GlobalUtilities.getColorByName(abilities.get(1)) + "  " + abilities.get(1), "", EDIT, CREATENEWCLASSLEVEL, DELETE);
+                String classServerGroup = mySQLMethods.selectClassServerGroup(className);
+                List<String> lore;
+                if (classServerGroup.equals("null")) {
+                    lore = Arrays.asList(InventoryUtilities.printClassPrice(classCoast), "", GlobalUtilities.getColorByName(KeineKohle.ABILITIESDISPLAYNAME) + KeineKohle.ABILITIESDISPLAYNAME + ":", GlobalUtilities.getColorByName(abilities.get(0)) + "  " + abilities.get(0), GlobalUtilities.getColorByName(abilities.get(1)) + "  " + abilities.get(1), "", EDIT, CREATENEWCLASSLEVEL, DELETE);
+                } else {
+                    lore = Arrays.asList(InventoryUtilities.printClassPrice(classCoast), "", InventoryUtilities.printNeededRank(classServerGroup), "", GlobalUtilities.getColorByName(KeineKohle.ABILITIESDISPLAYNAME) + KeineKohle.ABILITIESDISPLAYNAME + ":", GlobalUtilities.getColorByName(abilities.get(0)) + "  " + abilities.get(0), GlobalUtilities.getColorByName(abilities.get(1)) + "  " + abilities.get(1), "", EDIT, CREATENEWCLASSLEVEL, DELETE);
+                }
                 inventory.addItem(ItemBuilder.createItemStackWithLore(classIcon, 1, color + className, lore));
             }
             player.openInventory(inventory);
@@ -155,6 +161,7 @@ public class ListenerCmdClassesClick implements Listener {
                 classFabric.setClassLevel(mySQLMethods.selectHighestClassLevelFromClasses(className) + 1);
                 player.closeInventory();
                 GlobalStages.messageStageInfo(player, classFabric);
+                TitleAPI.sendTitle(player, 20 * 1, 20 * 2, 20 * 1, GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + "Please enter the class", "§l§aCoast§r");
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please type the §l§acoast§r" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "of the class.");
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: You can't use white spaces!");
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: You can type 'back', to go to the previous stage!");
@@ -174,6 +181,7 @@ public class ListenerCmdClassesClick implements Listener {
                 classFabric.setMode(classFabric.getMODECREATENEWCLASS());
                 classFabric.setStageMax(8);
                 player.closeInventory();
+                TitleAPI.sendTitle(player, 20 * 1, 20 * 2, 20 * 1, GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + "Please enter the class", "§l§aName§r");
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please type the §l§aname§r" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "of the class.");
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: You can't use white spaces!");
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: You can type 'back', to go to the previous stage!");

@@ -1,6 +1,7 @@
 name: Dungeon
 version: 1.0.0
 api-version: 1.16
+depend: [TitleAPI]
 author: Enno Stassny
 main: me.keinekohle.net.main.KeineKohle
 

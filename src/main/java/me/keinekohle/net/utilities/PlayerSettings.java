@@ -6,9 +6,9 @@ import org.bukkit.entity.Player;
 
 public final class PlayerSettings {
 
-    public static final String AUTOSELECT = "Auto select";
-    public static final Boolean AUTOSELECTVALUE = true;
-    private static final Material AUTOSELECTICON = Material.CHEST_MINECART;
+    public static final String AUTOSELECTCLASS = "Auto select class";
+    public static final Boolean AUTOSELECTCLASSVALUE = true;
+    private static final Material AUTOSELECTCLASSICON = Material.CHEST_MINECART;
 
     private PlayerSettings() {
         throw new IllegalStateException("Utility class");
@@ -17,26 +17,26 @@ public final class PlayerSettings {
 
     public static void insertAllPlayerSettings(Player player) {
         MySQLMethods mySQLMethods = new MySQLMethods();
-        if (!mySQLMethods.checkIfSettingAlreadyExists(player, AUTOSELECT)) {
-            mySQLMethods.addPlayerSettingToDataBase(player, AUTOSELECT, AUTOSELECTVALUE);
+        if (!mySQLMethods.checkIfSettingAlreadyExists(player, AUTOSELECTCLASS)) {
+            mySQLMethods.addPlayerSettingToDataBase(player, AUTOSELECTCLASS, AUTOSELECTCLASSVALUE);
         }
     }
 
     public static Material getMaterialBySettingsName(String setting) {
         return switch (setting) {
-            case AUTOSELECT -> AUTOSELECTICON;
+            case AUTOSELECTCLASS -> AUTOSELECTCLASSICON;
             default -> Material.AIR;
         };
     }
 
     public static String getSettingsNameByLanguage(String setting) {
-        if(setting.equals(Language.AUTOSELECTDISPLAYNAME)) return AUTOSELECT;
+        if(setting.equals(Language.AUTOSELECTCLASSDISPLAYNAME)) return AUTOSELECTCLASS;
         return "Error translating Displayname into Name";
     }
 
     public static String getLanguageNameBySettingsName(String setting) {
         return switch (setting) {
-            case AUTOSELECT -> Language.AUTOSELECTDISPLAYNAME;
+            case AUTOSELECTCLASS -> Language.AUTOSELECTCLASSDISPLAYNAME;
             default -> "Error";
         };
     }

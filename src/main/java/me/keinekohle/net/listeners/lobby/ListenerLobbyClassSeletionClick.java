@@ -6,6 +6,7 @@ import me.keinekohle.net.utilities.ClassFabric;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import me.keinekohle.net.utilities.Language;
 import me.keinekohle.net.utilities.PlayerUtilities;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -43,6 +44,7 @@ public class ListenerLobbyClassSeletionClick implements Listener {
             PlayerUtilities.setLastSelectedClass(player, className);
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You have selected the class " + clickedItem.getItemMeta().getDisplayName());
             player.closeInventory();
+            player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_NETHERITE, 1, 1);
 
         }
     }

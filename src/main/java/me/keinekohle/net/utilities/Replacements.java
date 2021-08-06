@@ -3,6 +3,7 @@ package me.keinekohle.net.utilities;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,6 +22,10 @@ public final class Replacements {
             match = pattern.matcher(toReplace);
         }
         return toReplace;
+    }
+
+    public static String replaceClassServerGroup(String toReplace, String classServerGroup) {
+        return toReplace.replace("%servergroup%", classServerGroup);
     }
 
     public static String replacePlayerName(String toReplace, Player player) {

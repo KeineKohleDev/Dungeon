@@ -1,5 +1,6 @@
 package me.keinekohle.net.utilities.setup;
 
+import com.connorlinfoot.titleapi.TitleAPI;
 import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.mysql.MySQLMethods;
 import me.keinekohle.net.utilities.ClassFabric;
@@ -29,6 +30,7 @@ public final class CreateNewClassStages {
             classFabric.setClassName(message);
             classFabric.setClassLevel(1);
             GlobalStages.prepareNextStage(player, classFabric);
+            TitleAPI.sendTitle(player, 20*1, 20*2, 20*1, GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + "Please enter the name of the", "§l§aServer group§r");
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please enter the name of the §l§aserver group§r" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "that should be able to purchase this class.");
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: Type 'next'  to make this class available to everyone!");
         }
@@ -40,6 +42,7 @@ public final class CreateNewClassStages {
             classFabric.setServerGroup(message);
         }
         GlobalStages.prepareNextStage(player,classFabric);
+        TitleAPI.sendTitle(player, 20*1, 20*2, 20*1, GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + "Please enter the class", "§l§aCoast§r");
         player.sendMessage(KeineKohle.PREFIX +GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR)+" "+"Please type the §l§acoast§r"+GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR)+" "+"of the class.");
 }
 
@@ -48,6 +51,7 @@ public final class CreateNewClassStages {
         if (GlobalUtilities.isNumeric(message)) {
             classFabric.setClassCoast(Integer.parseInt(message));
             GlobalStages.prepareNextStage(player, classFabric);
+            TitleAPI.sendTitle(player, 20*1, 20*2, 20*1, GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + "Please enter the class", "§l§aColor hex code§r");
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please type the §l§acolor hex code§r" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "of the class.");
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: Please use the right format: #123456");
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Here is a good website to pick hex color codes! https://color.adobe.com/de/create/color-wheel");
@@ -64,6 +68,7 @@ public final class CreateNewClassStages {
             String color = message.substring(match.start(), match.end());
             classFabric.setClassColor(color);
             GlobalStages.prepareNextStage(player, classFabric);
+            TitleAPI.sendTitle(player, 20*1, 20*2, 20*1, GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + "Please enter the class", "§l§aIcon§r");
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: You have selected the color: " + ChatColor.of(color) + color);
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please select the §l§aicon§r" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "for this class.");
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: Put the item into your main hand and type 'next', the item is removed afterwards!");
@@ -80,6 +85,7 @@ public final class CreateNewClassStages {
                 classFabric.setIcon(player.getInventory().getItemInMainHand().getType().toString());
                 player.getInventory().setItem(player.getInventory().getHeldItemSlot(), new ItemStack(Material.AIR));
                 GlobalStages.prepareNextStage(player, classFabric);
+                TitleAPI.sendTitle(player, 20*1, 20*2, 20*1, GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + "Please equip the class", "§l§aClass items§r");
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please equip the §l§aclass items" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + ".");
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: when you are finished, type 'next'!");
             } else {
@@ -96,6 +102,7 @@ public final class CreateNewClassStages {
         if (message.equalsIgnoreCase("next")) {
             classFabric.setInventory(player.getInventory());
             GlobalStages.prepareNextStage(player, classFabric);
+            TitleAPI.sendTitle(player, 20*1, 20*2, 20*1, GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + "Please equip the class", "§l§aAbilities§r");
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please select the §l§aclass abilities§r" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + ".");
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: Type 'next' to open the inventory!");
         } else {

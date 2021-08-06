@@ -30,6 +30,14 @@ public final class InventoryUtilities {
         throw new IllegalStateException("Utility class");
     }
 
+    public static String printClassPrice(int classCoast) {
+        return "§aPrice:§c " + classCoast;
+    }
+
+    public static String printNeededRank(String classServerGroup) {
+        return "§6Rank:§9§l " + classServerGroup;
+    }
+
     public static void createShopInventroy(Player player) {
         Inventory inventory = Bukkit.createInventory(player, 9 * 3, GlobalUtilities.getColorByName(KeineKohle.CHESTDISPLAYNAME) + KeineKohle.CHESTDISPLAYNAME);
         fillInventory(inventory, Material.BLACK_STAINED_GLASS_PANE);
@@ -45,6 +53,8 @@ public final class InventoryUtilities {
         createDifficultyVote(inventory, player);
         player.openInventory(inventory);
     }
+
+    //-- Difficulty --
 
     private static void createDifficultyVote(Inventory inventory, Player player) {
         String youVoted = "§aYou";
@@ -132,19 +142,7 @@ public final class InventoryUtilities {
         return "§aVotes:§c " + votes;
     }
 
-    public static void createUpgradeInventroy(Player player) {
-        MySQLMethods mySQLMethods = new MySQLMethods();
-        List<String> boughtClasses = mySQLMethods.selectAllBoughtClasses(player);
-        Inventory inventory = Bukkit.createInventory(player, GlobalUtilities.calculateInventorySize(boughtClasses.size()), GlobalUtilities.getColorByName(KeineKohle.ANVILDISPLAYNAME) + KeineKohle.ANVILDISPLAYNAME);
-
-        if (boughtClasses.isEmpty()) {
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.NOCLASSESBOUGHTYET);
-        } else {
-            fillInventoryWithUpgradableClasses(inventory, player, boughtClasses, mySQLMethods);
-            fillInventory(inventory, Material.BLACK_STAINED_GLASS_PANE);
-            player.openInventory(inventory);
-        }
-    }
+    //-- Abilities --
 
     public static Inventory createAbilitiesInventory(Player player) {
         Inventory inventory = Bukkit.createInventory(player, 9 * 3, GlobalUtilities.getColorByName(KeineKohle.ABILITIESDISPLAYNAME) + KeineKohle.ABILITIESDISPLAYNAME);
@@ -172,16 +170,27 @@ public final class InventoryUtilities {
         return inventory;
     }
 
-    public static void createClassesInventory(Player player) {
+    private static void addAbilityToInventory(Inventory inventory, Material material, String ability, List<String> abilityDescription) {
+        inventory.addItem(ItemBuilder.createItemStackWithLore(material, 1, GlobalUtilities.getColorByName(ability) + ability, abilityDescription));
+    }
+
+    private static void addAbilityToInventoryNotShowingPotionEffects(Inventory inventory, Material material, String ability, List<String> abilityDescription, Color color) {
+        inventory.addItem(ItemBuilder.createItemStackWithLoreWithOutShowingPotionEffects(material, 1, GlobalUtilities.getColorByName(ability) + ability, abilityDescription, color));
+    }
+
+    //-- Upgrade Inventroy --
+
+    public static void createUpgradeInventroy(Player player) {
         MySQLMethods mySQLMethods = new MySQLMethods();
-        List<String> classes = mySQLMethods.selectAllClasses();
-        if (classes != null) {
-            Inventory inventory = Bukkit.createInventory(player, GlobalUtilities.calculateInventorySize(classes.size()), GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Classes.SHOPCLASSES);
-            fillInventoryWithClassesLevelOne(inventory, player, classes, mySQLMethods);
+        List<String> boughtClasses = mySQLMethods.selectAllBoughtClasses(player);
+        Inventory inventory = Bukkit.createInventory(player, GlobalUtilities.calculateInventorySize(boughtClasses.size()), GlobalUtilities.getColorByName(KeineKohle.ANVILDISPLAYNAME) + KeineKohle.ANVILDISPLAYNAME);
+
+        if (boughtClasses.isEmpty()) {
+            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.NOCLASSESBOUGHTYET);
+        } else {
+            fillInventoryWithUpgradableClasses(inventory, player, boughtClasses, mySQLMethods);
             fillInventory(inventory, Material.BLACK_STAINED_GLASS_PANE);
             player.openInventory(inventory);
-        } else {
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "There are no classes!");
         }
     }
 
@@ -197,11 +206,13 @@ public final class InventoryUtilities {
             } else {
                 int nextClassLevel = classLevel + 1;
                 int classCoast = mySQLMethods.selectClassCoastFromClasses(className, nextClassLevel);
-                List<String> lore = Arrays.asList("§aLevel:§c " + nextClassLevel, "§aPrice:§c " + classCoast, "", GlobalUtilities.getColorByName(KeineKohle.ABILITIESDISPLAYNAME) + KeineKohle.ABILITIESDISPLAYNAME + ":", GlobalUtilities.getColorByName(abilities.get(0)) + "  " + abilities.get(0), GlobalUtilities.getColorByName(abilities.get(1)) + "  " + abilities.get(1), "", UPGRADE, PREVIEW);
+                List<String> lore = Arrays.asList("§aLevel:§c " + nextClassLevel, printClassPrice(classCoast), "", GlobalUtilities.getColorByName(KeineKohle.ABILITIESDISPLAYNAME) + KeineKohle.ABILITIESDISPLAYNAME + ":", GlobalUtilities.getColorByName(abilities.get(0)) + "  " + abilities.get(0), GlobalUtilities.getColorByName(abilities.get(1)) + "  " + abilities.get(1), "", UPGRADE, PREVIEW);
                 inventory.addItem(ItemBuilder.createItemStackWithLore(classIcon, 1, color + className, lore));
             }
         }
     }
+
+    //-- Settings Inventory --
 
     public static void createSettingsInventory(Player player) {
         MySQLMethods mySQLMethods = new MySQLMethods();
@@ -217,6 +228,21 @@ public final class InventoryUtilities {
         player.openInventory(inventory);
     }
 
+    //-- Classes Inventory --
+
+    public static void createClassesInventory(Player player) {
+        MySQLMethods mySQLMethods = new MySQLMethods();
+        List<String> classes = mySQLMethods.selectAllClasses();
+        if (classes != null) {
+            Inventory inventory = Bukkit.createInventory(player, GlobalUtilities.calculateInventorySize(classes.size()), GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Classes.SHOPCLASSES);
+            fillInventoryWithClassesLevelOne(inventory, player, classes, mySQLMethods);
+            fillInventory(inventory, Material.BLACK_STAINED_GLASS_PANE);
+            player.openInventory(inventory);
+        } else {
+            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "There are no classes!");
+        }
+    }
+
 
     public static void fillInventoryWithClassesLevelOne(Inventory inventory, Player player, List<String> classes, MySQLMethods mySQLMethods) {
         List<String> boughtClasses = mySQLMethods.selectAllBoughtClasses(player);
@@ -229,21 +255,18 @@ public final class InventoryUtilities {
                 if (!boughtClasses.isEmpty() && boughtClasses.contains(className)) {
                     inventory.addItem(ItemBuilder.createItemStackEnchantedWithLore(classIcon, 1, color + className, Arrays.asList(BOUGHT)));
                 } else {
-                    List<String> lore = Arrays.asList("§aPrice:§c " + classCoast, "", GlobalUtilities.getColorByName(KeineKohle.ABILITIESDISPLAYNAME) + KeineKohle.ABILITIESDISPLAYNAME + ":", GlobalUtilities.getColorByName(abilities.get(0)) + "  " + abilities.get(0), GlobalUtilities.getColorByName(abilities.get(1)) + "  " + abilities.get(1), "", BUY, PREVIEW);
+                    String classServerGroup = mySQLMethods.selectClassServerGroup(className);
+                    List<String> lore;
+                    if (classServerGroup.equals("null")) {
+                        lore = Arrays.asList(printClassPrice(classCoast), "", GlobalUtilities.getColorByName(KeineKohle.ABILITIESDISPLAYNAME) + KeineKohle.ABILITIESDISPLAYNAME + ":", GlobalUtilities.getColorByName(abilities.get(0)) + "  " + abilities.get(0), GlobalUtilities.getColorByName(abilities.get(1)) + "  " + abilities.get(1), "", BUY, PREVIEW);
+                    } else {
+                        lore = Arrays.asList(printClassPrice(classCoast), "", printNeededRank(classServerGroup), "", GlobalUtilities.getColorByName(KeineKohle.ABILITIESDISPLAYNAME) + KeineKohle.ABILITIESDISPLAYNAME + ":", GlobalUtilities.getColorByName(abilities.get(0)) + "  " + abilities.get(0), GlobalUtilities.getColorByName(abilities.get(1)) + "  " + abilities.get(1), "", BUY, PREVIEW);
+                    }
                     inventory.addItem(ItemBuilder.createItemStackWithLore(classIcon, 1, color + className, lore));
                 }
             }
         }
     }
-
-    private static void addAbilityToInventory(Inventory inventory, Material material, String ability, List<String> abilityDescription) {
-        inventory.addItem(ItemBuilder.createItemStackWithLore(material, 1, GlobalUtilities.getColorByName(ability) + ability, abilityDescription));
-    }
-
-    private static void addAbilityToInventoryNotShowingPotionEffects(Inventory inventory, Material material, String ability, List<String> abilityDescription, Color color) {
-        inventory.addItem(ItemBuilder.createItemStackWithLoreWithOutShowingPotionEffects(material, 1, GlobalUtilities.getColorByName(ability) + ability, abilityDescription, color));
-    }
-
 
     public static void fillInventory(Inventory inventory, Material fillMaterial) {
         for (int i = 0; i < inventory.getSize(); i++) {

@@ -55,7 +55,12 @@ public class ListenerLobbyShopClick implements Listener {
     private void purchaseClass(Player player, ItemStack clickedItem) {
         MySQLMethods mySQLMethods = new MySQLMethods();
         String className = GlobalUtilities.getNameWithoutColorCode(clickedItem.getItemMeta().getDisplayName());
-        if(mySQLMethods.checkIfPlayerAlreadyPurchasedClass(player, className)) return;
+        if (mySQLMethods.checkIfPlayerAlreadyPurchasedClass(player, className)) return;
+        String classServerGroup = mySQLMethods.selectClassServerGroup(className);
+        if (classServerGroup != null && !player.hasPermission(KeineKohle.PERMISSIONPREFIX + classServerGroup)) {
+            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Replacements.replaceClassServerGroup(Language.RANKNEEDED, classServerGroup));
+            return;
+        }
         int playerCoins = mySQLMethods.selectCoinsFromPlayerUUID(player);
         int classCoast = mySQLMethods.selectClassCoastFromClasses(className, 1);
         if (playerCoins >= classCoast) {

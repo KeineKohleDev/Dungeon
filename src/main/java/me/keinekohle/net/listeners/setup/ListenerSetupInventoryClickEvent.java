@@ -1,5 +1,6 @@
 package me.keinekohle.net.listeners.setup;
 
+import com.connorlinfoot.titleapi.TitleAPI;
 import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.utilities.Abilites;
 import me.keinekohle.net.utilities.ClassFabric;
@@ -57,6 +58,7 @@ public class ListenerSetupInventoryClickEvent implements Listener {
             classFabric.setAbilities(classAbilities);
             player.sendMessage(classAbilities.toString());
             GlobalStages.prepareNextStage(player, classFabric);
+            TitleAPI.sendTitle(player, 20*1, 20*2, 20*1, GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + "To save the class, type", "§l§a'finish'§r");
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "To save the class, type 'finish'!");
         }
     }

@@ -18,6 +18,7 @@ public class ListenerLobbyPlayerMoveEvent implements Listener {
                 Player player = event.getPlayer();
                 PlayerUtilities.clearPlayerInventory(player);
                 PlayerUtilities.giveLobbyItemsToPlayer(player);
+                PlayerUtilities.clearPlayerPotionEffects(player);
                 KeineKohle.INPRIVIEW.remove(player);
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.PREVIEWEND);
                 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);

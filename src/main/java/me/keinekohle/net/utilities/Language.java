@@ -1,5 +1,7 @@
 package me.keinekohle.net.utilities;
 
+import java.nio.charset.StandardCharsets;
+
 public final class Language {
 
     //cmd_dungeon
@@ -20,6 +22,8 @@ public final class Language {
     public static final String NOTENOUGHTCOINS = Replacements.replaceHexColors("You do not have enough coins!");
     public static final String UPGRADEDCLASS = Replacements.replaceHexColors("You have upgraded the class %classname% from level %fromlevel% to level %tolevel% for %coins% coins!");
 
+    public static final String RANKNEEDED = Replacements.replaceHexColors("You need the rank %servergroup% to get access to this content!");
+
 
     public static final String NOCLASSESBOUGHTYET = Replacements.replaceHexColors("You have to purchase a class before you can apply upgrades!");
     public static final String PREVIEWSTART = Replacements.replaceHexColors("If you move, the preview will stop.");
@@ -28,7 +32,7 @@ public final class Language {
     public static final String ARMORSTANDNAME = "Class Selection";
 
     //Settings
-    public static final String AUTOSELECTDISPLAYNAME = Replacements.replaceHexColors("#183918Auto select");
+    public static final String AUTOSELECTCLASSDISPLAYNAME = Replacements.replaceHexColors("#183918Auto select class");
 
     public static final String VOTEDFORDIFFICULTY = Replacements.replaceHexColors("You have voted for %vote%");
 

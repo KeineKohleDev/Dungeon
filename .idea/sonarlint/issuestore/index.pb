@@ -1,10 +1,6 @@
 
 É
 Ssrc/main/java/me/keinekohle/net/listeners/lobby/ListenerLobbyEntityDamageEvent.java,4\f\4f4652c077cbe722d16ca3965aab34a7e2a19e0f
-M
-src/main/resources/plugin.yml,4\8\481d8823f4e04298852018f4b015e571263a31a8
-7
-pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 m
 =src/main/java/me/keinekohle/net/license/ServerIdentifier.java,4\a\4af776fbc704d157323b0469a6252aea80ec4e70
 v
@@ -17,12 +13,8 @@ z
 Jsrc/main/java/me/keinekohle/net/listeners/ListenerPlayerDropItemEvent.java,1\b\1b81bdad9c1fc753cf58191d66f96b422ce01b64
 9
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
-k
-;src/main/java/me/keinekohle/net/utilities/Replacements.java,9\8\9899e90e1205d4063c96c2a1801371015c194d52
 j
 :src/main/java/me/keinekohle/net/utilities/ItemBuilder.java,4\8\48a62394d63ca37279015badb8aa737adca3fb9a
-Å
-Qsrc/main/java/me/keinekohle/net/listeners/lobby/ListenerLobbyPlayerMoveEvent.java,8\8\8867fdf55feaabe81a9615b9ce235431ab03e6a3
 k
 ;src/main/java/me/keinekohle/net/utilities/MapUtilities.java,4\d\4d77eacfd14a9b34f8e15cdf4b8f28e2788f6539
 v
@@ -31,8 +23,6 @@ Fsrc/main/java/me/keinekohle/net/listeners/ListenerBlockBreakEvent.java,f\0\f0e
 [src/main/java/me/keinekohle/net/listeners/lobby/ListenerLobbyEntityDamageByEntityEvent.java,a\8\a8e9b3143348d7fbafbe873cc16081c4bd315972
 q
 Asrc/main/java/me/keinekohle/net/utilities/setup/GlobalStages.java,9\6\9619deed8fe5318952be1dcfc6c25f090b1ceeb6
-Ö
-Usrc/main/java/me/keinekohle/net/listeners/lobby/ListenerLobbyDifficultyVoteClick.java,b\8\b8bc3b4b80d81218fcc29487f7685784733334bb
 Ö
 Usrc/main/java/me/keinekohle/net/listeners/lobby/ListenerLobbyInventoryCloseEvent.java,0\6\06b5d057238c3ddd6ffb0c639227c693bb699cc0
 f
