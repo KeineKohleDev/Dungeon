@@ -19,7 +19,7 @@ public class MySQLConnection {
     }
 
     public void connect() throws SQLException {
-        if(!isConnected()) connection = DriverManager.getConnection("jdbc:mysql://" + HOST + ":3306/" + DATABASE + "?useSSL=false", USERNAME, PASSWORD);
+        if(!isConnected()) connection = DriverManager.getConnection("jdbc:mysql://" + HOST + ":3306/" + DATABASE, USERNAME, PASSWORD);
     }
 
 

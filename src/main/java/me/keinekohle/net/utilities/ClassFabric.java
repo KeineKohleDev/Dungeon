@@ -24,12 +24,21 @@ public class ClassFabric {
     private Integer classCoast;
     private String classColor;
     private String icon;
+    private String group;
     private List<String> abilities = new ArrayList<>();
     private Inventory inventory;
 
     public ClassFabric(Player player) {
         player.playSound(player.getLocation(), Sound.BLOCK_PISTON_EXTEND, 1, 1);
         putPlayerIntoSetupMode(player);
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 
     private void putPlayerIntoSetupMode(Player player) {
@@ -59,7 +68,6 @@ public class ClassFabric {
     public void setStageMax(Integer stage_max) {
         this.stageMax = stage_max;
     }
-
 
     public Integer getStage() {
         return stage;
@@ -127,7 +135,7 @@ public class ClassFabric {
 
     public void SaveClass() {
         MySQLMethods mySQLMethods = new MySQLMethods();
-        mySQLMethods.insertClass(this.getClassName(), this.getClassLevel(), this.getClassCoast(), this.getClassColor(), this.getIcon(), this.getAbilities().toString());
+        mySQLMethods.insertClass(this.getClassName(), this.getClassLevel(), this.getClassCoast(), this.getClassColor(), this.getIcon(), this.getAbilities().toString(), this.getGroup());
         savePlayerInventoryToClassLevel(mySQLMethods);
     }
 

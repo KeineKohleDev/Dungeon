@@ -2,8 +2,9 @@ package me.keinekohle.net.utilities;
 
 import me.keinekohle.net.mysql.MySQLConnection;
 import me.keinekohle.net.mysql.MySQLMethods;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
+
+import java.util.logging.Logger;
 
 public final class LobbyScoreboardUtilities {
 
@@ -13,12 +14,20 @@ public final class LobbyScoreboardUtilities {
 
     public static Integer getCoins(Player player) {
         MySQLMethods mySQLMethods = new MySQLMethods();
-        return mySQLMethods.selectInteger(MySQLConnection.TABLE_PREFIX + "player","coins", "uuid", player.getUniqueId().toString());
+        return mySQLMethods.selectInteger(MySQLConnection.TABLE_PREFIX + "player", "coins", "uuid", player.getUniqueId().toString());
     }
 
-    public static String getLastUsedClass(Player player) {
+    public static String getLastUsedClassAndColor(Player player) {
         MySQLMethods mySQLMethods = new MySQLMethods();
-        String classname = mySQLMethods.selectLastUsedClassFromPlayer(player);
-        return classname;
+        String lastUsedClass = Classes.getLastUsedClass(player);
+        if (!lastUsedClass.equals(Classes.NONECLASS)) {
+            System.getLogger(Logger.GLOBAL_LOGGER_NAME).log(System.Logger.Level.INFO, lastUsedClass);
+            String classColor = mySQLMethods.selectClassColorFromClasses(lastUsedClass).toString();
+            if (classColor != null) {
+                System.getLogger(Logger.GLOBAL_LOGGER_NAME).log(System.Logger.Level.INFO, classColor);
+                return classColor + lastUsedClass;
+            }
+        }
+        return GlobalUtilities.getColorByName(Classes.NONECLASS) + Classes.NONECLASS;
     }
 }

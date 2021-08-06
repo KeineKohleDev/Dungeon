@@ -31,7 +31,7 @@ public final class PlayerUtilities {
 
     public static void sendLastUsedClassGotSelectedMessage(Player player) {
         String lastclass = Classes.getLastUsedClass(player);
-        if(lastclass != null) {
+        if(!lastclass.equals(Classes.NONECLASS)) {
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.classGotAutoSelected);
         }
     }

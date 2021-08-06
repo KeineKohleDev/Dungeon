@@ -127,7 +127,7 @@ public class ListenerCmdClassesClick implements Listener {
             } else {
                 ClassFabric classFabric = new ClassFabric(player);
                 classFabric.setMode(classFabric.getMODECREATENEWCLASS());
-                classFabric.setStageMax(7);
+                classFabric.setStageMax(8);
                 player.closeInventory();
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please type the §l§aname§r" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "of the class.");
                 player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: You can't use white spaces!");

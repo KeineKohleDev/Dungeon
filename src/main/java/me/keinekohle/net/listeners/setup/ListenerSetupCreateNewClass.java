@@ -26,12 +26,13 @@ public class ListenerSetupCreateNewClass implements Listener {
                     int stage = classFabric.getStage();
                     switch (stage) {
                         case 0 -> CreateNewClassStages.handleStageClassName(player, message, classFabric);
-                        case 1 -> CreateNewClassStages.handleStageClassLevelCoast(player, message, classFabric);
-                        case 2 -> CreateNewClassStages.handleStageClassColorHexCode(player, message, classFabric);
-                        case 3 -> CreateNewClassStages.handleStageIcon(player, message, classFabric);
-                        case 4 -> CreateNewClassStages.handleStageInventory(player, message, classFabric);
-                        case 5 -> CreateNewClassStages.handleStageOpenAbilitiesInventory(player, message);
-                        case 6 -> GlobalStages.handleStageSave(player, message, classFabric);
+                        case 1 -> CreateNewClassStages.handleStageClassGroup(player, message, classFabric);
+                        case 2 -> CreateNewClassStages.handleStageClassLevelCoast(player, message, classFabric);
+                        case 3 -> CreateNewClassStages.handleStageClassColorHexCode(player, message, classFabric);
+                        case 4 -> CreateNewClassStages.handleStageIcon(player, message, classFabric);
+                        case 5 -> CreateNewClassStages.handleStageInventory(player, message, classFabric);
+                        case 6 -> CreateNewClassStages.handleStageOpenAbilitiesInventory(player, message);
+                        case 7 -> GlobalStages.handleStageSave(player, message, classFabric);
                         default -> player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Error: please restart the setup!");
                     }
                 }

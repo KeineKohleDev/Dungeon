@@ -29,9 +29,18 @@ public final class CreateNewClassStages {
             classFabric.setClassName(message);
             classFabric.setClassLevel(1);
             GlobalStages.prepareNextStage(player, classFabric);
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please type the §l§acoast§r" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "of the class.");
-            GlobalStages.messageOnlyNumbersHere(player);
+            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please enter the name of the §l§aserver group§r" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "that should be able to purchase this class.");
+            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: Type 'next'  to make this class available to everyone!");
         }
+    }
+
+    public static void handleStageClassGroup(Player player, String message, ClassFabric classFabric) {
+        if (GlobalStages.messageBlackList(message)) return;
+        if (message != "next") {
+            classFabric.setGroup(message);
+        }
+        GlobalStages.prepareNextStage(player, classFabric);
+        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please type the §l§acoast§r" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "of the class.");
     }
 
     public static void handleStageClassLevelCoast(Player player, String message, ClassFabric classFabric) {

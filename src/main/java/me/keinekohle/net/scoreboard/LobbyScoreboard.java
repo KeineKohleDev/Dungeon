@@ -41,7 +41,7 @@ public final class LobbyScoreboard {
         setScore(objective, "§aSelected Class", score);
         score -= 1;
 
-        setScore(objective,  mySQLMethods.selectClassColorFromClasses(Classes.getLastUsedClass(player)) + GlobalUtilities.capitalizeFirstLetter(Classes.getLastUsedClass(player)), score);
+        setScore(objective,  LobbyScoreboardUtilities.getLastUsedClassAndColor(player), score);
         score -= 1;
 
         //Space

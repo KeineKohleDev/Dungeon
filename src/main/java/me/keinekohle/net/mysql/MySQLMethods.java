@@ -67,10 +67,10 @@ public class MySQLMethods {
 
     private void createDungeonPlayerTable() {
         Statement statement = null;
-        String sql = "CREATE TABLE IF NOT EXISTS dungeon_player (username VARCHAR(50) null,uuid VARCHAR(50) null,coins INTEGER(11) null,lastClass VARCHAR(50) null)";
+        String sql = "CREATE TABLE IF NOT EXISTS dungeon_player (username VARCHAR(16) null,uuid VARCHAR(36) null,coins INTEGER(11) null,lastClass VARCHAR(50) null)";
         try {
             statement = connection.createStatement();
-            statement.executeQuery(sql);
+            statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -80,10 +80,10 @@ public class MySQLMethods {
 
     private void createDungeonClasses() {
         Statement statement = null;
-        String sql = "CREATE TABLE IF NOT EXISTS dungeon_classes (classname varchar(50) null, classlevel int default 1 null,classcoast int, classcolor varchar(7) null,icon varchar(50) null, abilities varchar(100) null)";
+        String sql = "CREATE TABLE IF NOT EXISTS dungeon_classes (classname varchar(50) null, classlevel int(3) default 1 null,classcoast int(11), classcolor varchar(7) null,icon varchar(50) null, abilities varchar(100) null)";
         try {
             statement = connection.createStatement();
-            statement.executeQuery(sql);
+            statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -93,10 +93,10 @@ public class MySQLMethods {
 
     private void createDungeonPlayerClasses() {
         Statement statement = null;
-        String sql = "CREATE TABLE IF NOT EXISTS dungeon_player_classes(uuid varchar(36) null, classname varchar(50) null,classlevel int default 1 null)";
+        String sql = "CREATE TABLE IF NOT EXISTS dungeon_player_classes(uuid varchar(36) null, classname varchar(50) null,classlevel int(3) default 1 null)";
         try {
             statement = connection.createStatement();
-            statement.executeQuery(sql);
+            statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -106,10 +106,10 @@ public class MySQLMethods {
 
     private void createDungeonClassLevels() {
         Statement statement = null;
-        String sql = "CREATE TABLE IF NOT EXISTS dungeon_player_classes(classname varchar(50) null, slot int(2) null, classlevel int(2) null, itemstackyaml longblob null)";
+        String sql = "CREATE TABLE IF NOT EXISTS dungeon_classlevels(classname varchar(50) null, slot int(2) null, classlevel int(3) null, itemstackyaml longblob null)";
         try {
             statement = connection.createStatement();
-            statement.executeQuery(sql);
+            statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -214,10 +214,10 @@ public class MySQLMethods {
         }
     }
 
-    public void insertClass(String className, int classLevel, int classCoast, String classColor, String icon, String abilities) {
+    public void insertClass(String className, int classLevel, int classCoast, String classColor, String icon, String abilities, String group) {
         Statement statement = null;
         try {
-            String sql = "INSERT into dungeon_classes (classname, classlevel, classcoast, classcolor, icon, abilities) values ('" + className + "', '" + classLevel + "', '" + classCoast + "', '" + classColor + "', '" + icon + "', '" + abilities + "')";
+            String sql = "INSERT into dungeon_classes (classname, classlevel, classcoast, classcolor, icon, abilities, group) values ('" + className + "', '" + classLevel + "', '" + classCoast + "', '" + classColor + "', '" + icon + "', '" + abilities + "', '" + group + "')";
             statement = connection.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {
