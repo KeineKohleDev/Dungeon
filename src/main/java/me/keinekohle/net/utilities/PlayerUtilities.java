@@ -1,6 +1,7 @@
 package me.keinekohle.net.utilities;
 
 import me.keinekohle.net.main.KeineKohle;
+import me.keinekohle.net.mysql.MySQLMethods;
 import me.keinekohle.net.scoreboard.LobbyScoreboard;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -32,7 +33,17 @@ public final class PlayerUtilities {
     public static void sendLastUsedClassGotSelectedMessage(Player player) {
         String lastclass = Classes.getLastUsedClass(player);
         if(!lastclass.equals(Classes.NONECLASS)) {
+            ClassFabric classFabric = new ClassFabric();
+            classFabric.setPlayer(player);
+            classFabric.setClassName(lastclass);
+            classFabric.autoFill();
+            KeineKohle.SELECTEDCLASS.put(player, classFabric);
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.classGotAutoSelected);
         }
+    }
+
+    public static void setLastSelectedClass(Player player, String className) {
+        MySQLMethods mySQLMethods = new MySQLMethods();
+        mySQLMethods.updateLastUsedClass(player, className);
     }
 }

@@ -18,10 +18,13 @@ public class CmdDungeonUtilities {
     private static final List<String> CLASSINFO = Arrays.asList("§bCreate new class (Left click)", "§bList all classes (Right click)");
     private static final List<String> TITLEINFO = Arrays.asList("§bCreate new title (Left click)", "§bList all titles (Right click)");
     private static final List<String> BOOSTERINFO = Arrays.asList("§bCreate new booster (Left click)", "§bList all booster (Right click)");
+    private static final List<String> LOBBYINFO = Arrays.asList("§bSet spawn (Left click)", "§bSet class selection Armorstand (Right click)");
 
     public static final String BUILDMODE = "Buildmode";
     private static final String BUILDMODEON = "§aon§b (Left click)";
     private static final String BUILDMODEOFF = "§coff§b (Left click)";
+
+    public static final String LOBBY = "Lobby";
 
     private CmdDungeonUtilities() {
         throw new IllegalStateException("Utility class");
@@ -29,12 +32,13 @@ public class CmdDungeonUtilities {
 
     public static void createCMDDungeonInventory(Player player) {
         int invSize = 9 * 5;
-        Inventory inventory = Bukkit.createInventory(player, invSize, KeineKohle.PREFIX);
+        Inventory inventory = Bukkit.createInventory(player, invSize, GlobalUtilities.getColorByName(KeineKohle.DISPLAYNAME) + KeineKohle.DISPLAYNAME);
         fillInventoryBorder(inventory, invSize);
         inventory.setItem(10, ItemBuilder.createItemStackWithLore(Material.IRON_CHESTPLATE, 1, GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Classes.SHOPCLASSES, CLASSINFO));
-        inventory.setItem(14, ItemBuilder.createItemStackWithLore(Material.NAME_TAG, 1, GlobalUtilities.getColorByName(KeineKohle.SHOPTITLES) + KeineKohle.SHOPTITLES, TITLEINFO));
+        inventory.setItem(11, ItemBuilder.createItemStackWithLore(Material.NAME_TAG, 1, GlobalUtilities.getColorByName(KeineKohle.SHOPTITLES) + KeineKohle.SHOPTITLES, TITLEINFO));
         addBuildmode(player, inventory);
-        inventory.setItem(32, ItemBuilder.createItemStackWithLore(Material.BEACON, 1, GlobalUtilities.getColorByName(KeineKohle.SHOPBOOSTER) + KeineKohle.SHOPBOOSTER, BOOSTERINFO));
+        inventory.setItem(12, ItemBuilder.createItemStackWithLore(Material.BEACON, 1, GlobalUtilities.getColorByName(KeineKohle.SHOPBOOSTER) + KeineKohle.SHOPBOOSTER, BOOSTERINFO));
+        inventory.setItem(14, ItemBuilder.createItemStackWithLore(Material.NETHER_STAR, 1, GlobalUtilities.getColorByName(LOBBY) + LOBBY, LOBBYINFO));
         player.openInventory(inventory);
     }
 
@@ -42,7 +46,7 @@ public class CmdDungeonUtilities {
         if (KeineKohle.BUILDMODE.contains(player)) {
             inventory.setItem(28, ItemBuilder.createItemStackEnchantedWithLore(Material.IRON_PICKAXE, 1, GlobalUtilities.getColorByName(BUILDMODE) + BUILDMODE, Arrays.asList(BUILDMODEOFF)));
         } else {
-            inventory.setItem(28, ItemBuilder.createItemStackEnchantedWithLore(Material.IRON_PICKAXE, 1, GlobalUtilities.getColorByName(BUILDMODE) + BUILDMODE, Arrays.asList(BUILDMODEON)));
+            inventory.setItem(28, ItemBuilder.createItemStackWithLore(Material.IRON_PICKAXE, 1, GlobalUtilities.getColorByName(BUILDMODE) + BUILDMODE, Arrays.asList(BUILDMODEON)));
         }
     }
 

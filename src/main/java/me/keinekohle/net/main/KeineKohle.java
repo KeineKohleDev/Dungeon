@@ -9,6 +9,7 @@ import me.keinekohle.net.listeners.setup.ListenerSetupCreateNewClassLevel;
 import me.keinekohle.net.listeners.setup.ListenerSetupInventoryClickEvent;
 import me.keinekohle.net.mysql.MySQLMethods;
 import me.keinekohle.net.utilities.ClassFabric;
+import me.keinekohle.net.utilities.ClassSeletionArmorStand;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -31,6 +32,7 @@ public class KeineKohle extends JavaPlugin {
     public static final List<Player> INPRIVIEW = new ArrayList<>();
     public static final List<Player> BUILDMODE = new ArrayList<>();
     public static final HashMap<Player, String> VOTEDIFFICULTY = new HashMap<>();
+    public static final HashMap<Player, ClassFabric> SELECTEDCLASS = new HashMap<>();
 
     //-- Player lobby hotbar --
     public static final String CHESTDISPLAYNAME = "Shop";
@@ -76,6 +78,7 @@ public class KeineKohle extends JavaPlugin {
 
         MySQLMethods mySQLMethods = new MySQLMethods();
         mySQLMethods.createTablesIfNotExists();
+        ClassSeletionArmorStand.spawnClassSelectionArmorStand();
 
     }
 
@@ -104,8 +107,10 @@ public class KeineKohle extends JavaPlugin {
         pm.registerEvents(new ListenerLobbyPlayerMoveEvent(), this);
         pm.registerEvents(new ListenerLobbyShopClick(), this);
         pm.registerEvents(new ListenerLobbyUpgradeClick(), this);
+        pm.registerEvents(new ListenerLobbyClassSeletionClick(), this);
         pm.registerEvents(new ListenerLobbyDifficultyVoteClick(), this);
         pm.registerEvents(new ListenerLobbyInventoryCloseEvent(), this);
+        pm.registerEvents(new ListenerLobbyPlayerInteractAtEntityEvent(), this);
 
         //Setup only
         pm.registerEvents(new ListenerSetupCreateNewClass(), this);

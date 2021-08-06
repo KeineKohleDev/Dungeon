@@ -36,12 +36,12 @@ public final class CreateNewClassStages {
 
     public static void handleStageClassGroup(Player player, String message, ClassFabric classFabric) {
         if (GlobalStages.messageBlackList(message)) return;
-        if (message != "next") {
-            classFabric.setGroup(message);
+        if (!message.equalsIgnoreCase("next")) {
+            classFabric.setServerGroup(message);
         }
-        GlobalStages.prepareNextStage(player, classFabric);
-        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please type the §l§acoast§r" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "of the class.");
-    }
+        GlobalStages.prepareNextStage(player,classFabric);
+        player.sendMessage(KeineKohle.PREFIX +GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR)+" "+"Please type the §l§acoast§r"+GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR)+" "+"of the class.");
+}
 
     public static void handleStageClassLevelCoast(Player player, String message, ClassFabric classFabric) {
         if (GlobalStages.messageBlackList(message)) return;

@@ -9,6 +9,9 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,7 +34,7 @@ public class ListenerCmdClassesClick implements Listener {
         if (event.getWhoClicked() instanceof Player player && event.getCurrentItem() != null) {
             ItemStack clickedItem = event.getCurrentItem();
             String title = event.getView().getTitle();
-            if (title.equals(KeineKohle.PREFIX) && clickedItem.hasItemMeta() && clickedItem.getItemMeta().hasDisplayName()) {
+            if (title.equals(GlobalUtilities.getColorByName(KeineKohle.DISPLAYNAME) + KeineKohle.DISPLAYNAME) && clickedItem.hasItemMeta() && clickedItem.getItemMeta().hasDisplayName()) {
                 event.setCancelled(true);
                 String displayName = clickedItem.getItemMeta().getDisplayName();
                 if (displayName.equals(GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Classes.SHOPCLASSES)) {
@@ -39,6 +42,9 @@ public class ListenerCmdClassesClick implements Listener {
                     listClassesWhenRightClick(event, player);
                 } else if (displayName.equals(GlobalUtilities.getColorByName(CmdDungeonUtilities.BUILDMODE) + CmdDungeonUtilities.BUILDMODE)) {
                     toggleBuildmode(player);
+                } else if (displayName.equals(GlobalUtilities.getColorByName(CmdDungeonUtilities.LOBBY) + CmdDungeonUtilities.LOBBY)) {
+                    setLobbySpawn(event, player);
+                    setClassSelectionSpawn(event, player);
                 }
             } else if (title.equals(GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + "List " + Classes.SHOPCLASSES) && !clickedItem.getItemMeta().getDisplayName().equals("§a")) {
                 startCreateNewClassLevelSetup(event, player);
@@ -46,7 +52,42 @@ public class ListenerCmdClassesClick implements Listener {
 
             }
         }
+
     }
+
+    private void setLobbySpawn(InventoryClickEvent event, Player player) {
+        if (event.getClick() == ClickType.LEFT) {
+            YamlConfiguration configuration = new YamlConfiguration();
+            configuration.set("loc", player.getLocation());
+            String location = configuration.saveToString();
+            MySQLMethods mySQLMethods = new MySQLMethods();
+            if(mySQLMethods.checkIfLocationAlreadyExists("Lobby")) {
+                mySQLMethods.updateLocationToDataBase("Lobby", location);
+                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You have updated the Lobby spawn!");
+            } else {
+                mySQLMethods.addLocationToDataBase("Lobby", location);
+                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You have set the Lobby spawn!");
+            }
+        }
+    }
+
+    private void setClassSelectionSpawn(InventoryClickEvent event, Player player) {
+        if (event.getClick() == ClickType.RIGHT) {
+            YamlConfiguration configuration = new YamlConfiguration();
+            configuration.set("loc", player.getLocation());
+            String location = configuration.saveToString();
+            MySQLMethods mySQLMethods = new MySQLMethods();
+            if(mySQLMethods.checkIfLocationAlreadyExists("ClassSelection")) {
+                mySQLMethods.updateLocationToDataBase("ClassSelection", location);
+                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You have updated the class selection spawn!");
+            } else {
+                mySQLMethods.addLocationToDataBase("ClassSelection", location);
+                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You have set the class selection spawn!");
+            }
+            ClassSeletionArmorStand.spawnClassSelectionArmorStand();
+        }
+    }
+
 
     private void deleteClass(InventoryClickEvent event, Player player) {
         if (event.getClick() == ClickType.CONTROL_DROP) {
@@ -103,7 +144,8 @@ public class ListenerCmdClassesClick implements Listener {
                 howToQuitTheSetupMode(player);
             } else {
                 String className = GlobalUtilities.getNameWithoutColorCode(event.getCurrentItem().getItemMeta().getDisplayName());
-                ClassFabric classFabric = new ClassFabric(player);
+                ClassFabric classFabric = new ClassFabric();
+                classFabric.putPlayerIntoSetupMode(player);
                 classFabric.setMode(classFabric.getMODECREATENEWCLASSLEVEL());
                 classFabric.setClassName(className);
                 classFabric.setStageMax(3);
@@ -125,7 +167,8 @@ public class ListenerCmdClassesClick implements Listener {
             if (KeineKohle.SETUPMODE.containsKey(player)) {
                 howToQuitTheSetupMode(player);
             } else {
-                ClassFabric classFabric = new ClassFabric(player);
+                ClassFabric classFabric = new ClassFabric();
+                classFabric.putPlayerIntoSetupMode(player);
                 classFabric.setMode(classFabric.getMODECREATENEWCLASS());
                 classFabric.setStageMax(8);
                 player.closeInventory();

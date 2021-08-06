@@ -28,7 +28,7 @@ public class ListenerSetupInventoryClickEvent implements Listener {
         if (event.getWhoClicked() instanceof Player player && KeineKohle.SETUPMODE.containsKey(player)) {
             ClassFabric classFabric = KeineKohle.SETUPMODE.get(player);
             ItemStack itemStack = event.getCurrentItem();
-            if(classFabric.getMode().equals(classFabric.getMODECREATENEWCLASS()) && classFabric.getStage() == 5 && itemStack != null) {
+            if(classFabric.getMode().equals(classFabric.getMODECREATENEWCLASS()) && classFabric.getStage() == 6 && itemStack != null) {
                 if (event.getClick() == ClickType.LEFT && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore() && itemStack.getItemMeta().getLore().contains(Abilites.SELECT)) {
                     int selected = countSelectedAbilities(event);
                     addClickedAbilityMaxTwo(player, itemStack, selected);

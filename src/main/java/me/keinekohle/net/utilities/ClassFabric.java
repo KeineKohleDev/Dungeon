@@ -16,6 +16,7 @@ public class ClassFabric {
     private final Integer MODECREATENEWCLASS = 0;
     private final Integer MODECREATENEWCLASSLEVEL = 1;
 
+    private Player player;
     private Integer stage = 0;
     private Integer stageMax = 7;
     private Integer mode;
@@ -24,24 +25,28 @@ public class ClassFabric {
     private Integer classCoast;
     private String classColor;
     private String icon;
-    private String group;
+    private String serverGroup;
     private List<String> abilities = new ArrayList<>();
     private Inventory inventory;
 
-    public ClassFabric(Player player) {
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public String getServerGroup() {
+        return serverGroup;
+    }
+
+    public void setServerGroup(String serverGroup) {
+        this.serverGroup = serverGroup;
+    }
+
+    public void putPlayerIntoSetupMode(Player player) {
         player.playSound(player.getLocation(), Sound.BLOCK_PISTON_EXTEND, 1, 1);
-        putPlayerIntoSetupMode(player);
-    }
-
-    public String getGroup() {
-        return group;
-    }
-
-    public void setGroup(String group) {
-        this.group = group;
-    }
-
-    private void putPlayerIntoSetupMode(Player player) {
         KeineKohle.SETUPMODE.put(player, this);
     }
 
@@ -133,9 +138,21 @@ public class ClassFabric {
         this.className = className;
     }
 
+    public void autoFill() {
+        MySQLMethods mySQLMethods = new MySQLMethods();
+        setClassLevel(mySQLMethods.selectHighestClassLevelFromPlayer(getPlayer(), getClassName()));
+        setClassColor(mySQLMethods.selectClassColorFromClasses(getClassName()).toString());
+        setAbilities(Abilites.selectClassAbilities(getClassName()));
+    }
+
+    public void giveClassItems() {
+        MySQLMethods mySQLMethods = new MySQLMethods();
+        mySQLMethods.giveClassItems(getPlayer(), getClassName(), getClassLevel());
+    }
+
     public void SaveClass() {
         MySQLMethods mySQLMethods = new MySQLMethods();
-        mySQLMethods.insertClass(this.getClassName(), this.getClassLevel(), this.getClassCoast(), this.getClassColor(), this.getIcon(), this.getAbilities().toString(), this.getGroup());
+        mySQLMethods.insertClass(this.getClassName(), this.getClassLevel(), this.getClassCoast(), this.getClassColor(), this.getIcon(), this.getAbilities().toString(), this.getServerGroup());
         savePlayerInventoryToClassLevel(mySQLMethods);
     }
 

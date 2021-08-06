@@ -26,7 +26,7 @@ public final class GlobalUtilities {
             case KeineKohle.COINS -> ChatColor.of("#F29C1B").toString();
             case KeineKohle.BRACKETSCOLOR, Classes.NONECLASS -> ChatColor.DARK_GRAY.toString();
             case KeineKohle.CHATCOLOR -> ChatColor.of("#FCE23A").toString();
-            case Classes.SHOPCLASSES-> ChatColor.of("#39F6D3").toString();
+            case Classes.SHOPCLASSES, Language.ARMORSTANDNAME -> ChatColor.of("#39F6D3").toString();
             case KeineKohle.DIFFICULTYEASY -> ChatColor.of("#9DFC58").toString();
             case KeineKohle.DIFFICULTYNORMAL -> ChatColor.of("#1EE62F").toString();
             case KeineKohle.DIFFICULTYHARD -> ChatColor.of("#F6814C").toString();
@@ -47,6 +47,7 @@ public final class GlobalUtilities {
             case KeineKohle.SHOPBOOSTER -> ChatColor.of("#E58AEB").toString();
             case KeineKohle.SHOPTITLES -> ChatColor.of("#96DDF5").toString();
             case CmdDungeonUtilities.BUILDMODE ->  ChatColor.of("#9EFF40").toString();
+            case CmdDungeonUtilities.LOBBY -> ChatColor.of("#81FCF2").toString();
             default -> "getColorByName: default! for input " + name;
         };
     }

@@ -12,6 +12,7 @@ public class ListenerPlayerQuitEvent implements Listener {
     @EventHandler
     public void onPlayerQuitEvent(PlayerQuitEvent event) {
         if(KeineKohle.VOTEDIFFICULTY.containsKey(event.getPlayer())) KeineKohle.VOTEDIFFICULTY.remove(event.getPlayer());
+        if(KeineKohle.SELECTEDCLASS.containsKey(event.getPlayer())) KeineKohle.SELECTEDCLASS.remove(event.getPlayer());
         event.setQuitMessage(Replacements.replacePlayerName(Language.playerLeaveMessage, event.getPlayer()));
     }
 }

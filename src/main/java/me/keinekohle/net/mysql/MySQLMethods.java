@@ -2,6 +2,7 @@ package me.keinekohle.net.mysql;
 
 import me.keinekohle.net.main.KeineKohle;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -214,10 +215,10 @@ public class MySQLMethods {
         }
     }
 
-    public void insertClass(String className, int classLevel, int classCoast, String classColor, String icon, String abilities, String group) {
+    public void insertClass(String className, int classLevel, int classCoast, String classColor, String icon, String abilities, String serverGroup) {
         Statement statement = null;
         try {
-            String sql = "INSERT into dungeon_classes (classname, classlevel, classcoast, classcolor, icon, abilities, group) values ('" + className + "', '" + classLevel + "', '" + classCoast + "', '" + classColor + "', '" + icon + "', '" + abilities + "', '" + group + "')";
+            String sql = "INSERT into dungeon_classes (classname, classlevel, classcoast, classcolor, icon, abilities, servergroup) values ('" + className + "', '" + classLevel + "', '" + classCoast + "', '" + classColor + "', '" + icon + "', '" + abilities + "', '" + serverGroup + "')";
             statement = connection.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {
@@ -431,6 +432,19 @@ public class MySQLMethods {
         return null;
     }
 
+    public void updateLastUsedClass(Player player, String className) {
+        Statement statement = null;
+        try {
+            String sql = "UPDATE dungeon_player SET lastclass='" + className + "' WHERE uuid='" + player.getUniqueId() + "'";
+            statement = connection.createStatement();
+            statement.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(statement);
+        }
+    }
+
     public String selectAbilitiesFromClasses(String className, int classLevel) {
         Statement statement = null;
         ResultSet resultSet = null;
@@ -560,6 +574,24 @@ public class MySQLMethods {
         return null;
     }
 
+    public Integer selectHighestClassLevelFromPlayer(Player player, String className) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT classlevel FROM dungeon_player_classes WHERE uuid='" + player.getUniqueId() + "' ORDER BY classlevel DESC";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return resultSet.getInt("classlevel");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return null;
+    }
+
     public Integer selectClassLevelFromPlayerByClassName(Player player, String className) {
         Statement statement = null;
         ResultSet resultSet = null;
@@ -593,6 +625,83 @@ public class MySQLMethods {
         } finally {
             closeStatement(statement);
         }
+    }
+
+    public void addLocationToDataBase(String locationName, String location) {
+        Statement statement = null;
+        try {
+            String sql = "INSERT into dungeon_locations (locationname, location) values ('" + locationName + "', '" + location + "')";
+            statement = connection.createStatement();
+            statement.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(statement);
+        }
+    }
+
+    public void updateLocationToDataBase(String locationName, String location) {
+        Statement statement = null;
+        try {
+            String sql = "UPDATE dungeon_locations SET location='" + location + "' WHERE locationname='" + locationName + "'";
+            statement = connection.createStatement();
+            statement.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(statement);
+        }
+    }
+
+    public void deleteLocationFromDataBase(String locationNamen) {
+        Statement statement = null;
+        try {
+            String sql = "DELETE FROM dungeon_locations WHERE locationname='" + locationNamen + "'";
+            statement = connection.createStatement();
+            statement.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(statement);
+        }
+    }
+
+    public boolean checkIfLocationAlreadyExists(String locationName) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT locationName FROM dungeon_locations WHERE locationName='" + locationName + "'";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return false;
+    }
+
+    public Location selectLocationByName(String locationName) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT location FROM dungeon_locations WHERE locationName='" + locationName + "'";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                YamlConfiguration configuration = new YamlConfiguration();
+                configuration.loadFromString(resultSet.getString("location"));
+                return configuration.getLocation("loc");
+            }
+        } catch (SQLException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return null;
     }
 
 

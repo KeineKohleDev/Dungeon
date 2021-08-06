@@ -32,5 +32,12 @@ public class ListenerPlayerJoinEvent implements Listener {
         } else if (!mySQLMethods.selectString(MySQLConnection.TABLE_PREFIX + "player", "username", "uuid", player.getUniqueId().toString()).equals(player.getName())) {
             mySQLMethods.updateString(MySQLConnection.TABLE_PREFIX + "player", "username", player.getName(), "uuid", player.getUniqueId().toString());
         }
+
+        // -- check if Lobby spawn is set --
+        if (!mySQLMethods.checkIfLocationAlreadyExists("Lobby")) {
+            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please set the Lobby spawn! use /dungeon and click on the nether start!");
+        } else {
+            player.teleport(mySQLMethods.selectLocationByName("Lobby"));
+        }
     }
 }

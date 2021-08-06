@@ -43,7 +43,7 @@ public class ListenerLobbyUpgradeClick implements Listener {
         MySQLMethods mySQLMethods = new MySQLMethods();
         String className = GlobalUtilities.getNameWithoutColorCode(clickedItem.getItemMeta().getDisplayName());
         int playerCoins = mySQLMethods.selectCoinsFromPlayerUUID(player);
-        int classCoast = mySQLMethods.selectClassCoastFromClasses(className, 1);
+        int classCoast = mySQLMethods.selectClassCoastFromClasses(className, classLevel);
         if (playerCoins >= classCoast) {
             mySQLMethods.updatePlayerCoins(player, (playerCoins - classCoast));
             mySQLMethods.updateClassLevelAccessToPlayer(player, className, classLevel);
@@ -51,8 +51,12 @@ public class ListenerLobbyUpgradeClick implements Listener {
             InventoryUtilities.createUpgradeInventroy(player);
             LobbyScoreboard.sendLobbyScoreboard(player);
             player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
+            if(KeineKohle.SELECTEDCLASS.containsKey(player)) {
+                ClassFabric classFabric = KeineKohle.SELECTEDCLASS.get(player);
+                classFabric.autoFill();
+            }
         } else {
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Replacements.replaceClassName(Language.NOTENOUGHTCOINS, className));
+            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.NOTENOUGHTCOINS);
         }
     }
 }
