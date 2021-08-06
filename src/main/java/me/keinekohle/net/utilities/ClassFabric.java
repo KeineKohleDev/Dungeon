@@ -140,7 +140,7 @@ public class ClassFabric {
 
     public void autoFill() {
         MySQLMethods mySQLMethods = new MySQLMethods();
-        setClassLevel(mySQLMethods.selectHighestClassLevelFromPlayer(getPlayer(), getClassName()));
+        setClassLevel(mySQLMethods.selectClassLevelFromPlayerByClassName(getPlayer(), getClassName()));
         setClassColor(mySQLMethods.selectClassColorFromClasses(getClassName()).toString());
         setAbilities(Abilites.selectClassAbilities(getClassName()));
     }

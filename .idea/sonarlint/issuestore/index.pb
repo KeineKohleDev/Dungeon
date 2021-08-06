@@ -1,8 +1,6 @@
 
 ƒ
 Ssrc/main/java/me/keinekohle/net/listeners/lobby/ListenerLobbyEntityDamageEvent.java,4\f\4f4652c077cbe722d16ca3965aab34a7e2a19e0f
-g
-7src/main/java/me/keinekohle/net/utilities/Abilites.java,1\2\12d378247a61b26ad40c3c63bb9fe28e8a369842
 M
 src/main/resources/plugin.yml,4\8\481d8823f4e04298852018f4b015e571263a31a8
 7
@@ -27,8 +25,6 @@ j
 Qsrc/main/java/me/keinekohle/net/listeners/lobby/ListenerLobbyPlayerMoveEvent.java,8\8\8867fdf55feaabe81a9615b9ce235431ab03e6a3
 k
 ;src/main/java/me/keinekohle/net/utilities/MapUtilities.java,4\d\4d77eacfd14a9b34f8e15cdf4b8f28e2788f6539
-g
-7src/main/java/me/keinekohle/net/utilities/Settings.java,3\a\3a9b3e9ee222ef5dae5ffaad9f6f17b20f52e5c7
 v
 Fsrc/main/java/me/keinekohle/net/listeners/ListenerBlockBreakEvent.java,f\0\f0e5958353d88775c12200b9381c54b8783242e0
 ‹

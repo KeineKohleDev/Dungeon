@@ -27,6 +27,9 @@ public final class Language {
 
     public static final String ARMORSTANDNAME = "Class Selection";
 
+    //Settings
+    public static final String AUTOSELECTDISPLAYNAME = Replacements.replaceHexColors("#183918Auto select");
+
     public static final String VOTEDFORDIFFICULTY = Replacements.replaceHexColors("You have voted for %vote%");
 
     private Language() {

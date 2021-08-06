@@ -28,6 +28,9 @@ public class ListenerLobbyPlayerInteractEvent implements Listener {
             } else if (itemDisplayName.equals(GlobalUtilities.getColorByName(KeineKohle.ANVILDISPLAYNAME) + KeineKohle.ANVILDISPLAYNAME)) {
                 InventoryUtilities.createUpgradeInventroy(player);
                 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1, 1);
+            } else if (itemDisplayName.equals(GlobalUtilities.getColorByName(KeineKohle.BOOKDISPLAYNAME) + KeineKohle.BOOKDISPLAYNAME)) {
+                InventoryUtilities.createSettingsInventory(player);
+                player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
             }
         }
     }

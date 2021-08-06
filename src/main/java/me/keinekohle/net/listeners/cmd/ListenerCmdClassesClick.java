@@ -106,11 +106,13 @@ public class ListenerCmdClassesClick implements Listener {
             PlayerUtilities.giveLobbyItemsToPlayer(player);
             player.setGameMode(GameMode.SURVIVAL);
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.cmdDungeonBuildnodeOff);
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 1);
             player.closeInventory();
         } else {
             KeineKohle.BUILDMODE.add(player);
             player.setGameMode(GameMode.CREATIVE);
             player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.cmdDungeonBuildnodeOn);
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
             player.closeInventory();
         }
     }

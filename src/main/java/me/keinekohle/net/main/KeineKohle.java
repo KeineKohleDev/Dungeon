@@ -45,7 +45,7 @@ public class KeineKohle extends JavaPlugin {
     public static final String SHOPBOOSTER = "Booster";
     public static final String SHOPTITLES = "Titles";
 
-    public static  int connections = 0;
+    public static int connections = 0;
 
     //BRACKETS
     public static final String BRACKETSCOLOR = "BRACKETSCOLOR";
@@ -111,6 +111,8 @@ public class KeineKohle extends JavaPlugin {
         pm.registerEvents(new ListenerLobbyDifficultyVoteClick(), this);
         pm.registerEvents(new ListenerLobbyInventoryCloseEvent(), this);
         pm.registerEvents(new ListenerLobbyPlayerInteractAtEntityEvent(), this);
+        pm.registerEvents(new ListenerLobbySettingsClick(), this);
+
 
         //Setup only
         pm.registerEvents(new ListenerSetupCreateNewClass(), this);

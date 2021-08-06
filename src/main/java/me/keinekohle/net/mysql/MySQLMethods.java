@@ -14,8 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 public class MySQLMethods {
@@ -25,6 +25,10 @@ public class MySQLMethods {
 
     private String whereClassNameAndSlotAndClasslevel(String classname, int classlevel, int slot) {
         return "classname='" + classname + "' AND slot='" + slot + "' AND classlevel='" + classlevel + "'";
+    }
+
+    private String whereUUID(Player player) {
+        return "uuid='" + player.getUniqueId() + "'";
     }
 
     private void closeStatementAndResultSet(Statement statement, ResultSet resultSet) {
@@ -169,10 +173,10 @@ public class MySQLMethods {
     }
 
 
-    public boolean checkIsPlayerInDataBase(UUID uuid) {
+    public boolean checkIsPlayerInDataBase(Player player) {
         Statement statement = null;
         try {
-            String sql = "SELECT uuid from dungeon_player WHERE uuid='" + uuid + "'";
+            String sql = "SELECT uuid from dungeon_player WHERE " + whereUUID(player);
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
@@ -435,7 +439,7 @@ public class MySQLMethods {
     public void updateLastUsedClass(Player player, String className) {
         Statement statement = null;
         try {
-            String sql = "UPDATE dungeon_player SET lastclass='" + className + "' WHERE uuid='" + player.getUniqueId() + "'";
+            String sql = "UPDATE dungeon_player SET lastclass='" + className + "' WHERE" + whereUUID(player);
             statement = connection.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {
@@ -542,7 +546,7 @@ public class MySQLMethods {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-            String sql = "SELECT classname FROM dungeon_player_classes WHERE classname='" + className + "' AND uuid='" + player.getUniqueId() + "'";
+            String sql = "SELECT classname FROM dungeon_player_classes WHERE classname='" + className + "' AND " + whereUUID(player);
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
@@ -574,29 +578,11 @@ public class MySQLMethods {
         return null;
     }
 
-    public Integer selectHighestClassLevelFromPlayer(Player player, String className) {
-        Statement statement = null;
-        ResultSet resultSet = null;
-        try {
-            String sql = "SELECT classlevel FROM dungeon_player_classes WHERE uuid='" + player.getUniqueId() + "' ORDER BY classlevel DESC";
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(sql);
-            if (resultSet.next()) {
-                return resultSet.getInt("classlevel");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeStatementAndResultSet(statement, resultSet);
-        }
-        return null;
-    }
-
     public Integer selectClassLevelFromPlayerByClassName(Player player, String className) {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-            String sql = "SELECT classlevel FROM dungeon_player_classes WHERE uuid='" + player.getUniqueId() + "' AND classname='" + className + "'";
+            String sql = "SELECT classlevel FROM dungeon_player_classes WHERE " + whereUUID(player) + " AND classname='" + className + "'";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
@@ -670,7 +656,7 @@ public class MySQLMethods {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-            String sql = "SELECT locationName FROM dungeon_locations WHERE locationName='" + locationName + "'";
+            String sql = "SELECT locationname FROM dungeon_locations WHERE locationname='" + locationName + "'";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
@@ -688,7 +674,7 @@ public class MySQLMethods {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-            String sql = "SELECT location FROM dungeon_locations WHERE locationName='" + locationName + "'";
+            String sql = "SELECT location FROM dungeon_locations WHERE locationname='" + locationName + "'";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
@@ -702,6 +688,87 @@ public class MySQLMethods {
             closeStatementAndResultSet(statement, resultSet);
         }
         return null;
+    }
+
+    public void addPlayerSettingToDataBase(Player player, String settingsName, Boolean settingsValue) {
+        Statement statement = null;
+        try {
+            String sql = "INSERT into dungeon_player_settings (uuid, settingsname, settingsvalue) values ('" + player.getUniqueId() + "', '" + settingsName + "', '" + settingsValue + "')";
+            statement = connection.createStatement();
+            statement.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(statement);
+        }
+    }
+
+    public void updatePlayerSetting(Player player, String settingsName, Boolean settingsValue) {
+        Statement statement = null;
+        try {
+            String sql = "UPDATE dungeon_player_settings SET settingsvalue='" + settingsValue + "' WHERE settingsname='" + settingsName + "' AND " + whereUUID(player);
+            statement = connection.createStatement();
+            statement.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(statement);
+        }
+    }
+
+    public HashMap<String, Boolean> selectAllPlayerSetting(Player player) {
+        HashMap<String, Boolean> playerSettings = new HashMap<>();
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT settingsvalue, settingsname FROM dungeon_player_settings WHERE " + whereUUID(player);
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                playerSettings.put(resultSet.getString("settingsname"), resultSet.getBoolean("settingsvalue"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return playerSettings;
+    }
+
+    public Boolean selectPlayerSetting(Player player, String settingsName) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT settingsvalue FROM dungeon_player_settings WHERE settingsname='" + settingsName + "' AND " + whereUUID(player);
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return resultSet.getBoolean("settingsvalue");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return false;
+    }
+
+    public boolean checkIfSettingAlreadyExists(Player player, String settingsName) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT settingsname FROM dungeon_player_settings WHERE settingsname='" + settingsName + "' AND " + whereUUID(player);
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return false;
     }
 
 

@@ -11,6 +11,7 @@ import org.bukkit.inventory.Inventory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -21,6 +22,8 @@ public final class InventoryUtilities {
     public static final String UPGRADE = "§bUpgrade (Right click)";
     public static final String PREVIEW = "§bPreview (Left click)";
     public static final String BOUGHT = "§e§lBought";
+    public static final String ON = "§aOn";
+    public static final String OFF = "§cOff";
     public static final String HIGHESTCLASS = "§e§lHighest level reached!";
 
     private InventoryUtilities() {
@@ -200,6 +203,20 @@ public final class InventoryUtilities {
         }
     }
 
+    public static void createSettingsInventory(Player player) {
+        MySQLMethods mySQLMethods = new MySQLMethods();
+        Inventory inventory = Bukkit.createInventory(player, 9 * 1, GlobalUtilities.getColorByName(KeineKohle.BOOKDISPLAYNAME) + KeineKohle.BOOKDISPLAYNAME);
+        HashMap<String, Boolean> playerSettings = mySQLMethods.selectAllPlayerSetting(player);
+        for (String settingsName : playerSettings.keySet()) {
+            if (playerSettings.get(settingsName) == true) {
+                inventory.addItem(ItemBuilder.createItemStackEnchantedWithLore(PlayerSettings.getMaterialBySettingsName(settingsName), 1, PlayerSettings.getLanguageNameBySettingsName(settingsName), Arrays.asList(ON)));
+            } else {
+                inventory.addItem(ItemBuilder.createItemStackWithLore(PlayerSettings.getMaterialBySettingsName(settingsName), 1, PlayerSettings.getLanguageNameBySettingsName(settingsName), Arrays.asList(OFF)));
+            }
+        }
+        player.openInventory(inventory);
+    }
+
 
     public static void fillInventoryWithClassesLevelOne(Inventory inventory, Player player, List<String> classes, MySQLMethods mySQLMethods) {
         List<String> boughtClasses = mySQLMethods.selectAllBoughtClasses(player);
@@ -226,6 +243,7 @@ public final class InventoryUtilities {
     private static void addAbilityToInventoryNotShowingPotionEffects(Inventory inventory, Material material, String ability, List<String> abilityDescription, Color color) {
         inventory.addItem(ItemBuilder.createItemStackWithLoreWithOutShowingPotionEffects(material, 1, GlobalUtilities.getColorByName(ability) + ability, abilityDescription, color));
     }
+
 
     public static void fillInventory(Inventory inventory, Material fillMaterial) {
         for (int i = 0; i < inventory.getSize(); i++) {

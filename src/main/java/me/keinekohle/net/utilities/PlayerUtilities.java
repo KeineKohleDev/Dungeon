@@ -25,20 +25,23 @@ public final class PlayerUtilities {
 
     public static void giveLobbyItemsToPlayer(Player player) {
         player.getInventory().setItem(0, ItemBuilder.createItemStack(Material.CHEST, 1, GlobalUtilities.getColorByName(KeineKohle.CHESTDISPLAYNAME) + KeineKohle.CHESTDISPLAYNAME));
-        player.getInventory().setItem(1, ItemBuilder.createItemStack(Material.COMPARATOR, 1, GlobalUtilities.getColorByName(KeineKohle.COMPARATORDISPLAYNAME)  + KeineKohle.COMPARATORDISPLAYNAME));
+        player.getInventory().setItem(1, ItemBuilder.createItemStack(Material.COMPARATOR, 1, GlobalUtilities.getColorByName(KeineKohle.COMPARATORDISPLAYNAME) + KeineKohle.COMPARATORDISPLAYNAME));
         player.getInventory().setItem(4, ItemBuilder.createItemStack(Material.ANVIL, 1, GlobalUtilities.getColorByName(KeineKohle.ANVILDISPLAYNAME) + KeineKohle.ANVILDISPLAYNAME));
         player.getInventory().setItem(8, ItemBuilder.createItemStack(Material.BOOK, 1, GlobalUtilities.getColorByName(KeineKohle.BOOKDISPLAYNAME) + KeineKohle.BOOKDISPLAYNAME));
     }
 
     public static void sendLastUsedClassGotSelectedMessage(Player player) {
-        String lastclass = Classes.getLastUsedClass(player);
-        if(!lastclass.equals(Classes.NONECLASS)) {
-            ClassFabric classFabric = new ClassFabric();
-            classFabric.setPlayer(player);
-            classFabric.setClassName(lastclass);
-            classFabric.autoFill();
-            KeineKohle.SELECTEDCLASS.put(player, classFabric);
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.classGotAutoSelected);
+        MySQLMethods mySQLMethods = new MySQLMethods();
+        if (mySQLMethods.selectPlayerSetting(player, PlayerSettings.AUTOSELECT)) {
+            String lastclass = Classes.getLastUsedClass(player);
+            if (!lastclass.equals(Classes.NONECLASS)) {
+                ClassFabric classFabric = new ClassFabric();
+                classFabric.setPlayer(player);
+                classFabric.setClassName(lastclass);
+                classFabric.autoFill();
+                KeineKohle.SELECTEDCLASS.put(player, classFabric);
+                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.classGotAutoSelected);
+            }
         }
     }
 
