@@ -5,6 +5,7 @@ import me.keinekohle.net.mysql.MySQLMethods;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import me.keinekohle.net.utilities.InventoryUtilities;
 import me.keinekohle.net.utilities.PlayerSettings;
+import me.keinekohle.net.utilities.Variables;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,10 +18,10 @@ public class ListenerLobbySettingsClick implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if (event.getWhoClicked() instanceof Player player && !KeineKohle.INGAME && !KeineKohle.BUILDMODE.contains(player)) {
+        if (event.getWhoClicked() instanceof Player player && !KeineKohle.inGame && !KeineKohle.BUILDMODE.contains(player)) {
             if (event.getCurrentItem() != null) {
                 ItemStack clickedItem = event.getCurrentItem();
-                if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(KeineKohle.BOOKDISPLAYNAME) + KeineKohle.BOOKDISPLAYNAME)) {
+                if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(Variables.BOOKDISPLAYNAME) + Variables.BOOKDISPLAYNAME)) {
                     event.setCancelled(true);
                     toggleSetting(player, clickedItem);
                 }

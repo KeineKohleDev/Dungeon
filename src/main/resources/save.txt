@@ -1,0 +1,16 @@
+                    for(Player all : Bukkit.getOnlinePlayers()) {
+                        ByteArrayOutputStream b = new ByteArrayOutputStream();
+                        DataOutputStream out = new DataOutputStream(b);
+
+                        try {
+                            out.writeUTF("Connect");
+                            out.writeUTF("lobby");
+                        } catch (IOException ex){
+                            System.err.println("Es gab einen Fehler:");
+                            ex.printStackTrace();
+                        }
+
+
+                        all.sendPluginMessage(KeineKohle.getPlugin(KeineKohle.class), "BungeeCord", b.toByteArray());
+
+                    }

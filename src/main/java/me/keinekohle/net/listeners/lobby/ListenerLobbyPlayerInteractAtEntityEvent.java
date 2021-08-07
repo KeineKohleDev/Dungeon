@@ -15,7 +15,7 @@ public class ListenerLobbyPlayerInteractAtEntityEvent implements Listener {
     public void onPlayerInteractAtEntityEvent(PlayerInteractAtEntityEvent event) {
         if (event.getRightClicked() instanceof ArmorStand armorStand) {
             Player player = event.getPlayer();
-            if(armorStand.getCustomName().equals(GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Language.ARMORSTANDNAME)) {
+            if(armorStand.getCustomName().equals(GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Language.armorStandName)) {
                 event.setCancelled(true);
                 ClassSeletionArmorStand.openInventory(player);
             }

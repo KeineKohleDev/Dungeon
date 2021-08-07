@@ -17,7 +17,7 @@ public class ListenerPlayerJoinEvent implements Listener {
         doDataBaseChecks(player);
         PlayerUtilities.onJoin(player);
         PlayerSettings.insertAllPlayerSettings(player);
-        event.setJoinMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Replacements.replacePlayerName(Language.playerJoinMessage, player));
+        event.setJoinMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + Replacements.replacePlayerName(Language.playerJoinMessage, player));
     }
 
     private void doDataBaseChecks(Player player) {
@@ -33,7 +33,7 @@ public class ListenerPlayerJoinEvent implements Listener {
 
         // -- check if Lobby spawn is set --
         if (!mySQLMethods.checkIfLocationAlreadyExists("Lobby")) {
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please set the Lobby spawn! use /dungeon and click on the nether start!");
+            player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "Please set the Lobby spawn! use /dungeon and click on the nether start!");
         } else {
             player.teleport(mySQLMethods.selectLocationByName("Lobby"));
         }

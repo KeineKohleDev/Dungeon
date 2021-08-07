@@ -17,10 +17,10 @@ public class ListenerLobbyShopClick implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if (event.getWhoClicked() instanceof Player player && !KeineKohle.INGAME && !KeineKohle.BUILDMODE.contains(player)) {
+        if (event.getWhoClicked() instanceof Player player && !KeineKohle.inGame && !KeineKohle.BUILDMODE.contains(player)) {
             if (event.getCurrentItem() != null) {
                 ItemStack clickedItem = event.getCurrentItem();
-                if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(KeineKohle.CHESTDISPLAYNAME) + KeineKohle.CHESTDISPLAYNAME)) {
+                if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(Variables.CHESTDISPLAYNAME) + Variables.CHESTDISPLAYNAME)) {
                     event.setCancelled(true);
                     handleShopInventorActions(player, clickedItem);
                 } else if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Classes.SHOPCLASSES)) {
@@ -55,10 +55,10 @@ public class ListenerLobbyShopClick implements Listener {
     private void purchaseClass(Player player, ItemStack clickedItem) {
         MySQLMethods mySQLMethods = new MySQLMethods();
         String className = GlobalUtilities.getNameWithoutColorCode(clickedItem.getItemMeta().getDisplayName());
-        if (mySQLMethods.checkIfPlayerAlreadyPurchasedClass(player, className)) return;
+        if (mySQLMethods.checkIfPlayerAlreadypurchasedClass(player, className)) return;
         String classServerGroup = mySQLMethods.selectClassServerGroup(className);
         if (classServerGroup != null && !player.hasPermission(KeineKohle.PERMISSIONPREFIX + classServerGroup)) {
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Replacements.replaceClassServerGroup(Language.RANKNEEDED, classServerGroup));
+            player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + Replacements.replaceClassServerGroup(Language.rankNeeded, classServerGroup));
             return;
         }
         int playerCoins = mySQLMethods.selectCoinsFromPlayerUUID(player);
@@ -66,12 +66,12 @@ public class ListenerLobbyShopClick implements Listener {
         if (playerCoins >= classCoast) {
             mySQLMethods.updatePlayerCoins(player, (playerCoins - classCoast));
             mySQLMethods.giveClassAccessToPlayer(player, className);
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Replacements.replaceCoins(Replacements.replaceClassName(Language.PURCHASEDCLASS, className), classCoast));
+            player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + Replacements.replaceCoins(Replacements.replaceClassName(Language.purchasedClass, className), classCoast));
             InventoryUtilities.createClassesInventory(player);
-            LobbyScoreboard.sendLobbyScoreboard(player);
+            LobbyScoreboard.sendLobbyScoreboard();
             player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1, 1);
         } else {
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.NOTENOUGHTCOINS);
+            player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + Language.notEnoughCoins);
         }
     }
 }

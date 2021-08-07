@@ -542,7 +542,7 @@ public class MySQLMethods {
         }
     }
 
-    public boolean checkIfPlayerAlreadyPurchasedClass(Player player, String className) {
+    public boolean checkIfPlayerAlreadypurchasedClass(Player player, String className) {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
@@ -787,6 +787,125 @@ public class MySQLMethods {
             closeStatementAndResultSet(statement, resultSet);
         }
         return false;
+    }
+
+    public void addTitle(String title, int titleCoast, String titleGroup, ChatColor titlecolor) {
+        Statement statement = null;
+        try {
+            String sql = "INSERT into dungeon_titles (title, titlecoast, titlegroup, titlecolor) values ('" + title + "', '" + titleCoast + "', '" + titleGroup + "', '" + titlecolor + "')";
+            statement = connection.createStatement();
+            statement.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(statement);
+        }
+    }
+
+    public List<String> selectAllTitles() {
+        List<String> titles = new ArrayList<>();
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT title FROM dungeon_titles";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                titles.add(resultSet.getString("title"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return titles;
+    }
+
+    public Boolean checkIfTitleExists(String title) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT tile FROM dungeon_titles WHERE title='" + title + "'";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(statement);
+        }
+        return false;
+    }
+
+    public ChatColor selectTitleColor(String title) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT titlecolor FROM dungeon_titles WHERE title='" + title + "'";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return ChatColor.of(resultSet.getString("titlecolor"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(statement);
+        }
+        return null;
+    }
+
+
+    public void addTitleToPlayer(Player player, String title) {
+        Statement statement = null;
+        try {
+            String sql = "INSERT into dungeon_titles (uuid, title) values ('" + player.getUniqueId() + "', '" + title + "')";
+            statement = connection.createStatement();
+            statement.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(statement);
+        }
+    }
+
+    public List<String> selectAllPlayerTitles(Player player) {
+        List<String> titles = new ArrayList<>();
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT title FROM dungeon_player_titles WHERE uuid='" + player.getUniqueId() + "'";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                titles.add(resultSet.getString("title"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return titles;
+    }
+
+    public String selectCurrentPlayerTitle(Player player) {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT title FROM dungeon_player WHERE uuid='" + player.getUniqueId() + "'";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return resultSet.getString("title");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatementAndResultSet(statement, resultSet);
+        }
+        return null;
     }
 
 

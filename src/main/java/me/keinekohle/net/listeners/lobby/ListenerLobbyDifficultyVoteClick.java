@@ -1,10 +1,7 @@
 package me.keinekohle.net.listeners.lobby;
 
 import me.keinekohle.net.main.KeineKohle;
-import me.keinekohle.net.utilities.GlobalUtilities;
-import me.keinekohle.net.utilities.InventoryUtilities;
-import me.keinekohle.net.utilities.Language;
-import me.keinekohle.net.utilities.Replacements;
+import me.keinekohle.net.utilities.*;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,15 +13,15 @@ public class ListenerLobbyDifficultyVoteClick implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if (event.getWhoClicked() instanceof Player player && !KeineKohle.INGAME && !KeineKohle.BUILDMODE.contains(player)) {
+        if (event.getWhoClicked() instanceof Player player && !KeineKohle.inGame && !KeineKohle.BUILDMODE.contains(player)) {
             event.setCancelled(true);
             if (event.getCurrentItem() != null) {
                 ItemStack clickedItem = event.getCurrentItem();
-                if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(KeineKohle.COMPARATORDISPLAYNAME) + KeineKohle.COMPARATORDISPLAYNAME) & clickedItem.hasItemMeta() && clickedItem.hasItemMeta()) {
-                    vote(player, clickedItem, KeineKohle.DIFFICULTYEASY);
-                    vote(player, clickedItem, KeineKohle.DIFFICULTYNORMAL);
-                    vote(player, clickedItem, KeineKohle.DIFFICULTYHARD);
-                    vote(player, clickedItem, KeineKohle.DIFFICULTYVERYHARD);
+                if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(Variables.COMPARATORDISPLAYNAME) + Variables.COMPARATORDISPLAYNAME) & clickedItem.hasItemMeta() && clickedItem.hasItemMeta()) {
+                    vote(player, clickedItem, Variables.DIFFICULTYEASY);
+                    vote(player, clickedItem, Variables.DIFFICULTYNORMAL);
+                    vote(player, clickedItem, Variables.DIFFICULTYHARD);
+                    vote(player, clickedItem, Variables.DIFFICULTYVERYHARD);
                 }
             }
         }
@@ -56,6 +53,6 @@ public class ListenerLobbyDifficultyVoteClick implements Listener {
     }
 
     private void votedForMessage(Player player, ItemStack clickedItem) {
-        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Replacements.replaceVoteDifficulty(Language.VOTEDFORDIFFICULTY, clickedItem.getItemMeta().getDisplayName()));
+        player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + Replacements.replaceVoteDifficulty(Language.voteForDifficulty, clickedItem.getItemMeta().getDisplayName()));
     }
 }

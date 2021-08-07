@@ -11,6 +11,9 @@ public class ListenerLobbyEntityDamageEvent implements Listener {
 
     @EventHandler
     public void onEntityDamageEvent(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player || event.getEntity() instanceof ArmorStand && !KeineKohle.INGAME) event.setCancelled(true);
+        if (!KeineKohle.inGame) {
+            if (event.getEntity() instanceof Player || event.getEntity() instanceof ArmorStand)
+                event.setCancelled(true);
+        }
     }
 }

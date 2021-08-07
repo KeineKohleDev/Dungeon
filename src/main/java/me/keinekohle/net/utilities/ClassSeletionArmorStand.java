@@ -1,6 +1,5 @@
 package me.keinekohle.net.utilities;
 
-import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.mysql.MySQLMethods;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -33,7 +32,7 @@ public class ClassSeletionArmorStand {
             removeOldArmorStand(location);
             ArmorStand armorStand = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
             EntityEquipment entityEquipment = armorStand.getEquipment();
-            armorStand.setCustomName(GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Language.ARMORSTANDNAME);
+            armorStand.setCustomName(GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Language.armorStandName);
             armorStand.setCustomNameVisible(true);
             armorStand.setBasePlate(false);
             armorStand.setVisible(false);
@@ -48,10 +47,8 @@ public class ClassSeletionArmorStand {
 
     private static void removeOldArmorStand(Location location) {
         for (Entity entity : location.getWorld().getEntities()) {
-            if (entity instanceof ArmorStand armorStand) {
-                if (armorStand.getCustomName().equals(GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Language.ARMORSTANDNAME)) {
-                    armorStand.remove();
-                }
+            if (entity instanceof ArmorStand armorStand && armorStand.getCustomName().equals(GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Language.armorStandName)) {
+                armorStand.remove();
             }
         }
     }
@@ -59,13 +56,13 @@ public class ClassSeletionArmorStand {
     public static void openInventory(Player player) {
         MySQLMethods mySQLMethods = new MySQLMethods();
         List<String> boughtClasses = mySQLMethods.selectAllBoughtClasses(player);
-        Inventory inventory = Bukkit.createInventory(player, GlobalUtilities.calculateInventorySize(boughtClasses.size()), GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Language.ARMORSTANDNAME);
+        Inventory inventory = Bukkit.createInventory(player, GlobalUtilities.calculateInventorySize(boughtClasses.size()), GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Language.armorStandName);
         for (String className : boughtClasses) {
             int classLevel = mySQLMethods.selectClassLevelFromPlayerByClassName(player, className);
             ChatColor color = mySQLMethods.selectClassColorFromClasses(className);
             List<String> abilities = Abilites.selectClassAbilities(className);
             Material classIcon = mySQLMethods.selectIconFromClasses(className);
-            List<String> lore = Arrays.asList("§aLevel:§c " + classLevel, "", GlobalUtilities.getColorByName(KeineKohle.ABILITIESDISPLAYNAME) + KeineKohle.ABILITIESDISPLAYNAME + ":", GlobalUtilities.getColorByName(abilities.get(0)) + "  " + abilities.get(0), GlobalUtilities.getColorByName(abilities.get(1)) + "  " + abilities.get(1), "", SELECTCLASS);
+            List<String> lore = Arrays.asList("§aLevel:§c " + classLevel, "", GlobalUtilities.getColorByName(Variables.ABILITIESDISPLAYNAME) + Variables.ABILITIESDISPLAYNAME + ":", GlobalUtilities.getColorByName(abilities.get(0)) + "  " + abilities.get(0), GlobalUtilities.getColorByName(abilities.get(1)) + "  " + abilities.get(1), "", SELECTCLASS);
             inventory.addItem(ItemBuilder.createItemStackWithLore(classIcon, 1, color + className, lore));
         }
         InventoryUtilities.fillInventory(inventory, Material.BLACK_STAINED_GLASS_PANE);

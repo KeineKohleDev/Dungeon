@@ -58,8 +58,8 @@ public class ListenerSetupInventoryClickEvent implements Listener {
             classFabric.setAbilities(classAbilities);
             player.sendMessage(classAbilities.toString());
             GlobalStages.prepareNextStage(player, classFabric);
-            TitleAPI.sendTitle(player, 20*1, 20*2, 20*1, GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + "To save the class, type", "§l§a'finish'§r");
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "To save the class, type 'finish'!");
+            TitleAPI.sendTitle(player, 20*1, 20*2, 20*1, KeineKohle.CHATCOLOR + "To save the class, type", "§l§a'finish'§r");
+            player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "To save the class, type 'finish'!");
         }
     }
 
@@ -80,7 +80,7 @@ public class ListenerSetupInventoryClickEvent implements Listener {
             itemStack.setItemMeta(itemMeta);
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
         } else {
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You can only select two abilities!");
+            player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "You can only select two abilities!");
         }
     }
 

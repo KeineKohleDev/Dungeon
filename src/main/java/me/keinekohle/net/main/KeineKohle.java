@@ -8,9 +8,9 @@ import me.keinekohle.net.listeners.setup.ListenerSetupCreateNewClass;
 import me.keinekohle.net.listeners.setup.ListenerSetupCreateNewClassLevel;
 import me.keinekohle.net.listeners.setup.ListenerSetupInventoryClickEvent;
 import me.keinekohle.net.mysql.MySQLMethods;
-import me.keinekohle.net.utilities.ClassFabric;
-import me.keinekohle.net.utilities.ClassSeletionArmorStand;
-import me.keinekohle.net.utilities.GlobalUtilities;
+import me.keinekohle.net.scheduler.LobbyCountdown;
+import me.keinekohle.net.utilities.*;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -22,63 +22,43 @@ import java.util.List;
 
 public class KeineKohle extends JavaPlugin {
 
-    //message PREFIX
     public static final String PREFIX = GlobalUtilities.surroundWithBracketsAndColorCodes(GlobalUtilities.getColorByName(KeineKohle.DISPLAYNAME) + KeineKohle.DISPLAYNAME);
     public static final String PERMISSIONPREFIX = "Dungeon.";
+    public static final String DISPLAYNAME = "Dungeon";
+    public static ChatColor CHATCOLOR = ChatColor.of("#FCE23A");
 
-    //-- Lists --
-    //buildmode
     public static final HashMap<Player, ClassFabric> SETUPMODE = new HashMap<>();
     public static final List<Player> INPRIVIEW = new ArrayList<>();
     public static final List<Player> BUILDMODE = new ArrayList<>();
     public static final HashMap<Player, String> VOTEDIFFICULTY = new HashMap<>();
     public static final HashMap<Player, ClassFabric> SELECTEDCLASS = new HashMap<>();
 
-    //-- Player lobby hotbar --
-    public static final String CHESTDISPLAYNAME = "Shop";
-    public static final String COMPARATORDISPLAYNAME  = "Difficulty";
-    public static final String ANVILDISPLAYNAME  = "Upgrade";
-    public static final String BOOKDISPLAYNAME  = "Settings";
-
-    public static final String ABILITIESDISPLAYNAME  = "Abilities";
-
-    public static final String SHOPBOOSTER = "Booster";
-    public static final String SHOPTITLES = "Titles";
-
     public static int connections = 0;
+    public static boolean inGame = false;
 
-    //BRACKETS
-    public static final String BRACKETSCOLOR = "BRACKETSCOLOR";
-    public static final String CHATCOLOR = "CHATCOLOR";
-
-    public static final String DISPLAYNAME = "Dungeon";
-
-    public static final String DIFFICULTYEASY = "Easy";
-    public static final String DIFFICULTYNORMAL = "Normal";
-    public static final String DIFFICULTYHARD = "Hard";
-    public static final String DIFFICULTYVERYHARD = "Very hard";
-
-    //-- Global --
-    public static final String COINS = "Coins";
-
-    //Stage
-    public static final boolean INGAME = false;
-
-
-    //server identifier
-
-    //loaded on startup
     @Override
     public void onEnable() {
         // NEED TO BE ADDED: LICENSE CHECK!
+
+        Language.createLanguageProperties();
+        Language.loadLanguageProperties();
 
         loadCommonListeners();
         loadCommonCommands();
         System.getLogger(Bukkit.getVersion());
 
+        //LobbyCountdown.startLobbyCountdown();
+
         MySQLMethods mySQLMethods = new MySQLMethods();
         mySQLMethods.createTablesIfNotExists();
         ClassSeletionArmorStand.spawnClassSelectionArmorStand();
+
+        // bStats
+        int classes = mySQLMethods.selectAllClasses().size();
+        System.out.println("Classes: "+classes);
+        int pluginId = 12348;
+        Metrics metrics = new Metrics(this, pluginId);
+        metrics.addCustomChart(new Metrics.SimplePie("classes", () -> {return String.valueOf(classes);}));
 
     }
 

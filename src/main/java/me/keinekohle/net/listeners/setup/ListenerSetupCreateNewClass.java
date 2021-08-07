@@ -20,7 +20,7 @@ public class ListenerSetupCreateNewClass implements Listener {
             if (classFabric.getMode().equals(classFabric.getMODECREATENEWCLASS())) {
                 String message = event.getMessage();
                 if (message.contains(" ")) {
-                    player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You can't use white spaces!");
+                    player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "You can't use white spaces!");
                 } else {
                     GlobalStages.handleBlacklist(player, message, classFabric);
                     int stage = classFabric.getStage();
@@ -33,7 +33,7 @@ public class ListenerSetupCreateNewClass implements Listener {
                         case 5 -> CreateNewClassStages.handleStageInventory(player, message, classFabric);
                         case 6 -> CreateNewClassStages.handleStageOpenAbilitiesInventory(player, message);
                         case 7 -> GlobalStages.handleStageSave(player, message, classFabric);
-                        default -> player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Error: please restart the setup!");
+                        default -> player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "Error: please restart the setup!");
                     }
                 }
                 event.setCancelled(true);

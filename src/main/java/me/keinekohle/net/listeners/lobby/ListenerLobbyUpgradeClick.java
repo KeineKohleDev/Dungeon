@@ -17,10 +17,10 @@ public class ListenerLobbyUpgradeClick implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if (event.getWhoClicked() instanceof Player player && !KeineKohle.INGAME && !KeineKohle.BUILDMODE.contains(player)) {
+        if (event.getWhoClicked() instanceof Player player && !KeineKohle.inGame && !KeineKohle.BUILDMODE.contains(player)) {
             if (event.getCurrentItem() != null) {
                 ItemStack clickedItem = event.getCurrentItem();
-                if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(KeineKohle.ANVILDISPLAYNAME) + KeineKohle.ANVILDISPLAYNAME)) {
+                if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(Variables.ANVILDISPLAYNAME) + Variables.ANVILDISPLAYNAME)) {
                     event.setCancelled(true);
                     handleUpgradeInventorActions(event, player, clickedItem);
                 }
@@ -47,16 +47,16 @@ public class ListenerLobbyUpgradeClick implements Listener {
         if (playerCoins >= classCoast) {
             mySQLMethods.updatePlayerCoins(player, (playerCoins - classCoast));
             mySQLMethods.updateClassLevelAccessToPlayer(player, className, classLevel);
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Replacements.replaceToLevel(Replacements.replaceFromLevel(Replacements.replaceCoins(Replacements.replaceClassName(Language.UPGRADEDCLASS, className), classCoast), classLevel-1), classLevel));
+            player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + Replacements.replaceToLevel(Replacements.replaceFromLevel(Replacements.replaceCoins(Replacements.replaceClassName(Language.upgradeClass, className), classCoast), classLevel-1), classLevel));
             InventoryUtilities.createUpgradeInventroy(player);
-            LobbyScoreboard.sendLobbyScoreboard(player);
+            LobbyScoreboard.sendLobbyScoreboard();
             player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
             if(KeineKohle.SELECTEDCLASS.containsKey(player)) {
                 ClassFabric classFabric = KeineKohle.SELECTEDCLASS.get(player);
                 classFabric.autoFill();
             }
         } else {
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.NOTENOUGHTCOINS);
+            player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + Language.notEnoughCoins);
         }
     }
 }

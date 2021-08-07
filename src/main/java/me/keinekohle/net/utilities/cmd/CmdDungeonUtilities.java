@@ -5,6 +5,7 @@ import me.keinekohle.net.mysql.MySQLMethods;
 import me.keinekohle.net.utilities.Classes;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import me.keinekohle.net.utilities.ItemBuilder;
+import me.keinekohle.net.utilities.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -35,9 +36,9 @@ public class CmdDungeonUtilities {
         Inventory inventory = Bukkit.createInventory(player, invSize, GlobalUtilities.getColorByName(KeineKohle.DISPLAYNAME) + KeineKohle.DISPLAYNAME);
         fillInventoryBorder(inventory, invSize);
         inventory.setItem(10, ItemBuilder.createItemStackWithLore(Material.IRON_CHESTPLATE, 1, GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Classes.SHOPCLASSES, CLASSINFO));
-        inventory.setItem(11, ItemBuilder.createItemStackWithLore(Material.NAME_TAG, 1, GlobalUtilities.getColorByName(KeineKohle.SHOPTITLES) + KeineKohle.SHOPTITLES, TITLEINFO));
+        inventory.setItem(11, ItemBuilder.createItemStackWithLore(Material.NAME_TAG, 1, GlobalUtilities.getColorByName(Variables.SHOPTITLES) + Variables.SHOPTITLES, TITLEINFO));
         addBuildmode(player, inventory);
-        inventory.setItem(12, ItemBuilder.createItemStackWithLore(Material.BEACON, 1, GlobalUtilities.getColorByName(KeineKohle.SHOPBOOSTER) + KeineKohle.SHOPBOOSTER, BOOSTERINFO));
+        inventory.setItem(12, ItemBuilder.createItemStackWithLore(Material.BEACON, 1, GlobalUtilities.getColorByName(Variables.SHOPBOOSTER) + Variables.SHOPBOOSTER, BOOSTERINFO));
         inventory.setItem(14, ItemBuilder.createItemStackWithLore(Material.NETHER_STAR, 1, GlobalUtilities.getColorByName(LOBBY) + LOBBY, LOBBYINFO));
         player.openInventory(inventory);
     }

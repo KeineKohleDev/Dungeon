@@ -20,7 +20,7 @@ public class GlobalStages {
     }
 
     public static void messageStageInfo(Player player, ClassFabric classFabric) {
-        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Setup stage " + (classFabric.getStage() + 1) + " of " + classFabric.getStageMax());
+        player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "Setup stage " + (classFabric.getStage() + 1) + " of " + classFabric.getStageMax());
     }
 
     public static void nextStage(ClassFabric classFabric) {
@@ -33,14 +33,14 @@ public class GlobalStages {
     public static void goBock(Player player, ClassFabric classFabric) {
         if (classFabric.getStage() >= 1) {
             classFabric.setStage(classFabric.getStage() - 1);
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You went back!");
+            player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "You went back!");
         } else {
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You can't go back!");
+            player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "You can't go back!");
         }
     }
 
     public static void messageOnlyNumbersHere(Player player) {
-        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: You can only use numbers here!");
+        player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "Note: You can only use numbers here!");
     }
 
     public static boolean messageBlackList(String message) {
@@ -56,10 +56,10 @@ public class GlobalStages {
             classFabric.SaveClass();
             KeineKohle.SETUPMODE.remove(player);
             player.playSound(player.getLocation(), Sound.BLOCK_PISTON_CONTRACT, 1, classFabric.getStage());
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "The class got saved!");
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: You left the setup mode!");
+            player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "The class got saved!");
+            player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "Note: You left the setup mode!");
         } else {
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please type 'finish'");
+            player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "Please type 'finish'");
         }
     }
 
@@ -68,7 +68,7 @@ public class GlobalStages {
             GlobalStages.goBock(player, classFabric);
         } else if (message.equalsIgnoreCase("cancel")) {
             KeineKohle.SETUPMODE.remove(player);
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You left the setup!");
+            player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "You left the setup!");
         }
     }
 }

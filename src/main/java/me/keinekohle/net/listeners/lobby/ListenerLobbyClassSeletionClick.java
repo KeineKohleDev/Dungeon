@@ -2,10 +2,7 @@ package me.keinekohle.net.listeners.lobby;
 
 import me.keinekohle.net.main.KeineKohle;
 import me.keinekohle.net.scoreboard.LobbyScoreboard;
-import me.keinekohle.net.utilities.ClassFabric;
-import me.keinekohle.net.utilities.GlobalUtilities;
-import me.keinekohle.net.utilities.Language;
-import me.keinekohle.net.utilities.PlayerUtilities;
+import me.keinekohle.net.utilities.*;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,10 +15,10 @@ public class ListenerLobbyClassSeletionClick implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if (event.getWhoClicked() instanceof Player player && !KeineKohle.INGAME && !KeineKohle.BUILDMODE.contains(player)) {
+        if (event.getWhoClicked() instanceof Player player && !KeineKohle.inGame && !KeineKohle.BUILDMODE.contains(player)) {
             if (event.getCurrentItem() != null) {
                 ItemStack clickedItem = event.getCurrentItem();
-                if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(Language.ARMORSTANDNAME) + Language.ARMORSTANDNAME)) {
+                if (event.getView().getTitle().equals(GlobalUtilities.getColorByName(Classes.SHOPCLASSES) + Language.armorStandName)) {
                     event.setCancelled(true);
                     selectClass(player, clickedItem);
                 }
@@ -40,9 +37,9 @@ public class ListenerLobbyClassSeletionClick implements Listener {
             classFabric.setClassName(className);
             classFabric.autoFill();
             KeineKohle.SELECTEDCLASS.put(player, classFabric);
-            LobbyScoreboard.sendLobbyScoreboard(player);
+            LobbyScoreboard.sendLobbyScoreboard();
             PlayerUtilities.setLastSelectedClass(player, className);
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You have selected the class " + clickedItem.getItemMeta().getDisplayName());
+            player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "You have selected the class " + clickedItem.getItemMeta().getDisplayName());
             player.closeInventory();
             player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_NETHERITE, 1, 1);
 

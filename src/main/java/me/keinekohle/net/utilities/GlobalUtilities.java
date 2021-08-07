@@ -18,20 +18,19 @@ public final class GlobalUtilities {
     public static String getColorByName(String name) {
 
         return switch (name) {
-            case KeineKohle.ANVILDISPLAYNAME -> ChatColor.of("#4815ED").toString();
-            case KeineKohle.COMPARATORDISPLAYNAME -> ChatColor.of("#F70C24").toString();
-            case KeineKohle.CHESTDISPLAYNAME -> ChatColor.of("#F75CCB").toString();
-            case KeineKohle.BOOKDISPLAYNAME -> ChatColor.of("#76B7F0").toString();
+            case Variables.ANVILDISPLAYNAME -> ChatColor.of("#4815ED").toString();
+            case Variables.COMPARATORDISPLAYNAME -> ChatColor.of("#F70C24").toString();
+            case Variables.CHESTDISPLAYNAME -> ChatColor.of("#F75CCB").toString();
+            case Variables.BOOKDISPLAYNAME -> ChatColor.of("#76B7F0").toString();
             case KeineKohle.DISPLAYNAME -> ChatColor.GOLD.toString();
-            case KeineKohle.COINS -> ChatColor.of("#F29C1B").toString();
-            case KeineKohle.BRACKETSCOLOR, Classes.NONECLASS -> ChatColor.DARK_GRAY.toString();
-            case KeineKohle.CHATCOLOR -> ChatColor.of("#FCE23A").toString();
-            case Classes.SHOPCLASSES, Language.ARMORSTANDNAME -> ChatColor.of("#39F6D3").toString();
-            case KeineKohle.DIFFICULTYEASY -> ChatColor.of("#9DFC58").toString();
-            case KeineKohle.DIFFICULTYNORMAL -> ChatColor.of("#1EE62F").toString();
-            case KeineKohle.DIFFICULTYHARD -> ChatColor.of("#F6814C").toString();
-            case KeineKohle.DIFFICULTYVERYHARD -> ChatColor.of("#EB140B").toString();
-            case KeineKohle.ABILITIESDISPLAYNAME -> ChatColor.of("#BEF679").toString();
+            case Variables.COINS -> ChatColor.of("#F29C1B").toString();
+            case Variables.BRACKETSCOLOR, Classes.NONECLASS -> ChatColor.DARK_GRAY.toString();
+            case Classes.SHOPCLASSES -> ChatColor.of("#39F6D3").toString();
+            case Variables.DIFFICULTYEASY -> ChatColor.of("#9DFC58").toString();
+            case Variables.DIFFICULTYNORMAL -> ChatColor.of("#1EE62F").toString();
+            case Variables.DIFFICULTYHARD -> ChatColor.of("#F6814C").toString();
+            case Variables.DIFFICULTYVERYHARD -> ChatColor.of("#EB140B").toString();
+            case Variables.ABILITIESDISPLAYNAME -> ChatColor.of("#BEF679").toString();
             case Abilites.FIRE -> ChatColor.of("#D9211A").toString();
             case Abilites.FIREGRENADE -> ChatColor.of("#DB4944").toString();
             case Abilites.EARTH -> ChatColor.of("#6AF22E").toString();
@@ -44,8 +43,9 @@ public final class GlobalUtilities {
             case Abilites.HEALGRENADE -> ChatColor.of("#F58573").toString();
             case Abilites.WEAKNESS -> ChatColor.of("#B6BCBF").toString();
             case Abilites.WWEAKNESSGRANDE -> ChatColor.of("#DDE5E9").toString();
-            case KeineKohle.SHOPBOOSTER -> ChatColor.of("#E58AEB").toString();
-            case KeineKohle.SHOPTITLES -> ChatColor.of("#96DDF5").toString();
+            case Variables.SHOPBOOSTER -> ChatColor.of("#E58AEB").toString();
+            case Variables.SHOPTITLES -> ChatColor.of("#96DDF5").toString();
+            case Variables.ENDERCHESTNAME -> ChatColor.of("#81FA8B").toString();
             case CmdDungeonUtilities.BUILDMODE ->  ChatColor.of("#9EFF40").toString();
             case CmdDungeonUtilities.LOBBY -> ChatColor.of("#81FCF2").toString();
             default -> "getColorByName: default! for input " + name;
@@ -57,15 +57,7 @@ public final class GlobalUtilities {
     }
 
     public static String surroundWithBracketsAndColorCodes(String tosurround) {
-        return getColorByName(KeineKohle.BRACKETSCOLOR) + "[" + tosurround + getColorByName(KeineKohle.BRACKETSCOLOR) + "]";
-    }
-
-    public static void debbugMode(String code) {
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + code);
-    }
-
-    public static String capitalizeFirstLetter(String tocapitalize) {
-        return tocapitalize.substring(0, 1).toUpperCase() + tocapitalize.substring(1).toLowerCase();
+        return getColorByName(Variables.BRACKETSCOLOR) + "[" + tosurround + getColorByName(Variables.BRACKETSCOLOR) + "]";
     }
 
     public static Integer calculateInventorySize(int size) {
@@ -91,7 +83,7 @@ public final class GlobalUtilities {
         KeineKohle.INPRIVIEW.add(player);
         PlayerUtilities.clearPlayerInventory(player);
         mySQLMethods.giveClassItems(player, GlobalUtilities.getNameWithoutColorCode(clickedItem.getItemMeta().getDisplayName()), classLevel);
-        player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + Language.PREVIEWSTART);
+        player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + Language.previewStart);
         player.closeInventory();
         player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 1, 1);
     }

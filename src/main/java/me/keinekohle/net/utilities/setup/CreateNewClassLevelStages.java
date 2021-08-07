@@ -17,9 +17,9 @@ public class CreateNewClassLevelStages {
         if (GlobalUtilities.isNumeric(message)) {
             classFabric.setClassCoast(Integer.parseInt(message));
             GlobalStages.prepareNextStage(player, classFabric);
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please equip the §l§aclass items" + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + ".");
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: To get the items of the previous class type 'last'!");
-            player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Note: when you are finished, type 'next'!");
+            player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "Please equip the §l§aclass items" + KeineKohle.CHATCOLOR + ".");
+            player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "Note: To get the items of the previous class type 'last'!");
+            player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "Note: when you are finished, type 'next'!");
         } else {
             GlobalStages.messageOnlyNumbersHere(player);
         }
@@ -31,15 +31,15 @@ public class CreateNewClassLevelStages {
             case "next":
                 classFabric.setInventory(player.getInventory());
                 GlobalStages.prepareNextStage(player, classFabric);
-                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "To save the class, type 'finish'!");
+                player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "To save the class, type 'finish'!");
                 break;
             case "last":
                 MySQLMethods mySQLMethods = new MySQLMethods();
                 mySQLMethods.giveClassItems(player, classFabric.getClassName(), mySQLMethods.selectHighestClassLevelFromClasses(classFabric.getClassName()));
-                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "You have received the items of the last class level!");
+                player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "You have received the items of the last class level!");
                 break;
             default:
-                player.sendMessage(KeineKohle.PREFIX + GlobalUtilities.getColorByName(KeineKohle.CHATCOLOR) + " " + "Please type 'next' or 'last'");
+                player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "Please type 'next' or 'last'");
                 break;
         }
     }
