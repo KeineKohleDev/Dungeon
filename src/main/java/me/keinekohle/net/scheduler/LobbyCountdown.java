@@ -9,11 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
-public class LobbyCountdown {
+public final class LobbyCountdown {
 
     private static int time = 60;
 

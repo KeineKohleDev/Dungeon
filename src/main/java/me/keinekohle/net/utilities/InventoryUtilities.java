@@ -9,10 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 public final class InventoryUtilities {
@@ -218,11 +215,11 @@ public final class InventoryUtilities {
         MySQLMethods mySQLMethods = new MySQLMethods();
         Inventory inventory = Bukkit.createInventory(player, 9 * 1, GlobalUtilities.getColorByName(Variables.BOOKDISPLAYNAME) + Variables.BOOKDISPLAYNAME);
         HashMap<String, Boolean> playerSettings = mySQLMethods.selectAllPlayerSetting(player);
-        for (String settingsName : playerSettings.keySet()) {
-            if (playerSettings.get(settingsName) == true) {
-                inventory.addItem(ItemBuilder.createItemStackEnchantedWithLore(PlayerSettings.getMaterialBySettingsName(settingsName), 1, PlayerSettings.getLanguageNameBySettingsName(settingsName), Arrays.asList(ON)));
+        for (Map.Entry<String, Boolean> entry : playerSettings.entrySet()) {
+            if (Boolean.TRUE.equals(entry.getValue())) {
+                inventory.addItem(ItemBuilder.createItemStackEnchantedWithLore(PlayerSettings.getMaterialBySettingsName(entry.getKey()), 1, PlayerSettings.getLanguageNameBySettingsName(entry.getKey()), Arrays.asList(ON)));
             } else {
-                inventory.addItem(ItemBuilder.createItemStackWithLore(PlayerSettings.getMaterialBySettingsName(settingsName), 1, PlayerSettings.getLanguageNameBySettingsName(settingsName), Arrays.asList(OFF)));
+                inventory.addItem(ItemBuilder.createItemStackWithLore(PlayerSettings.getMaterialBySettingsName(entry.getKey()), 1, PlayerSettings.getLanguageNameBySettingsName(entry.getKey()), Arrays.asList(OFF)));
             }
         }
         player.openInventory(inventory);
