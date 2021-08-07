@@ -6,7 +6,7 @@ import me.keinekohle.net.utilities.GlobalUtilities;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-public class GlobalStages {
+public final class GlobalStages {
 
     private GlobalStages() {
         throw new IllegalStateException("Utility class");
@@ -53,7 +53,7 @@ public class GlobalStages {
     public static void handleStageSave(Player player, String message, ClassFabric classFabric) {
         if (GlobalStages.messageBlackList(message)) return;
         if (message.equalsIgnoreCase("finish")) {
-            classFabric.SaveClass();
+            classFabric.saveClass();
             KeineKohle.SETUPMODE.remove(player);
             player.playSound(player.getLocation(), Sound.BLOCK_PISTON_CONTRACT, 1, classFabric.getStage());
             player.sendMessage(KeineKohle.PREFIX + KeineKohle.CHATCOLOR + " " + "The class got saved!");

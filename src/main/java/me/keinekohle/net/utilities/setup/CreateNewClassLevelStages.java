@@ -6,7 +6,7 @@ import me.keinekohle.net.utilities.ClassFabric;
 import me.keinekohle.net.utilities.GlobalUtilities;
 import org.bukkit.entity.Player;
 
-public class CreateNewClassLevelStages {
+public final class CreateNewClassLevelStages {
 
     private CreateNewClassLevelStages() {
         throw new IllegalStateException("Utility class");

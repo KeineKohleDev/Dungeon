@@ -16,6 +16,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class MySQLMethods {
@@ -467,24 +468,6 @@ public class MySQLMethods {
         return null;
     }
 
-    public Integer selectCoinsFromClassLevel(String className, int classLevel) {
-        Statement statement = null;
-        ResultSet resultSet = null;
-        try {
-            String sql = "SELECT classcoast FROM dungeon_classes WHERE classname='" + className + "' AND classlevel='" + classLevel + "'";
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(sql);
-            if (resultSet.next()) {
-                return resultSet.getInt("classcoast");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeStatementAndResultSet(statement, resultSet);
-        }
-        return null;
-    }
-
     public Integer selectCoinsFromPlayerUUID(Player player) {
         Statement statement = null;
         ResultSet resultSet = null;
@@ -617,13 +600,13 @@ public class MySQLMethods {
     public void deleteClass(String className) {
         Statement statement = null;
         try {
-            String sql_dungeon_classes = "DELETE FROM dungeon_classes WHERE classname='" + className + "'";
-            String sql_dungeon_player_classes = "DELETE FROM dungeon_player_classes WHERE classname='" + className + "'";
-            String sql_dungeon_classlevels = "DELETE FROM dungeon_classlevels WHERE classname='" + className + "'";
+            String sqlDungeonClasses = "DELETE FROM dungeon_classes WHERE classname='" + className + "'";
+            String sqlDungeonPlayerClasses = "DELETE FROM dungeon_player_classes WHERE classname='" + className + "'";
+            String sqlDungeonClassLevels = "DELETE FROM dungeon_classlevels WHERE classname='" + className + "'";
             statement = connection.createStatement();
-            statement.execute(sql_dungeon_classes);
-            statement.execute(sql_dungeon_player_classes);
-            statement.execute(sql_dungeon_classlevels);
+            statement.execute(sqlDungeonClasses);
+            statement.execute(sqlDungeonPlayerClasses);
+            statement.execute(sqlDungeonClassLevels);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

@@ -17,6 +17,10 @@ public class LobbyCountdown {
 
     private static int time = 60;
 
+    private LobbyCountdown() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static void startLobbyCountdown() {
         if (Bukkit.getOnlinePlayers().size() >= 2) {
             Bukkit.getScheduler().scheduleSyncRepeatingTask(KeineKohle.getPlugin(KeineKohle.class), () -> {

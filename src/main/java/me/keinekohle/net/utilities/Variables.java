@@ -2,7 +2,7 @@ package me.keinekohle.net.utilities;
 
 import org.bukkit.Material;
 
-public class Variables {
+public final class Variables {
 
     public static final String BRACKETSCOLOR = "BRACKETSCOLOR";
 

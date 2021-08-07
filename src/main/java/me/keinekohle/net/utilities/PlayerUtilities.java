@@ -48,7 +48,7 @@ public final class PlayerUtilities {
 
     public static void sendLastUsedClassGotSelectedMessage(Player player) {
         MySQLMethods mySQLMethods = new MySQLMethods();
-        if (mySQLMethods.selectPlayerSetting(player, Variables.AUTOSELECTCLASS)) {
+        if (Boolean.TRUE.equals(mySQLMethods.selectPlayerSetting(player, Variables.AUTOSELECTCLASS))) {
             String lastclass = Classes.getLastUsedClass(player);
             if (!lastclass.equals(Classes.NONECLASS)) {
                 ClassFabric classFabric = new ClassFabric();

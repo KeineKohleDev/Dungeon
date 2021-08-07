@@ -14,7 +14,7 @@ import org.bukkit.inventory.Inventory;
 import java.util.Arrays;
 import java.util.List;
 
-public class CmdDungeonUtilities {
+public final class CmdDungeonUtilities {
 
     private static final List<String> CLASSINFO = Arrays.asList("§bCreate new class (Left click)", "§bList all classes (Right click)");
     private static final List<String> TITLEINFO = Arrays.asList("§bCreate new title (Left click)", "§bList all titles (Right click)");

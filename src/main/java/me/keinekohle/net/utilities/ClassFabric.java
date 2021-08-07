@@ -13,8 +13,8 @@ import java.util.List;
 
 public class ClassFabric {
 
-    private final Integer MODECREATENEWCLASS = 0;
-    private final Integer MODECREATENEWCLASSLEVEL = 1;
+    public static final Integer MODECREATENEWCLASS = 0;
+    public static final Integer MODECREATENEWCLASSLEVEL = 1;
 
     private Player player;
     private Integer stage = 0;
@@ -70,8 +70,8 @@ public class ClassFabric {
         return stageMax;
     }
 
-    public void setStageMax(Integer stage_max) {
-        this.stageMax = stage_max;
+    public void setStageMax(Integer stageMax) {
+        this.stageMax = stageMax;
     }
 
     public Integer getStage() {
@@ -150,7 +150,7 @@ public class ClassFabric {
         mySQLMethods.giveClassItems(getPlayer(), getClassName(), getClassLevel());
     }
 
-    public void SaveClass() {
+    public void saveClass() {
         MySQLMethods mySQLMethods = new MySQLMethods();
         mySQLMethods.insertClass(this.getClassName(), this.getClassLevel(), this.getClassCoast(), this.getClassColor(), this.getIcon(), this.getAbilities().toString(), this.getServerGroup());
         savePlayerInventoryToClassLevel(mySQLMethods);
