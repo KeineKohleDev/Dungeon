@@ -6,13 +6,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Properties;
 
-public class Config {
+public final class Config {
+
+    private static Properties config = new Properties();
 
     private Config() {
         throw new IllegalStateException("Utility class");
     }
-
-    private static Properties config = new Properties();
 
     public static void createProperties() {
         try {

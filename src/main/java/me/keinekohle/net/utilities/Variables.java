@@ -29,4 +29,8 @@ public class Variables {
     public static final Boolean AUTOSELECTCLASSVALUE = true;
     public static final Material AUTOSELECTCLASSICON = Material.CHEST_MINECART;
 
+    private Variables() {
+        throw new IllegalStateException("Utility class");
+    }
+
 }
